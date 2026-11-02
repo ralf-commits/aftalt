@@ -2,7 +2,7 @@
 
 `index.html` er en one-pager til salgsmødet med Dansk Håndværk. Én fil, ingen build. Åbn den direkte i browseren. Knapperne "Se prototypen" linker til `../prototype/index.html`.
 
-Sektioner: Hero, Problemet, Det fanger Aftalt (fire ting), En sag (Ved Søen 8 med kundens telefon), Sagsmappen, Tre parter, Pilot.
+Sektioner: Hero, Problemet, Det fanger Aftalt (fire ting), En sag (Ved Søen 8 med kundens telefon), Sagsmappen, Det får foreningen (kundens tryghed), Tre parter, Pilot.
 
 Samme regler som i roden (`README.md`) og designsystemet (`design-system/README.md`): kun værdier fra `tokens.json`, stemplet er signaturen, rolig tone, dansk tekst, ingen emojis.
 
