@@ -37,6 +37,6 @@ Billederne skal ikke ændre layoutet. Rør ikke telefonen, sagsmappen og stemple
 
 ## Kendte huller
 
-- Logomærket er tegnet direkte i siden (`<symbol id="mark">`), fordi `aftalt-mark.svg` og `aftalt-mark-ink.svg` endnu ikke ligger i `design-system/assets/Logo/`. Når filerne findes, skal de erstatte symbolet.
+- Logomærket er tegnet direkte i siden (`<symbol id="mark">`, samme tegning som i prototypen), fordi `aftalt-mark.svg` og `aftalt-mark-ink.svg` endnu ikke ligger i `design-system/assets/Logo/`. Når filerne findes, skal de erstatte symbolet.
 - Fontene hentes fra Google Fonts. Skal siden køre på en projektor uden net, skal de indlejres (se regel 6 i roden).
 - Citatet i Problemet er gengivet fra en samtale med Dansk Håndværk. Ret ordlyden, hvis den skal være mere præcis.
