@@ -4,6 +4,7 @@ Dokumentationslag til håndværkere ("Det aftalte, dokumenteret."). Kunde: Dansk
 
 ## Indhold
 - `prototype/index.html`: interaktiv prototype i én fil (mobil/desktop, simuleret ur, kundens telefon). Åbn direkte i browseren. Ingen build.
+- `salgsside/index.html`: one-pager til salgsmødet med Dansk Håndværk. Har billedpladser til genererede billeder; se `salgsside/README.md`.
 - `design-system/tokens.json` og `design-system/README.md`: farver, typografi, afstande og brandbog. Kilden til alt visuelt.
 
 ## Til AI-værktøjer (ChatGPT, Claude m.fl.)

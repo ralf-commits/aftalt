@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aftalt · Det aftalte, dokumenteret</title>
+<meta name="description" content="Aftalt er dokumentationslaget bag håndværkergarantien. Til Dansk Håndværk.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Salgsside til Dansk Håndværk. Alle værdier kommer fra design-system/tokens.json; navnene er de samme. */
+/* Billedpladser er <figure class="billedplads" data-billede="..."> med en prompt i data-prompt. Se salgsside/README.md. */
+:root{
+  --ground-100:#efede6; --surface-100:#ffffff; --surface-200:#f7f6f1; --line-100:#dcd9cf; --line-200:#bfbbae;
+  --ink-900:#1c1a17; --ink-600:#4f4c45; --ink-400:#716d63;
+  --snor-700:#1f3c8a; --snor-100:#e1e8fa; --on-snor:#ffffff;
+  --markering-600:#c84e0c; --markering-100:#fbe9dd;
+  --kvit-600:#1e7a4a; --kvit-100:#def1e5;
+  --stop-600:#b3362a; --stop-100:#f8e1dd;
+  --shadow-float:0 12px 32px rgba(28,26,23,0.14);
+  /* Sagsmappens hoved er altid mørkt; derfor faste værdier her. */
+  --mappe-bg:#1c1a17; --mappe-ink:#efede6; --mappe-stamp:#b8b5ac; --mappe-line:#4f4c45;
+
+  --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+  --sans:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono","SF Mono",Menlo,Consolas,monospace;
+
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px; --space-8:48px;
+  --radius-sm:4px; --radius-md:10px; --radius-lg:16px; --radius-pill:999px;
+  --gutter:var(--space-4);
+}
+@media (min-width:760px){ :root{ --gutter:var(--space-5); } }
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --ground-100:#141513; --surface-100:#1c1e1c; --surface-200:#232624; --line-100:#313532; --line-200:#434845;
+  --ink-900:#edebe4; --ink-600:#b8b5ac; --ink-400:#8f8c82;
+  --snor-700:#9db4f2; --snor-100:#1c2a4f; --on-snor:#0f1a36;
+  --markering-600:#f0914f; --markering-100:#3d2411;
+  --kvit-600:#5cc287; --kvit-100:#163a26;
+  --stop-600:#e27c70; --stop-100:#3f1e1a;
+  --shadow-float:0 12px 32px rgba(0,0,0,0.5);
+  --mappe-bg:#232624; --mappe-ink:#edebe4; --mappe-stamp:#b8b5ac; --mappe-line:#434845;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --ground-100:#141513; --surface-100:#1c1e1c; --surface-200:#232624; --line-100:#313532; --line-200:#434845;
+  --ink-900:#edebe4; --ink-600:#b8b5ac; --ink-400:#8f8c82;
+  --snor-700:#9db4f2; --snor-100:#1c2a4f; --on-snor:#0f1a36;
+  --markering-600:#f0914f; --markering-100:#3d2411;
+  --kvit-600:#5cc287; --kvit-100:#163a26;
+  --stop-600:#e27c70; --stop-100:#3f1e1a;
+  --shadow-float:0 12px 32px rgba(0,0,0,0.5);
+  --mappe-bg:#232624; --mappe-ink:#edebe4; --mappe-stamp:#b8b5ac; --mappe-line:#434845;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground-100);color:var(--ink-900);font-family:var(--sans);font-size:15px;line-height:22px;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+h1,h2,h3,p,ul,ol,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+a{color:var(--snor-700)}
+:focus-visible{outline:2px solid var(--snor-700);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* ---------- typografi ---------- */
+.display-xl{font-family:var(--display);font-size:40px;line-height:44px;font-weight:700;letter-spacing:-0.015em;text-wrap:balance}
+.display-md{font-family:var(--display);font-size:24px;line-height:28px;font-weight:700;letter-spacing:-0.01em;text-wrap:balance}
+.display-sm{font-family:var(--display);font-size:20px;line-height:24px;font-weight:600;letter-spacing:-0.005em;text-wrap:balance}
+.title{font-size:17px;line-height:22px;font-weight:600}
+.lede{font-size:17px;line-height:26px;color:var(--ink-600);max-width:56ch}
+.muted{color:var(--ink-600)}
+.caption{font-size:13px;line-height:18px;color:var(--ink-400)}
+.label{font-size:11px;line-height:14px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-400)}
+@media (min-width:760px){ .display-xl{font-size:56px;line-height:60px} }
+
+/* ---------- stemplet ---------- */
+.stamp{display:inline-flex;align-items:center;gap:var(--space-1);font-family:var(--mono);font-size:12.5px;line-height:16px;font-weight:500;color:var(--ink-400)}
+.stamp svg{width:14px;height:14px;flex:none}
+.stamp-lg{font-family:var(--mono);font-size:22px;line-height:28px;font-weight:500;letter-spacing:0.12em}
+
+/* ---------- layout ---------- */
+.wrap{width:100%;max-width:1120px;margin-inline:auto;padding-inline:var(--gutter)}
+.section{display:grid;gap:var(--space-6);padding-block:var(--space-8)}
+@media (min-width:760px){ .section{padding-block:96px} }
+.section-head{display:grid;gap:var(--space-3);max-width:720px}
+.stack{display:grid;gap:var(--space-3)}
+.stack-lg{display:grid;gap:var(--space-5)}
+.rule{border:0;border-top:1px solid var(--line-100);margin:0}
+
+/* ---------- top ---------- */
+.top{position:sticky;top:0;z-index:5;background:var(--ground-100);border-bottom:1px solid var(--line-100)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);min-height:64px}
+.brand{display:inline-flex;align-items:center;gap:var(--space-3);color:var(--ink-900);text-decoration:none}
+.brand .ord{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-0.015em}
+.mark{width:28px;height:28px;flex:none}
+.top nav{display:none;gap:var(--space-5)}
+.top nav a{color:var(--ink-600);text-decoration:none;font-weight:600;font-size:15px}
+.top nav a:hover{color:var(--ink-900)}
+@media (min-width:900px){ .top nav{display:flex} }
+
+/* ---------- knapper og chips ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);min-height:46px;padding-inline:var(--space-5);border-radius:var(--radius-md);font:600 15px/22px var(--sans);text-decoration:none;border:1px solid transparent;cursor:pointer}
+.btn svg{width:20px;height:20px}
+.btn-primary{background:var(--snor-700);color:var(--on-snor)}
+.btn-secondary{background:var(--surface-100);color:var(--ink-900);border-color:var(--line-200)}
+.btn-sm{min-height:44px;padding-inline:var(--space-4)}
+.pill{display:inline-flex;align-items:center;gap:var(--space-1);padding:var(--space-1) var(--space-3);border-radius:var(--radius-pill);font-size:13px;line-height:18px;font-weight:600;white-space:nowrap}
+.pill svg{width:14px;height:14px}
+.pill-kvit{background:var(--kvit-100);color:var(--kvit-600)}
+.pill-markering{background:var(--markering-100);color:var(--markering-600)}
+.pill-snor{background:var(--snor-100);color:var(--snor-700)}
+.pill-stop{background:var(--stop-100);color:var(--stop-600)}
+
+/* ---------- kort ---------- */
+.card{background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-md);padding:var(--space-4);display:grid;gap:var(--space-3);align-content:start}
+@media (min-width:760px){ .card{padding:var(--space-5)} }
+.icon{width:44px;height:44px;border-radius:var(--radius-md);background:var(--snor-100);color:var(--snor-700);display:grid;place-items:center}
+.icon svg{width:24px;height:24px}
+.grid-2{display:grid;gap:var(--space-5)}
+.grid-3{display:grid;gap:var(--space-5)}
+.grid-4{display:grid;gap:var(--space-4)}
+@media (min-width:760px){ .grid-2{grid-template-columns:1.25fr 1fr;align-items:center} .grid-3{grid-template-columns:repeat(3,1fr)} .grid-4{grid-template-columns:repeat(2,1fr)} }
+@media (min-width:1040px){ .grid-4{grid-template-columns:repeat(4,1fr)} }
+
+/* ---------- billedpladser (Codex udfylder) ---------- */
+.billedplads{position:relative;display:grid;place-items:center;overflow:hidden;background:var(--surface-200);border:1px dashed var(--line-200);border-radius:var(--radius-lg);aspect-ratio:4/3;padding:var(--space-4);text-align:center}
+.billedplads[data-format="bred"]{aspect-ratio:16/9}
+.billedplads[data-format="hoej"]{aspect-ratio:4/5}
+.billedplads .pladstekst{display:grid;gap:var(--space-2);max-width:36ch;justify-items:center;color:var(--ink-400)}
+.billedplads .pladstekst svg{width:24px;height:24px}
+.billedplads img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.billedplads:has(img){border-style:solid;border-color:var(--line-100)}
+.billedplads:has(img) .pladstekst{display:none}
+
+/* ---------- hero ---------- */
+.hero{display:grid;gap:var(--space-6);padding-block:var(--space-8)}
+@media (min-width:900px){ .hero{grid-template-columns:1.1fr 1fr;align-items:center;padding-block:96px} }
+.hero-tekst{display:grid;gap:var(--space-5);justify-items:start}
+.hero-handling{display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:center}
+.hero-billede{position:relative}
+.hero-stempel{position:absolute;left:var(--space-4);bottom:var(--space-4);right:var(--space-4);background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);display:grid;gap:var(--space-1);box-shadow:var(--shadow-float)}
+
+/* ---------- problem ---------- */
+.problem-liste{display:grid;gap:0;border-top:1px solid var(--line-100)}
+.problem-liste li{display:grid;gap:var(--space-2);padding-block:var(--space-5);border-bottom:1px solid var(--line-100)}
+@media (min-width:760px){ .problem-liste li{grid-template-columns:72px 1fr 1.4fr;gap:var(--space-5);align-items:baseline} }
+.problem-liste .nr{font-family:var(--mono);font-weight:500;font-size:12.5px;color:var(--ink-400)}
+.citat{background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-lg);padding:var(--space-5);display:grid;gap:var(--space-3)}
+.citat blockquote{margin:0;font-family:var(--display);font-size:24px;line-height:30px;font-weight:600;letter-spacing:-0.01em;text-wrap:balance}
+
+/* ---------- flow ---------- */
+.flow{display:grid;gap:var(--space-4);counter-reset:trin}
+.trin{display:grid;gap:var(--space-4);background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-md);padding:var(--space-4)}
+@media (min-width:760px){ .trin{grid-template-columns:200px 1fr auto;align-items:center;padding:var(--space-5)} }
+.trin-navn{display:grid;gap:var(--space-1)}
+.trin-navn .label{color:var(--snor-700)}
+.trin .stack{gap:var(--space-2)}
+
+/* ---------- kundens telefon ---------- */
+.telefon{width:100%;max-width:320px;justify-self:center;background:var(--surface-100);border:1px solid var(--line-200);border-radius:36px;padding:var(--space-3);box-shadow:var(--shadow-float)}
+.telefon-skaerm{border-radius:26px;background:var(--surface-200);padding:var(--space-4);display:grid;gap:var(--space-3);min-height:520px;align-content:start}
+.telefon-top{display:flex;justify-content:space-between}
+.boble{background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-lg);padding:var(--space-3) var(--space-4);display:grid;gap:var(--space-2)}
+.prisfelt{display:grid;gap:var(--space-2);background:var(--surface-200);border-radius:var(--radius-md);padding:var(--space-3)}
+.prisfelt .linje{display:flex;justify-content:space-between;gap:var(--space-3)}
+.kode{display:grid;gap:var(--space-1);justify-items:center;border:1px solid var(--line-200);border-radius:var(--radius-md);padding:var(--space-3);background:var(--surface-100)}
+
+/* ---------- sagsmappe ---------- */
+.mappe{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--line-100);background:var(--surface-100)}
+.mappe-hoved{background:var(--mappe-bg);color:var(--mappe-ink);padding:var(--space-5);display:grid;gap:var(--space-3)}
+.mappe-hoved .stamp{color:var(--mappe-stamp)}
+.mappe-hoved .label{color:var(--mappe-stamp)}
+.mappe-raekker li{display:grid;grid-template-columns:auto 1fr;gap:var(--space-1) var(--space-3);padding:var(--space-4) var(--space-5);border-top:1px solid var(--line-100);align-items:start}
+.mappe-raekker li:first-child{border-top:0}
+.mappe-raekker .tjek{width:24px;height:24px;border-radius:var(--radius-sm);display:grid;place-items:center;background:var(--kvit-100);color:var(--kvit-600);grid-row:span 2}
+.mappe-raekker .tjek.afventer{background:var(--markering-100);color:var(--markering-600)}
+.mappe-raekker .tjek svg{width:16px;height:16px}
+.mappe-raekker .linje1{display:flex;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap;align-items:center}
+
+/* ---------- roller ---------- */
+.rolle{display:grid;gap:var(--space-3)}
+.rolle ul{display:grid;gap:var(--space-2)}
+.rolle li{display:grid;grid-template-columns:20px 1fr;gap:var(--space-2);color:var(--ink-600)}
+.rolle li svg{width:20px;height:20px;color:var(--kvit-600);margin-top:1px}
+
+/* ---------- pilot ---------- */
+.pilot{background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-lg);padding:var(--space-5);display:grid;gap:var(--space-5)}
+@media (min-width:760px){ .pilot{padding:var(--space-8);grid-template-columns:1.25fr 1fr;align-items:start} }
+.pilot ol{display:grid;gap:var(--space-4);counter-reset:p}
+.pilot ol li{display:grid;grid-template-columns:32px 1fr;gap:var(--space-3);counter-increment:p}
+.pilot ol li::before{content:counter(p);font-family:var(--mono);font-weight:500;font-size:12.5px;width:32px;height:32px;border-radius:var(--radius-sm);display:grid;place-items:center;background:var(--snor-100);color:var(--snor-700)}
+
+footer{border-top:1px solid var(--line-100);padding-block:var(--space-6)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--space-4);align-items:center}
+</style>
+</head>
+<body>
+
+<!-- Ikoner: Lucide-stil, 2px streg, runde ender. Bruges via <svg><use href="#i-..."/></svg>. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-laas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+    <symbol id="i-kamera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7.5 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3.5z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+    <symbol id="i-mikrofon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><path d="M12 18v4"/></symbol>
+    <symbol id="i-position" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-flueben" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-ur" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-billede" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></symbol>
+    <symbol id="i-pil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="i-mappe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9l-.8-1.2A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z"/></symbol>
+    <!-- Mærket: et A, der også er et flueben. Foreløbig tegning; erstattes af design-system/assets/Logo/aftalt-mark.svg, når filen findes. -->
+    <symbol id="mark" viewBox="0 0 28 28"><rect width="28" height="28" rx="4" fill="var(--snor-700)"/><g fill="none" stroke="var(--on-snor)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 21.5 14 6.5"/><path d="M14 6.5l6.5 15"/><path d="M10 16.5l3 3 5-5.5"/></g></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Aftalt, til toppen">
+      <svg class="mark" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="ord">Aftalt</span>
+    </a>
+    <nav aria-label="Sektioner">
+      <a href="#problemet">Problemet</a>
+      <a href="#fire-ting">Det fanger</a>
+      <a href="#sagen">En sag</a>
+      <a href="#sagsmappen">Sagsmappen</a>
+      <a href="#pilot">Pilot</a>
+    </nav>
+    <a class="btn btn-secondary btn-sm" href="../prototype/index.html">Se prototypen</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- 1. Hero -->
+  <section class="wrap hero" aria-labelledby="hero-titel">
+    <div class="hero-tekst">
+      <span class="label">Til Dansk Håndværk</span>
+      <h1 id="hero-titel" class="display-xl">Det aftalte, dokumenteret.</h1>
+      <p class="lede">Aftalt er dokumentationslaget bag håndværkergarantien. Det fanger fire ting, mens arbejdet sker: hvad der blev aftalt, hvad der kom til, hvad der blev lukket inde, og hvad kunden kvitterede for.</p>
+      <div class="hero-handling">
+        <a class="btn btn-primary" href="#pilot">Se forslaget til en pilot <svg aria-hidden="true"><use href="#i-pil"/></svg></a>
+        <span class="caption">Kunden installerer intet. Alt foregår via SMS-link.</span>
+      </div>
+    </div>
+    <div class="hero-billede">
+      <figure class="billedplads" data-billede="hero" data-format="hoej"
+        data-prompt="Dokumentarisk foto, naturligt dagslys. En dansk tømrer i arbejdstøj står i et halvfærdigt badeværelse i et parcelhus og fotograferer vådrumsmembranen på væggen med sin telefon, før der sættes fliser op. Set lidt bagfra over skulderen, så telefonen og membranen er i fokus. Varme, dæmpede farver (puds, beton, træ). Ingen tekst, ingen logoer, intet poseret smil. Format 4:5.">
+        <div class="pladstekst">
+          <svg aria-hidden="true"><use href="#i-billede"/></svg>
+          <span class="label">Billede · hero</span>
+          <span class="caption">Tømrer fotograferer membranen, før den lukkes inde.</span>
+        </div>
+      </figure>
+      <div class="hero-stempel" aria-label="Eksempel på et stempel">
+        <span class="title">Membran før fliser</span>
+        <span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>3. nov 2026 · 09:14 · position bekræftet</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 2. Problemet -->
+  <section id="problemet" class="wrap section" aria-labelledby="problem-titel">
+    <div class="section-head">
+      <span class="label">Problemet</span>
+      <h2 id="problem-titel" class="display-md">Når en garantisag starter, mangler arbejdet sjældent. Det gør dokumentationen.</h2>
+      <p class="lede">Garantien hviler på, at man bagefter kan se, hvad der blev aftalt og lavet. I dag ligger det i en mail, en sms-tråd, en snak på pladsen og en telefon med 3.000 billeder.</p>
+    </div>
+    <div class="grid-2">
+      <ol class="problem-liste">
+        <li>
+          <span class="nr">01</span>
+          <span class="title">Aftalen er uklar</span>
+          <span class="muted">Hvad var med, og hvad var ikke? Et tilbud i en pdf siger sjældent noget om det, der blev sagt ved besigtigelsen.</span>
+        </li>
+        <li>
+          <span class="nr">02</span>
+          <span class="title">Tillæg aftales mundtligt</span>
+          <span class="muted">Den rådne bjælke bliver fundet, prisen nævnt, og arbejdet fortsætter. Ved slutfakturaen husker de to parter det forskelligt.</span>
+        </li>
+        <li>
+          <span class="nr">03</span>
+          <span class="title">Skjult arbejde er væk</span>
+          <span class="muted">Membran, rør og el bliver lukket inde. Når der kommer fugt to år senere, er der intet at se på.</span>
+        </li>
+        <li>
+          <span class="nr">04</span>
+          <span class="title">Afleveringen er ikke kvitteret</span>
+          <span class="muted">Mangler bliver nævnt, men ikke skrevet ned med frist. Ingen kan bagefter sige, hvad kunden godkendte.</span>
+        </li>
+      </ol>
+      <div class="citat">
+        <span class="label">Det hører vi fra foreningen</span>
+        <blockquote>Tingene er meget sjældent specielt godt dokumenteret.</blockquote>
+        <p class="caption">Gengivet fra samtale med Dansk Håndværk om garantiordningen.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 3. De fire ting -->
+  <section id="fire-ting" class="wrap section" aria-labelledby="fire-titel">
+    <div class="section-head">
+      <span class="label">Det fanger Aftalt</span>
+      <h2 id="fire-titel" class="display-md">Fire ting, mens arbejdet sker</h2>
+      <p class="lede">Håndværkeren taler og tager billeder. Aftalt sætter tid, sted og godkendelse på, og låser det.</p>
+    </div>
+    <div class="grid-4">
+      <article class="card">
+        <span class="icon"><svg aria-hidden="true"><use href="#i-mikrofon"/></svg></span>
+        <h3 class="title">Det aftalte</h3>
+        <p class="muted">Tilbud ud fra en talenote på pladsen. Med og ikke med står sort på hvidt. Kunden godkender med en SMS-kode.</p>
+        <span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>14. okt · 11:02 · kode 482 917</span>
+      </article>
+      <article class="card">
+        <span class="icon"><svg aria-hidden="true"><use href="#i-ur"/></svg></span>
+        <h3 class="title">Det der kom til</h3>
+        <p class="muted">Uforudset arbejde bliver et tillæg med pris og loft. Arbejdet fortsætter først, når kunden har godkendt.</p>
+        <span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>4. nov · 13:40 · kode 105 338</span>
+      </article>
+      <article class="card">
+        <span class="icon"><svg aria-hidden="true"><use href="#i-kamera"/></svg></span>
+        <h3 class="title">Det der blev lukket inde</h3>
+        <p class="muted">Obligatoriske fotos af membran, rør og el, før de dækkes til. Med tid og position.</p>
+        <span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>6. nov · 09:14 · position bekræftet</span>
+      </article>
+      <article class="card">
+        <span class="icon"><svg aria-hidden="true"><use href="#i-flueben"/></svg></span>
+        <h3 class="title">Det kunden kvitterede for</h3>
+        <p class="muted">Aflevering med tjekliste, mangler med frist, og kundens kvittering. Slutfakturaen matcher det godkendte.</p>
+        <span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>21. nov · 15:30 · kode 774 062</span>
+      </article>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 4. En sag -->
+  <section id="sagen" class="wrap section" aria-labelledby="sag-titel">
+    <div class="section-head">
+      <span class="label">En sag fra start til slut</span>
+      <h2 id="sag-titel" class="display-md">Badeværelset på Ved Søen 8</h2>
+      <p class="lede">Tømrerfirma Holm ApS renoverer et badeværelse for Mette og Jonas Jensen. Fire uger, fem skridt. Eksemplet er konstrueret; navne og beløb er opfundne.</p>
+    </div>
+    <div class="grid-2">
+      <ol class="flow">
+        <li class="trin">
+          <div class="trin-navn"><span class="label">1 · Sag</span><span class="title">Besigtigelse</span></div>
+          <div class="stack"><p class="muted">Mester indtaler en talenote på stedet. Aftalt laver udkastet til tilbuddet og spørger efter VVS'erens pris.</p><span class="stamp">14. okt · 08:30 · position bekræftet</span></div>
+          <span class="pill pill-kvit"><svg aria-hidden="true"><use href="#i-flueben"/></svg>Oprettet</span>
+        </li>
+        <li class="trin">
+          <div class="trin-navn"><span class="label">2 · Aftale</span><span class="title">Tilbud godkendt</span></div>
+          <div class="stack"><p class="muted">Kunden får et SMS-link med indhold, tilvalg og vilkår, og godkender med en kode.</p><span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>14. okt · 11:02 · kode 482 917</span></div>
+          <span class="pill pill-kvit"><svg aria-hidden="true"><use href="#i-laas"/></svg>Låst</span>
+        </li>
+        <li class="trin">
+          <div class="trin-navn"><span class="label">3 · Byggedag</span><span class="title">Tillæg og skjult arbejde</span></div>
+          <div class="stack"><p class="muted">En rådden bjælke bliver et tillæg på 6.800 kr. med loft. Membranen fotograferes, før fliserne kommer op.</p><span class="stamp">4. nov · 13:12 · sendt til kunden</span></div>
+          <span class="pill pill-markering"><svg aria-hidden="true"><use href="#i-ur"/></svg>Afventer kunden</span>
+        </li>
+        <li class="trin">
+          <div class="trin-navn"><span class="label">4 · Aflevering</span><span class="title">Kvitteret</span></div>
+          <div class="stack"><p class="muted">Tjekliste gennemgået. En mangel noteret med frist. Kunden kvitterer.</p><span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>21. nov · 15:30 · kode 774 062</span></div>
+          <span class="pill pill-kvit"><svg aria-hidden="true"><use href="#i-flueben"/></svg>Kvitteret</span>
+        </li>
+        <li class="trin">
+          <div class="trin-navn"><span class="label">5 · Sagsmappe</span><span class="title">Klar til garantien</span></div>
+          <div class="stack"><p class="muted">Alt samles i én låst mappe, som foreningen kan åbne, hvis der kommer en klage.</p><span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>21. nov · 15:31 · sag AF-2026-0412</span></div>
+          <span class="pill pill-snor"><svg aria-hidden="true"><use href="#i-mappe"/></svg>Arkiveret</span>
+        </li>
+      </ol>
+
+      <!-- Kundens telefon: SMS-godkendelse af tillægget -->
+      <div class="telefon" role="img" aria-label="Kundens telefon med godkendelse af et tillæg">
+        <div class="telefon-skaerm">
+          <div class="telefon-top"><span class="caption">Tømrerfirma Holm ApS</span><span class="caption">13:12</span></div>
+          <div class="boble">
+            <span class="label">Tillæg til aftalen</span>
+            <span class="display-sm">Udskiftning af rådden bjælke</span>
+            <p class="caption">Fundet under nedrivning. Arbejdet fortsætter, når du har godkendt.</p>
+          </div>
+          <div class="prisfelt">
+            <div class="linje"><span>Tillæg inkl. moms</span><span class="title">6.800 kr.</span></div>
+            <div class="linje"><span class="caption">Loft, kan ikke overskrides</span><span class="caption">7.040 kr.</span></div>
+          </div>
+          <div class="kode">
+            <span class="label">Din kode</span>
+            <span class="stamp-lg">105 338</span>
+          </div>
+          <span class="btn btn-primary">Godkend tillægget</span>
+          <span class="stamp" style="justify-self:center">4. nov 2026 · 13:12 · sag AF-2026-0412</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 5. Sagsmappen -->
+  <section id="sagsmappen" class="wrap section" aria-labelledby="mappe-titel">
+    <div class="grid-2">
+      <div class="stack-lg">
+        <div class="section-head">
+          <span class="label">Sagsmappen</span>
+          <h2 id="mappe-titel" class="display-md">Det foreningen ser, når der kommer en klage</h2>
+          <p class="lede">Ikke en bunke billeder, men en tidslinje, hvor hvert punkt er låst med tid, sted og hvem der godkendte. Den samme mappe kan sendes som pdf til nævnet.</p>
+        </div>
+        <figure class="billedplads" data-billede="sagsmappe" data-format="bred"
+          data-prompt="Rolig kontorscene i dagslys. En sagsbehandler i en dansk brancheforening sidder ved et lyst egetræsbord og kigger på en bærbar computer, hvor en sag med fotos og tidslinje er åben (skærmindholdet sløret og ulæseligt). En kop kaffe og en printet mappe ved siden af. Varme, dæmpede farver. Ingen tekst, ingen logoer, intet poseret smil. Format 16:9.">
+          <div class="pladstekst">
+            <svg aria-hidden="true"><use href="#i-billede"/></svg>
+            <span class="label">Billede · sagsmappe</span>
+            <span class="caption">Sagsbehandler i foreningen åbner en sag.</span>
+          </div>
+        </figure>
+      </div>
+
+      <div class="mappe">
+        <div class="mappe-hoved">
+          <span class="label">Sagsmappe · Dansk Håndværk</span>
+          <span class="display-sm">Ved Søen 8, Allerød</span>
+          <span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>AF-2026-0412 · Tømrerfirma Holm ApS</span>
+        </div>
+        <ul class="mappe-raekker">
+          <li>
+            <span class="tjek"><svg aria-hidden="true"><use href="#i-flueben"/></svg></span>
+            <div class="linje1"><span class="title">Aftale godkendt</span><span class="pill pill-kvit">Godkendt 11:02</span></div>
+            <span class="stamp">14. okt 2026 · 11:02 · kode 482 917</span>
+          </li>
+          <li>
+            <span class="tjek"><svg aria-hidden="true"><use href="#i-flueben"/></svg></span>
+            <div class="linje1"><span class="title">Tillæg: rådden bjælke</span><span class="pill pill-kvit">Godkendt 13:40</span></div>
+            <span class="stamp">4. nov 2026 · 13:40 · kode 105 338</span>
+          </li>
+          <li>
+            <span class="tjek"><svg aria-hidden="true"><use href="#i-flueben"/></svg></span>
+            <div class="linje1"><span class="title">Membran før fliser · 4 fotos</span><span class="pill pill-kvit">Låst</span></div>
+            <span class="stamp">6. nov 2026 · 09:14 · position bekræftet</span>
+          </li>
+          <li>
+            <span class="tjek"><svg aria-hidden="true"><use href="#i-flueben"/></svg></span>
+            <div class="linje1"><span class="title">Rør før lukning · 3 fotos</span><span class="pill pill-kvit">Låst</span></div>
+            <span class="stamp">7. nov 2026 · 14:05 · position bekræftet</span>
+          </li>
+          <li>
+            <span class="tjek afventer"><svg aria-hidden="true"><use href="#i-ur"/></svg></span>
+            <div class="linje1"><span class="title">Mangel: fuge ved bruseniche</span><span class="pill pill-markering">Frist 28. nov</span></div>
+            <span class="stamp">21. nov 2026 · 15:24 · noteret af Holm</span>
+          </li>
+          <li>
+            <span class="tjek"><svg aria-hidden="true"><use href="#i-flueben"/></svg></span>
+            <div class="linje1"><span class="title">Aflevering kvitteret</span><span class="pill pill-kvit">Kvitteret 15:30</span></div>
+            <span class="stamp">21. nov 2026 · 15:30 · kode 774 062</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 6. Tre parter -->
+  <section class="wrap section" aria-labelledby="parter-titel">
+    <div class="section-head">
+      <span class="label">Hvem det er til</span>
+      <h2 id="parter-titel" class="display-md">Tre parter, én fælles fortælling</h2>
+    </div>
+    <div class="grid-3">
+      <article class="card rolle">
+        <figure class="billedplads" data-billede="forening"
+          data-prompt="Dokumentarisk foto. To personer fra en dansk brancheforening gennemgår en sag ved et mødebord med papirer og en bærbar. Set fra siden, ansigter delvist væk fra kameraet. Lyst, roligt kontor, dagslys. Ingen tekst, ingen logoer. Format 4:3.">
+          <div class="pladstekst"><svg aria-hidden="true"><use href="#i-billede"/></svg><span class="label">Billede · forening</span></div>
+        </figure>
+        <h3 class="title">Foreningen</h3>
+        <ul>
+          <li><svg aria-hidden="true"><use href="#i-flueben"/></svg>Garantisager afgøres på dokumentation, ikke på påstande.</li>
+          <li><svg aria-hidden="true"><use href="#i-flueben"/></svg>Én sagsmappe i samme format for alle medlemmer.</li>
+          <li><svg aria-hidden="true"><use href="#i-flueben"/></svg>Færre sager, der går i hårdknude.</li>
+        </ul>
+      </article>
+      <article class="card rolle">
+        <figure class="billedplads" data-billede="haandvaerker"
+          data-prompt="Dokumentarisk foto. En dansk håndværker med beskidte arbejdshænder holder en telefon og taler ind i den (talenote) på en byggeplads i et parcelhus. Fokus på hænderne og telefonen. Naturligt lys, varme farver, træ og gips i baggrunden. Ingen tekst på skærmen, ingen logoer. Format 4:3.">
+          <div class="pladstekst"><svg aria-hidden="true"><use href="#i-billede"/></svg><span class="label">Billede · håndværker</span></div>
+        </figure>
+        <h3 class="title">Medlemmet</h3>
+        <ul>
+          <li><svg aria-hidden="true"><use href="#i-flueben"/></svg>Tale og fotos i stedet for formularer.</li>
+          <li><svg aria-hidden="true"><use href="#i-flueben"/></svg>Tillæg godkendt, før arbejdet fortsætter.</li>
+          <li><svg aria-hidden="true"><use href="#i-flueben"/></svg>Fakturaer til Dinero med ét klik.</li>
+        </ul>
+      </article>
+      <article class="card rolle">
+        <figure class="billedplads" data-billede="boligejer"
+          data-prompt="Dokumentarisk foto. Et dansk par i 30'erne står i deres nyrenoverede badeværelse og kigger på en telefon sammen. Afslappet, ikke poseret. Lyse fliser, naturligt lys fra et vindue. Ingen tekst på skærmen, ingen logoer. Format 4:3.">
+          <div class="pladstekst"><svg aria-hidden="true"><use href="#i-billede"/></svg><span class="label">Billede · boligejer</span></div>
+        </figure>
+        <h3 class="title">Boligejeren</h3>
+        <ul>
+          <li><svg aria-hidden="true"><use href="#i-flueben"/></svg>Ingen app. Alt via SMS-link og kode.</li>
+          <li><svg aria-hidden="true"><use href="#i-flueben"/></svg>Ingen overraskelser på regningen.</li>
+          <li><svg aria-hidden="true"><use href="#i-flueben"/></svg>En huslogbog med dokumentation og garanti.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 7. Pilot -->
+  <section id="pilot" class="wrap section" aria-labelledby="pilot-titel">
+    <div class="pilot">
+      <div class="stack-lg">
+        <span class="label">Forslag</span>
+        <h2 id="pilot-titel" class="display-md">En pilot med 5 til 10 medlemsvirksomheder</h2>
+        <p class="lede">Vi foreslår at starte småt og måle på det, der betyder noget for garantien: om sagerne bliver dokumenteret, og om de kan afgøres hurtigere.</p>
+        <div class="hero-handling">
+          <a class="btn btn-primary" href="../prototype/index.html">Se prototypen <svg aria-hidden="true"><use href="#i-pil"/></svg></a>
+          <span class="caption">Kører i browseren, også uden net.</span>
+        </div>
+      </div>
+      <ol>
+        <li><div class="stack" style="gap:var(--space-1)"><span class="title">Vælg medlemmerne</span><span class="muted">Fem til ti virksomheder inden for vådrum og renovering.</span></div></li>
+        <li><div class="stack" style="gap:var(--space-1)"><span class="title">Fastlæg kravene</span><span class="muted">Sammen definerer vi, hvilke checkpoints garantien skal kræve.</span></div></li>
+        <li><div class="stack" style="gap:var(--space-1)"><span class="title">Kør rigtige sager</span><span class="muted">Tre måneder med almindelige opgaver hos rigtige kunder.</span></div></li>
+        <li><div class="stack" style="gap:var(--space-1)"><span class="title">Gør status</span><span class="muted">Andel dokumenterede checkpoints, brug blandt medlemmerne, og hvordan sagsmapperne holder.</span></div></li>
+      </ol>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Aftalt, til toppen">
+      <svg class="mark" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="ord">Aftalt</span>
+    </a>
+    <span class="caption">Det aftalte, dokumenteret. Eksemplet på siden er konstrueret; navne og beløb er opfundne.</span>
+  </div>
+</footer>
+
+</body>
+</html>
