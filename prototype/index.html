@@ -1,0 +1,574 @@
+<title>Aftalt</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: a presenter shell (top bar + stage) around a device frame; the app inside is rendered from one state and adapts to its container. */
+/* Tokens from the Aftalt design system: puds (ground), tjære (ink), snor (brand blue), markering (orange = afventer), kvit (green = godkendt), stop (red). */
+:root{
+  --ground:#efede6; --surface:#ffffff; --surface2:#f7f6f1; --line:#dcd9cf; --line2:#bfbbae;
+  --ink:#1c1a17; --ink2:#4f4c45; --ink3:#716d63;
+  --accent:#1f3c8a; --accent-ink:#ffffff; --accent-soft:#e1e8fa;
+  --good:#1e7a4a; --good-soft:#def1e5; --warn:#c84e0c; --warn-soft:#fbe9dd; --bad:#b3362a; --bad-soft:#f8e1dd;
+  --shell:#e4e2da; --shellink:#1c1a17;
+  --display:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif; --body:'IBM Plex Sans','Helvetica Neue',Arial,sans-serif; --mono:'IBM Plex Mono','SF Mono',Menlo,Consolas,monospace;
+  --r:10px; --shadow:0 12px 32px rgba(28,26,23,.14);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#141513; --surface:#1c1e1c; --surface2:#232624; --line:#313532; --line2:#434845;
+  --ink:#edebe4; --ink2:#b8b5ac; --ink3:#8f8c82;
+  --accent:#9db4f2; --accent-ink:#0f1a36; --accent-soft:#1c2a4f;
+  --good:#5cc287; --good-soft:#163a26; --warn:#f0914f; --warn-soft:#3d2411; --bad:#e27c70; --bad-soft:#3f1e1a;
+  --shell:#0c0e0d; --shellink:#edebe4; --shadow:0 12px 32px rgba(0,0,0,.5); color-scheme:dark } }
+:root[data-theme="dark"]{
+  --ground:#141513; --surface:#1c1e1c; --surface2:#232624; --line:#313532; --line2:#434845;
+  --ink:#edebe4; --ink2:#b8b5ac; --ink3:#8f8c82;
+  --accent:#9db4f2; --accent-ink:#0f1a36; --accent-soft:#1c2a4f;
+  --good:#5cc287; --good-soft:#163a26; --warn:#f0914f; --warn-soft:#3d2411; --bad:#e27c70; --bad-soft:#3f1e1a;
+  --shell:#0c0e0d; --shellink:#edebe4; --shadow:0 12px 32px rgba(0,0,0,.5); color-scheme:dark }
+
+html,body{height:100%}
+body{margin:0;background:var(--shell);color:var(--shellink);font-family:var(--body);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+button{font:inherit;cursor:pointer}
+input{font:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- presenter shell ---------- */
+.shell{min-height:100%;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line);background:var(--shell);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--shell)}
+.brand{display:flex;align-items:baseline;gap:8px;font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.01em}
+.brand small{font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.steps{display:flex;gap:4px;flex-wrap:wrap}
+.step{border:1px solid transparent;background:transparent;color:var(--ink2);padding:6px 10px;border-radius:999px;font-size:12.5px;font-weight:500;display:flex;align-items:center;gap:7px}
+.step b{display:inline-flex;width:18px;height:18px;border-radius:999px;border:1.5px solid var(--line2);align-items:center;justify-content:center;font-size:10.5px;font-weight:600;color:var(--ink3)}
+.step.done b{background:var(--good);border-color:var(--good);color:#fff}
+.step.active{background:var(--surface);border-color:var(--line);color:var(--ink)}
+.step.active b{border-color:var(--accent);color:var(--accent)}
+.step:hover{background:var(--surface)}
+.spacer{flex-grow:1}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;color:var(--ink2);padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:6px}
+.seg button.on{background:var(--ink);color:var(--ground)}
+.clock{font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:7px;padding:6px 10px;border:1px dashed var(--line2);border-radius:999px;font-variant-numeric:tabular-nums}
+.clock i{width:7px;height:7px;border-radius:999px;background:var(--accent);display:inline-block}
+.ghost{border:1px solid var(--line);background:transparent;color:var(--ink2);padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:500}
+.ghost:hover{background:var(--surface);color:var(--ink)}
+
+.stage{flex-grow:1;padding-block:28px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;justify-content:center;align-items:flex-start;overflow:hidden}
+.scaler{transform-origin:top center;display:flex;gap:28px;align-items:flex-start}
+
+/* ---------- device frames ---------- */
+.frame{position:relative;background:var(--surface);box-shadow:var(--shadow);overflow:hidden;container-type:inline-size;container-name:app}
+.frame.mobile{width:390px;height:844px;border-radius:40px;border:8px solid #1E2120}
+.frame.desktop{width:1180px;height:760px;border-radius:14px;border:1px solid var(--line)}
+.phone{width:330px;height:680px;border-radius:34px;border:7px solid #1E2120;background:var(--surface);box-shadow:var(--shadow);overflow:hidden;position:relative;container-type:inline-size;container-name:kunde}
+.phone .lbl{position:absolute;left:0;right:0;top:0;text-align:center;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding:8px;background:var(--surface);border-bottom:1px solid var(--line);z-index:2}
+
+/* ---------- app (inside frame) ---------- */
+.app{height:100%;display:flex;background:var(--ground);color:var(--ink)}
+.side{width:224px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:20px 14px}
+.side .logo{font-family:var(--display);font-weight:700;font-size:22px;padding:4px 10px 18px;letter-spacing:-.01em}
+.navi{display:flex;flex-direction:column;gap:2px}
+.navi a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;color:var(--ink2);text-decoration:none;font-weight:500;font-size:13.5px}
+.navi a.on{background:var(--accent-soft);color:var(--accent)}
+.navi a svg{width:16px;height:16px}
+.side .firm{margin-top:auto;display:flex;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:10px}
+.main{flex-grow:1;min-width:0;display:flex;flex-direction:column}
+.head{padding:18px 24px 12px;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.head h1{margin:0;font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.01em;line-height:1.15;text-wrap:balance}
+.head .sub{font-size:12.5px;color:var(--ink3);margin-bottom:3px}
+.tabs{display:flex;gap:6px}
+.tab{font-size:12px;font-weight:500;padding:6px 12px;border-radius:8px;background:var(--surface2);color:var(--ink3);border:1px solid transparent}
+.tab.on{background:var(--accent);color:var(--accent-ink)}
+.tab.done{color:var(--good);background:var(--good-soft)}
+.body{flex-grow:1;overflow:auto;padding:18px 24px 28px;display:flex;flex-direction:column;gap:14px}
+.foot{padding:12px 20px calc(16px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.cols{display:grid;grid-template-columns:1fr;gap:14px}
+@container app (min-width:700px){
+  .cols{grid-template-columns:1.25fr 1fr}
+  .body{padding:22px 28px 32px;gap:16px}
+}
+@container app (max-width:699px){
+  .side{display:none}
+  .head{padding:52px 20px 10px}
+  .head h1{font-size:20px}
+  .body{padding:16px 20px 24px}
+}
+
+/* ---------- components ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.card.ok{border-color:color-mix(in srgb,var(--good) 45%,var(--line))}
+.card.warn{border-color:color-mix(in srgb,var(--warn) 45%,var(--line))}
+.card.locked{background:var(--surface2);border-style:dashed}
+.card h3{margin:0;font-size:15px;font-weight:600;font-family:var(--body)}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3)}
+.row{display:flex;align-items:center;gap:10px}
+.row.between{justify-content:space-between}
+.muted{color:var(--ink3);font-size:12.5px}
+.small{font-size:12.5px;color:var(--ink2);line-height:1.45}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.neutral{background:var(--surface2);color:var(--ink2)}
+.pill.acc{background:var(--accent-soft);color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 18px;border-radius:11px;border:1px solid var(--line2);background:var(--surface);color:var(--ink);font-weight:600;font-size:14.5px;text-decoration:none;white-space:nowrap}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.icon{width:46px;padding:0}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.grow{flex-grow:1}
+.btn svg{width:18px;height:18px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12.5px;font-weight:600;color:var(--ink2)}
+.field input{height:46px;padding:0 13px;border:1px solid var(--line2);border-radius:10px;background:var(--surface);color:var(--ink);font-size:15px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line2);background:var(--surface);color:var(--ink);font-weight:500;font-size:14px}
+.chip.on{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.list{display:flex;flex-direction:column;gap:7px;font-size:14px}
+.list .it{display:flex;gap:10px;align-items:flex-start}
+.list .it b{width:18px;flex-shrink:0;text-align:center}
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px}
+.ph{aspect-ratio:1;border-radius:8px;background:linear-gradient(135deg,var(--surface2),var(--line));display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:5px;font-size:10px;color:var(--ink2);font-variant-numeric:tabular-nums;position:relative;max-width:100%}
+.ph svg{position:absolute;inset:0;margin:auto;width:20px;height:20px;color:var(--ink3)}
+.ph.add{background:var(--surface);border:1px dashed var(--line2);cursor:pointer;color:var(--accent);font-weight:600;justify-content:center}
+.ph.add:hover{background:var(--accent-soft)}
+.note{display:flex;gap:9px;padding:10px 12px;background:var(--surface2);border-radius:9px;font-size:13px;line-height:1.45;color:var(--ink2)}
+.note svg{width:15px;height:15px;flex-shrink:0;margin-top:2px;color:var(--accent)}
+.tl{display:flex;flex-direction:column}
+.tl .ev{display:grid;grid-template-columns:84px 1fr;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.tl .ev:last-child{border-bottom:0}
+.tl .t{font-size:12px;color:var(--ink3);line-height:1.4;font-variant-numeric:tabular-nums}
+.tl .ev.flag{background:var(--warn-soft);margin:0 -16px;padding-left:16px;padding-right:16px;border-radius:0}
+.tl .ev.flag .t,.tl .ev.flag b,.tl .ev.flag span{color:var(--warn)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.stats div{background:var(--surface);padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.stats b{font-family:var(--display);font-size:22px;font-weight:700;line-height:1}
+.stats span{font-size:11px;color:var(--ink3);text-align:center}
+.dark{background:var(--ink);color:var(--ground)}
+.dark .eyebrow{color:color-mix(in srgb,var(--ground) 65%,transparent)}
+.lockbar{display:flex;gap:8px;align-items:flex-start;padding:10px 12px;border-radius:9px;background:color-mix(in srgb,var(--ground) 14%,transparent);font-size:12.5px;line-height:1.4}
+.lockbar svg{width:14px;height:14px;flex-shrink:0;margin-top:2px}
+.tick{width:20px;height:20px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.tick.on{background:var(--good);color:#fff}
+.tick.off{border:1.5px solid var(--line2);color:transparent}
+.price{display:flex;align-items:baseline;justify-content:space-between;padding:14px 16px;background:var(--surface2);border-radius:var(--r)}
+.price b{font-family:var(--display);font-size:24px;font-weight:700}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.code{height:54px;font-size:22px;font-weight:600;letter-spacing:.14em;text-align:center}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:40px 24px;color:var(--ink3);height:100%}
+.empty svg{width:28px;height:28px}
+.sms{display:flex;flex-direction:column;gap:8px;padding:14px;background:var(--surface2);border-radius:14px 14px 14px 4px;font-size:13.5px;line-height:1.45;max-width:92%}
+.sms .from{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.sms a{color:var(--accent);font-weight:600}
+.kbody{height:100%;overflow:auto;padding:44px 18px 20px;display:flex;flex-direction:column;gap:14px;background:var(--surface);color:var(--ink)}
+.kfoot{position:sticky;bottom:0;background:var(--surface);padding-top:10px;display:flex;flex-direction:column;gap:8px;margin-top:auto}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--ground);padding:11px 16px;border-radius:10px;font-size:13.5px;font-weight:500;opacity:0;transition:.25s;z-index:20;pointer-events:none;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.modal{position:fixed;inset:0;background:rgba(10,12,11,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:30}
+.paper{background:#fff;color:#17191A;width:min(680px,100%);max-height:90%;overflow:auto;border-radius:6px;padding:40px 44px;font-family:var(--body);box-shadow:var(--shadow)}
+.paper h2{font-family:var(--display);margin:0 0 4px;font-size:24px}
+.paper .tl .ev{border-color:#E1DFD7}
+.paper .tl .t{color:#7B807E}
+.paper .pill{background:#F7F6F2;color:#4B4F4E}
+.stamp{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12.5px;line-height:16px;font-weight:500;color:var(--ink3);font-variant-numeric:tabular-nums}
+.stamp svg{width:13px;height:13px;flex-shrink:0}
+.stamp.locked{color:var(--ink2)}
+.tl .t{font-family:var(--mono);font-weight:500}
+.ph span{font-family:var(--mono);font-weight:500}
+.code{font-family:var(--mono)}
+.clock{font-family:var(--mono)}
+.mark{width:28px;height:28px;flex-shrink:0;display:inline-block}
+.brand{align-items:center}
+.mobileonly{display:none}
+@container app (max-width:699px){.mobileonly{display:inline-flex}.deskonly{display:none}}
+.switch{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:3}
+</style>
+
+<div class="shell">
+  <header class="topbar">
+    <div class="brand"><svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="6" fill="#1f3c8a"/><path d="M10 29.5 19.5 39 38.5 11" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.5 29.5H36" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>Aftalt <small>prototype</small></div>
+    <nav class="steps" id="steps" aria-label="Forløb"></nav>
+    <div class="spacer"></div>
+    <div class="clock" id="clock" title="Simuleret tid i prototypen"><i></i><span></span></div>
+    <div class="seg" role="group" aria-label="Enhed">
+      <button type="button" id="devMobile" data-action="device" data-v="mobile">Mobil</button>
+      <button type="button" id="devDesktop" data-action="device" data-v="desktop">Desktop</button>
+    </div>
+    <button type="button" class="ghost" data-action="reset">Nulstil</button>
+  </header>
+  <main class="stage" id="stage">
+    <div class="scaler" id="scaler">
+      <div class="frame mobile" id="frame"><div class="app" id="app"></div></div>
+      <div class="phone" id="phone"><div class="lbl">Kundens telefon · SMS-link</div><div class="kbody" id="kunde"></div></div>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="modalHost"></div>
+
+<script>
+(function(){
+'use strict';
+/* ---------- icons ---------- */
+const I = {
+  camera:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+  mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+  file:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
+  folder:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>',
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>',
+  inbox:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-7A2 2 0 0 0 16.7 4H7.3a2 2 0 0 0-1.8 1z"/></svg>'
+};
+
+/* ---------- simulated clock ---------- */
+const MON=['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
+const pad=n=>String(n).padStart(2,'0');
+const fmtTime=d=>`${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const fmtDay=d=>`${d.getDate()}. ${MON[d.getMonth()]}`;
+const fmtDate=d=>`${fmtDay(d)} ${d.getFullYear()}`;
+const WD=['søndag','mandag','tirsdag','onsdag','torsdag','fredag','lørdag'];
+
+/* ---------- state ---------- */
+let S;
+function fresh(){
+  return {
+    device:'mobile', screen:'sag', showKunde:false,
+    clock:new Date(2026,9,28,14,5),
+    sag:{adresse:'Ved Søen 8, 3450 Allerød',kunde:'Mette Lund',mobil:'+45 21 44 56 78',fag:'Vådrum',created:false,nr:'2026-0142'},
+    aftale:{status:'kladde',pris:69576,sentAt:null,okAt:null},
+    cps:[
+      {id:'membran',navn:'Membran før fliser',obl:true,fotos:[],note:null,ved:'Håndværker'},
+      {id:'roer',navn:'Rør før lukning',obl:true,fotos:[],note:null,ved:'VVS-underleverandør'},
+      {id:'fliser',navn:'Fliser og fald mod afløb',obl:false,fotos:[],note:null,needs:['membran','roer']},
+      {id:'vvs',navn:'VVS tilsluttet og tæthedstestet',obl:false,fotos:[],note:null,needs:['roer']},
+      {id:'el',navn:'El afprøvet',obl:false,fotos:[],note:null}
+    ],
+    tillaeg:[], draft:null,
+    mangler:[], kvit:{status:'ingen',at:null},
+    klage:null, events:[], checkedIn:false, stageDates:{}
+  };
+}
+const DAYS={byggedag:new Date(2026,10,3,7,52), aflevering:new Date(2026,10,7,14,50)};
+function tick(min){ S.clock=new Date(S.clock.getTime()+min*60000); }
+function log(kind,title,detail){ S.events.push({t:new Date(S.clock),kind,title,detail}); }
+const fotoCount=()=>S.cps.reduce((a,c)=>a+c.fotos.length,0)+S.tillaeg.reduce((a,t)=>a+t.fotos,0)+S.mangler.reduce((a,m)=>a+(m.udbedret?2:1),0);
+const cp=id=>S.cps.find(c=>c.id===id);
+const cpDone=c=>c.fotos.length>0;
+const cpLocked=c=>(c.needs||[]).some(id=>!cpDone(cp(id)));
+const pending=()=>S.aftale.status==='sendt'?'aftale':S.tillaeg.find(t=>t.status==='sendt')?'tillaeg':S.kvit.status==='sendt'?'kvit':null;
+const kr=n=>n.toLocaleString('da-DK')+' kr.';
+
+/* ---------- screens ---------- */
+const STEPS=[['sag','Ny sag'],['aftale','Aftale'],['byggedag','Byggedag'],['aflevering','Aflevering'],['sagsmappe','Sagsmappe']];
+const stepDone={
+  sag:()=>S.sag.created, aftale:()=>S.aftale.status==='godkendt',
+  byggedag:()=>S.cps.filter(c=>c.obl).every(cpDone), aflevering:()=>S.kvit.status==='kvitteret', sagsmappe:()=>!!S.klage
+};
+
+function scrSag(){
+  const s=S.sag;
+  return {
+    title:'Ny sag', sub:'Tager omkring 30 sekunder', pillTxt:null,
+    body:`
+    <div class="cols">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="field"><label for="f-adr">Adresse</label><input id="f-adr" data-bind="adresse" value="${s.adresse}"></div>
+        <div class="two">
+          <div class="field"><label for="f-kunde">Kunde</label><input id="f-kunde" data-bind="kunde" value="${s.kunde}"></div>
+          <div class="field"><label for="f-mobil">Kundens mobil</label><input id="f-mobil" data-bind="mobil" value="${s.mobil}"></div>
+        </div>
+        <div class="field"><span class="eyebrow">Fagtype · bestemmer tjeklisten</span>
+          <div class="chips">${['Vådrum','Tag','Andet'].map(f=>`<button type="button" class="chip ${s.fag===f?'on':''}" data-action="fag" data-v="${f}">${f}</button>`).join('')}</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card"><div class="row"><div class="tick on" style="width:40px;height:40px;border-radius:10px;background:var(--ink);color:var(--ground);font-size:13px">TH</div>
+          <div><div style="font-weight:600">Tømrerfirma Holm ApS</div><div class="muted">Medlem af Dansk Håndværk · Garantiordning</div></div></div></div>
+        <div class="card"><span class="eyebrow">Det får du med sagen</span>
+          <div class="list">
+            <div class="it"><b style="color:var(--good)">✓</b><span>Tjekliste med obligatoriske fotos for ${s.fag.toLowerCase()}</span></div>
+            <div class="it"><b style="color:var(--good)">✓</b><span>Aftale og tillæg godkendt af kunden via SMS-kode</span></div>
+            <div class="it"><b style="color:var(--good)">✓</b><span>Sagsmappe med låste tidsstempler, gemt i 10 år</span></div>
+          </div>
+          <p class="small" style="margin:0">Kunden installerer intet. Alt foregår via SMS-link.</p></div>
+      </div>
+    </div>`,
+    actions:`<button type="button" class="btn primary grow" data-action="opret">Opret sag</button>`
+  };
+}
+
+function scrAftale(){
+  const a=S.aftale;
+  const status = a.status==='kladde' ? `<div class="pill neutral">Kladde · ikke sendt</div>`
+    : a.status==='sendt' ? `<div class="pill warn">Sendt ${fmtDay(a.sentAt)} ${fmtTime(a.sentAt)} · afventer kunden</div>`
+    : `<div class="pill ok">${I.check} Godkendt af kunden</div><div class="stamp locked">${I.lock}${fmtDate(a.okAt)} · ${fmtTime(a.okAt)} · SMS-kode · låst</div>`;
+  const actions = a.status==='kladde' ? `<button type="button" class="btn primary grow" data-action="sendAftale">Send til kunden</button>`
+    : a.status==='sendt' ? `<button type="button" class="btn grow mobileonly" data-action="kunde">Vis kundens telefon</button><button type="button" class="btn grow deskonly" disabled>Afventer kundens godkendelse</button>`
+    : `<button type="button" class="btn primary grow" data-action="go" data-v="byggedag">Start byggedag</button>`;
+  return {
+    title:S.sag.adresse.split(',')[0], sub:`Sag ${S.sag.nr} · ${S.sag.fag} · ${S.sag.kunde}`,
+    body:`
+    <div class="cols">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card"><div class="row"><div class="tick" style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);color:var(--accent)">${I.file}</div>
+          <div style="min-width:0"><div style="font-weight:600">Tilbud_VedSoen8.pdf</div><div class="muted">${kr(a.pris)} DKK inkl. moms · uploadet 28. okt 14:05</div></div></div></div>
+        <div class="card"><span class="eyebrow" style="color:var(--good)">Med i aftalen</span>
+          <div class="list">
+            <div class="it"><b style="color:var(--good)">✓</b><span>Nedrivning af eksisterende badeværelse</span></div>
+            <div class="it"><b style="color:var(--good)">✓</b><span>Ny vådrumsmembran, fliser og fuger</span></div>
+            <div class="it"><b style="color:var(--good)">✓</b><span>VVS: nyt afløb og bruser (underleverandør)</span></div>
+            <div class="it"><b style="color:var(--good)">✓</b><span>El: 2 stikkontakter og 4 spots</span></div></div></div>
+        <div class="card"><span class="eyebrow" style="color:var(--bad)">Ikke med</span>
+          <div class="list">
+            <div class="it"><b style="color:var(--bad)">–</b><span>Maling af loft</span></div>
+            <div class="it"><b style="color:var(--bad)">–</b><span>Nyt toilet (kunden leverer selv)</span></div>
+            <div class="it"><b style="color:var(--bad)">–</b><span>Bortkørsel af affald</span></div></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card"><span class="eyebrow">Status</span>${status}
+          <p class="small" style="margin:0">Når kunden godkender med SMS-kode, låses aftalen med tidsstempel. Alt ekstra sker som tillæg med egen godkendelse.</p></div>
+        <div class="card"><span class="eyebrow">Betalingsplan</span>
+          <div class="list"><div class="it"><b>30 %</b><span>ved opstart · ${kr(Math.round(a.pris*.3))} DKK</span></div><div class="it"><b>40 %</b><span>midtvejs · ${kr(Math.round(a.pris*.4))} DKK</span></div><div class="it"><b>30 %</b><span>ved aflevering · ${kr(a.pris-Math.round(a.pris*.3)-Math.round(a.pris*.4))} DKK</span></div></div></div>
+      </div>
+    </div>`, actions };
+}
+
+function cpCard(c){
+  const locked=cpLocked(c), done=cpDone(c);
+  const state = done ? `<span class="pill ok">Dokumenteret ${fmtTime(c.fotos[0].t)}</span>` : locked ? `<span class="pill neutral">${I.lock} Låst</span>` : `<span class="pill warn">Mangler</span>`;
+  const photos = c.fotos.map(f=>`<div class="ph">${I.camera}<span>${fmtTime(f.t)}</span></div>`).join('') +
+    (locked ? '' : `<button type="button" class="ph add" data-action="foto" data-v="${c.id}" aria-label="Tag foto til ${c.navn}">${I.plus}</button>`);
+  const needs = locked ? `<div class="lockbar" style="background:var(--surface);border:1px solid var(--line)">${I.lock}<span>Kan først dokumenteres, når ${(c.needs||[]).filter(id=>!cpDone(cp(id))).map(id=>`"${cp(id).navn}"`).join(' og ')} er på plads. Fotos af skjult arbejde kan ikke tages bagefter.</span></div>` : '';
+  const note = c.note ? `<div class="note">${I.mic}<span>${c.note.text} <span class="muted">· talenote, skrevet ud ${fmtTime(c.note.t)}</span></span></div>`
+    : (done && !locked ? `<button type="button" class="btn" style="height:40px;font-size:13.5px;align-self:flex-start" data-action="note" data-v="${c.id}">${I.mic} Indtal note</button>` : '');
+  return `<div class="card ${done?'ok':locked?'locked':c.obl?'warn':''}">
+    <div class="row between"><div><div class="eyebrow">${c.obl?'Obligatorisk checkpoint':'Checkpoint'}${c.ved?' · '+c.ved:''}</div><h3>${c.navn}</h3></div>${state}</div>
+    ${needs}
+    ${locked?'':`<div class="photos">${photos}</div>`}
+    ${done?`<div class="stamp">${fmtDate(c.fotos[0].t)} · ${fmtTime(c.fotos[0].t)} · position bekræftet · ${c.fotos.length} foto${c.fotos.length>1?'s':''}</div>`:''}
+    ${note}
+  </div>`;
+}
+function tilCard(t){
+  const st = t.status==='kladde'?`<span class="pill neutral">Kladde</span>`:t.status==='sendt'?`<span class="pill warn">Sendt ${fmtTime(t.sentAt)} · afventer</span>`:`<span class="pill ok">Godkendt ${fmtTime(t.okAt)}</span>`;
+  const act = t.status==='kladde'?`<button type="button" class="btn primary" style="height:40px;font-size:13.5px;align-self:flex-start" data-action="sendTil" data-v="${t.id}">Send til kunden</button>`
+    : t.status==='sendt'?`<div class="small">Arbejdet på tillægget er sat på pause, indtil kunden har godkendt.</div><button type="button" class="btn mobileonly" style="height:40px;font-size:13.5px;align-self:flex-start" data-action="kunde">Vis kundens telefon</button>`
+    : `<div class="stamp locked">${I.lock}${fmtDate(t.okAt)} · ${fmtTime(t.okAt)} · SMS-kode · låst</div><div class="small">Arbejdet fortsat ${fmtTime(new Date(t.okAt.getTime()+3*60000))}, efter godkendelsen. Loggen viser rækkefølgen.</div>`;
+  return `<div class="card ${t.status==='godkendt'?'ok':''}"><div class="row between"><div><div class="eyebrow">Tillæg · ${fmtTime(t.at)}</div><h3>${t.titel}</h3></div>${st}</div>
+    <div class="small">Maks. ${kr(t.loft)} DKK inkl. moms · ${t.fotos} foto · godkendes af kunden via SMS-kode</div>${act}</div>`;
+}
+function scrByggedag(){
+  const d=DAYS.byggedag;
+  const oblDone=S.cps.filter(c=>c.obl).every(cpDone);
+  const draft = S.draft ? `<div class="card warn"><span class="eyebrow">Nyt tillæg</span>
+      <div class="field"><label for="t-titel">Hvad er fundet</label><input id="t-titel" data-bind="draftTitel" value="${S.draft.titel}"></div>
+      <div class="field"><label for="t-loft">Prisloft, kr. DKK inkl. moms</label><input id="t-loft" data-bind="draftLoft" inputmode="numeric" value="${S.draft.loft}"></div>
+      <div class="row"><button type="button" class="btn primary" style="height:42px" data-action="gemTil">Gem og send til kunden</button><button type="button" class="btn" style="height:42px" data-action="dropTil">Annullér</button></div></div>` : '';
+  return {
+    title:`${WD[d.getDay()][0].toUpperCase()+WD[d.getDay()].slice(1)} ${fmtDay(d)}`, sub:`${S.sag.adresse.split(',')[0]} · Sag ${S.sag.nr} · aftale låst ${fmtDay(S.aftale.okAt)}`,
+    body:`
+    <div class="row" style="font-size:13px;color:var(--ink2)"><span style="color:var(--good);display:inline-flex;width:16px">${I.pin}</span><span>Tjekket ind på adressen</span><span class="stamp">${fmtDate(DAYS.byggedag)} · ${fmtTime(DAYS.byggedag)} · position bekræftet</span></div>
+    <div class="cols">
+      <div style="display:flex;flex-direction:column;gap:14px">${S.cps.map(cpCard).join('')}</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        ${draft}
+        ${S.tillaeg.map(tilCard).join('')}
+        ${S.draft?'':`<button type="button" class="btn" data-action="nytTil" style="align-self:flex-start">${I.plus} Nyt tillæg (uforudset arbejde)</button>`}
+        <div class="card"><span class="eyebrow">Sådan virker låsen</span><p class="small" style="margin:0">Fliser kan først dokumenteres, når membran og rør er fotograferet. Skønsmanden laver sjældent destruktive indgreb, så fotos før lukning er det eneste bevis for skjult arbejde.</p></div>
+      </div>
+    </div>`,
+    actions:`<button type="button" class="btn icon" aria-label="Tag foto" data-action="fotoNext">${I.camera}</button><button type="button" class="btn primary grow" data-action="go" data-v="aflevering" ${oblDone?'':'disabled'}>${oblDone?'Gå til aflevering':'Aflevering låst: obligatoriske fotos mangler'}</button>`
+  };
+}
+
+function scrAflevering(){
+  const k=S.kvit;
+  const mangler = S.mangler.length ? S.mangler.map(m=>`<div class="card ${m.udbedret?'ok':'warn'}"><div class="row between"><span class="eyebrow">Mangel</span>${m.udbedret?`<span class="pill ok">Udbedret ${fmtDay(m.udbedretAt)}</span>`:`<span class="pill warn">Frist ${fmtDay(m.frist)}</span>`}</div>
+      <h3>${m.titel}</h3><div class="small">Noteret sammen med kunden · 1 foto · rettes uden beregning${m.udbedret?' · kunde kvitteret samme dag':''}</div>
+      ${m.udbedret||k.status!=='kvitteret'?'':`<button type="button" class="btn" style="height:40px;font-size:13.5px;align-self:flex-start" data-action="udbedr" data-v="${m.id}">Markér udbedret (+ foto)</button>`}</div>`).join('')
+    : `<div class="card"><span class="eyebrow">Mangler</span><div class="small">Ingen mangler noteret.</div>${k.status==='ingen'?`<button type="button" class="btn" style="height:40px;font-size:13.5px;align-self:flex-start" data-action="nyMangel">${I.plus} Notér mangel</button>`:''}</div>`;
+  const kv = k.status==='kvitteret' ? `<div class="card ok"><div class="row"><div class="tick on" style="width:36px;height:36px;border-radius:999px">${I.check}</div><div><div style="font-weight:600">Kvitteret af ${S.sag.kunde}</div><div class="stamp locked">${I.lock}${fmtDate(k.at)} · ${fmtTime(k.at)} · SMS-kode · låst</div><div class="small">"Afleveret${S.mangler.length?` med ${S.mangler.length} mangel, frist aftalt`:' uden mangler'}"</div></div></div></div>`
+    : k.status==='sendt' ? `<div class="card warn"><span class="eyebrow">Kundens kvittering</span><div class="pill warn">Sendt ${fmtTime(k.sentAt)} · afventer</div><button type="button" class="btn mobileonly" style="height:40px;font-size:13.5px;align-self:flex-start" data-action="kunde">Vis kundens telefon</button></div>`
+    : `<div class="card"><span class="eyebrow">Kundens kvittering</span><div class="small">Kunden kvitterer for afleveringen og eventuelle mangler via SMS-link. Kvitteringen er starten på garantiperioden.</div></div>`;
+  const actions = k.status==='ingen' ? `<button type="button" class="btn primary grow" data-action="sendKvit">Send aflevering til kundens kvittering</button>`
+    : k.status==='sendt' ? `<button type="button" class="btn grow deskonly" disabled>Afventer kundens kvittering</button><button type="button" class="btn grow mobileonly" data-action="kunde">Vis kundens telefon</button>`
+    : `<button type="button" class="btn primary grow" data-action="go" data-v="sagsmappe">${I.folder} Afslut og gem sagsmappe</button>`;
+  return {
+    title:`Aflevering · ${WD[DAYS.aflevering.getDay()]} ${fmtDay(DAYS.aflevering)}`, sub:`${S.sag.adresse.split(',')[0]} · Sag ${S.sag.nr}`,
+    body:`<div class="cols">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card"><span class="eyebrow">Tjekliste · ${S.sag.fag.toLowerCase()}</span><div class="list">
+          ${S.cps.map(c=>`<div class="it" style="align-items:center"><span class="tick ${cpDone(c)?'on':'off'}">✓</span><span style="flex-grow:1">${c.navn}</span><span class="muted">${cpDone(c)?c.fotos.length+' foto'+(c.fotos.length>1?'s':''):'mangler'}</span></div>`).join('')}
+          <div class="it" style="align-items:center"><span class="tick on">✓</span><span style="flex-grow:1">Materialer registreret</span><span class="muted">2 bilag</span></div>
+        </div></div>
+        ${mangler}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">${kv}
+        <div class="card"><span class="eyebrow">Herefter</span><p class="small" style="margin:0">Sagsmappen gemmes i 10 år. Kunden får sin egen kopi med fotos, aftale og tillæg, som følger huset ved salg.</p></div></div>
+    </div>`, actions };
+}
+
+function evRow(e,flag){ return `<div class="ev ${flag?'flag':''}"><div class="t">${fmtDay(e.t)}${e.t.getFullYear()!==2026?' '+e.t.getFullYear():''}<br>${fmtTime(e.t)}</div><div><b style="font-size:13px">${e.title}</b><br><span class="small">${e.detail}</span></div></div>`; }
+function scrSagsmappe(){
+  const godk=S.events.filter(e=>e.kind==='godk').length, til=S.tillaeg.filter(t=>t.status==='godkendt').length, mg=S.mangler.length;
+  const banner = S.klage ? `<div class="lockbar">${I.lock}<span>Åbnet ${fmtDate(S.klage.open)} ved klage · samtykke fra Tømrerfirma Holm ${fmtDay(S.klage.consent)} · adgang logget</span></div>`
+    : `<div class="lockbar">${I.lock}<span>Lukket sagsmappe. Kun håndværker og kunde har adgang. Foreningen får adgang ved en klage, med samtykke.</span></div>`;
+  return {
+    title:`Sag ${S.sag.nr} · ${S.sag.adresse.split(',')[0]}`, sub:`Sagsmappe · Tømrerfirma Holm ApS · ${S.sag.fag} · afleveret ${S.kvit.at?fmtDate(S.kvit.at):'(ikke afleveret)'}`,
+    body:`<div class="card dark"><div class="eyebrow">Dansk Håndværk · Garantiordning · ${S.klage?'foreningens visning':'arkiv'}</div>${banner}</div>
+    <div class="stats"><div><b>${godk}</b><span>godkendelser fra kunde</span></div><div><b>${til}</b><span>tillæg</span></div><div><b>${fotoCount()}</b><span>fotos, tidsstemplet</span></div><div><b>${mg}</b><span>mangel${mg===1?'':'er'}${S.mangler.every(m=>m.udbedret)&&mg?', lukket':''}</span></div></div>
+    <div class="cols">
+      <div class="card"><span class="eyebrow">Kronologi · alle tidsstempler låst ved registrering</span>
+        <div class="tl">${S.events.map(e=>evRow(e,e.kind==='klage')).join('')}${S.events.length?'':'<div class="small">Ingen hændelser endnu.</div>'}</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card"><span class="eyebrow">Det nævnet beder om</span><div class="list">
+          <div class="it"><span class="tick ${S.aftale.status==='godkendt'?'on':'off'}">✓</span><span>Aftalegrundlag: hvad var med, godkendt af kunden</span></div>
+          <div class="it"><span class="tick ${S.tillaeg.length&&S.tillaeg.every(t=>t.status==='godkendt')?'on':'off'}">✓</span><span>Ekstraarbejde godkendt før udførelse</span></div>
+          <div class="it"><span class="tick ${S.cps.filter(c=>c.obl).every(cpDone)?'on':'off'}">✓</span><span>Skjult arbejde fotograferet før lukning</span></div>
+          <div class="it"><span class="tick ${S.kvit.status==='kvitteret'?'on':'off'}">✓</span><span>Aflevering og mangler kvitteret af kunden</span></div></div></div>
+        ${S.klage?'':`<div class="card"><span class="eyebrow">Demo</span><p class="small" style="margin:0">Spol 18 måneder frem og se, hvad foreningen får, når der kommer en klage over fugt ved gulvet.</p><button type="button" class="btn" style="align-self:flex-start" data-action="klage">Simulér klage i 2028</button></div>`}
+      </div>
+    </div>`,
+    actions:`<button type="button" class="btn primary grow" data-action="pdf">${I.file} Vis sagsmappe som PDF</button><button type="button" class="btn deskonly" data-action="reset">Start forfra</button>`
+  };
+}
+const SCREENS={sag:scrSag,aftale:scrAftale,byggedag:scrByggedag,aflevering:scrAflevering,sagsmappe:scrSagsmappe};
+
+/* ---------- kunde (SMS-link) ---------- */
+function renderKunde(){
+  const p=pending(), el=document.getElementById('kunde');
+  const head=`<div class="muted" style="display:flex;gap:6px;align-items:center">${I.lock}<span>aftalt.dk/g/8k2f · åbnet fra SMS, intet login</span></div>`;
+  if(p==='aftale'){
+    el.innerHTML=`${head}<div><div class="eyebrow">Tømrerfirma Holm ApS</div><h2 style="font-family:var(--display);margin:4px 0 0;font-size:21px;line-height:1.2">Godkend aftalen for ${S.sag.adresse.split(',')[0]}</h2></div>
+    <div class="price"><span class="small">Samlet pris</span><b>${kr(S.aftale.pris)}</b></div><div class="muted" style="margin-top:-8px">DKK inkl. moms · 30 % ved start, 40 % midtvejs, 30 % ved aflevering</div>
+    <div class="two"><div class="card" style="padding:12px"><span class="eyebrow" style="color:var(--good)">Med</span><div class="list" style="font-size:13px"><span>Nedrivning</span><span>Membran, fliser, fuger</span><span>VVS: afløb og bruser</span><span>El: 2 stik, 4 spots</span></div></div>
+    <div class="card" style="padding:12px"><span class="eyebrow" style="color:var(--bad)">Ikke med</span><div class="list" style="font-size:13px"><span>Maling af loft</span><span>Nyt toilet (du leverer)</span><span>Bortkørsel af affald</span></div></div></div>
+    <p class="small" style="margin:0">Se <a href="#" data-action="noop" style="color:var(--accent);font-weight:600">tilbuddet (PDF) og vilkårene</a>. Ændringer undervejs sendes som tillæg, som du godkender på samme måde.</p>
+    <div class="kfoot"><div class="field"><label for="k-kode">Kode fra SMS</label><input id="k-kode" class="code" value="482 917"></div>
+    <button type="button" class="btn primary" data-action="okAftale">Godkend aftalen</button><div class="muted" style="text-align:center">Aftalen låses og tidsstemples. Du får en kopi på SMS.</div></div>`;
+  } else if(p==='tillaeg'){
+    const t=S.tillaeg.find(x=>x.status==='sendt');
+    el.innerHTML=`${head}<div><div class="eyebrow">Tømrerfirma Holm ApS · tillæg til aftalen</div><h2 style="font-family:var(--display);margin:4px 0 0;font-size:21px;line-height:1.2">${t.titel}</h2></div>
+    <div class="card"><div class="photos"><div class="ph">${I.camera}<span>${fmtTime(t.at)}</span></div></div><div class="small">Fundet ${fmtDay(t.at)} ${fmtTime(t.at)} under arbejdet. Ikke en del af den godkendte aftale.</div></div>
+    <div class="price"><span class="small">Prisloft</span><b>maks. ${kr(t.loft)}</b></div><div class="muted" style="margin-top:-8px">DKK inkl. moms · du betaler kun for det, der faktisk udføres</div>
+    <p class="small" style="margin:0">Arbejdet er sat på pause, indtil du godkender. Den oprindelige aftale ændres ikke.</p>
+    <div class="kfoot"><div class="field"><label for="k-kode2">Kode fra SMS</label><input id="k-kode2" class="code" value="306 118"></div>
+    <button type="button" class="btn primary" data-action="okTil" data-v="${t.id}">Godkend tillægget</button><button type="button" class="btn" data-action="noop">Ring til mester</button></div>`;
+  } else if(p==='kvit'){
+    el.innerHTML=`${head}<div><div class="eyebrow">Tømrerfirma Holm ApS</div><h2 style="font-family:var(--display);margin:4px 0 0;font-size:21px;line-height:1.2">Kvittér for afleveringen</h2></div>
+    <div class="card"><span class="eyebrow">Gennemgået sammen</span><div class="list" style="font-size:13px">${S.cps.map(c=>`<div class="it"><span class="tick ${cpDone(c)?'on':'off'}">✓</span><span>${c.navn}</span></div>`).join('')}</div></div>
+    ${S.mangler.map(m=>`<div class="card warn"><span class="eyebrow">Mangel · rettes uden beregning</span><b>${m.titel}</b><div class="small">Frist ${fmtDay(m.frist)}. Du får besked, når den er rettet.</div></div>`).join('')}
+    <p class="small" style="margin:0">Din kvittering starter garantiperioden. Du får sagsmappen med alle fotos, aftale og tillæg på SMS.</p>
+    <div class="kfoot"><div class="field"><label for="k-kode3">Kode fra SMS</label><input id="k-kode3" class="code" value="771 240"></div>
+    <button type="button" class="btn primary" data-action="okKvit">Kvittér for aflevering</button></div>`;
+  } else {
+    const last = S.kvit.status==='kvitteret' ? `<div class="sms"><div class="from">Aftalt · Tømrerfirma Holm</div>Tak, ${S.sag.kunde.split(' ')[0]}. Din kvittering er modtaget ${fmtTime(S.kvit.at)}. Her er din sagsmappe for ${S.sag.adresse.split(',')[0]}: <a href="#" data-action="noop">aftalt.dk/m/8k2f</a> (gemmes i 10 år).</div>`
+      : S.aftale.status==='godkendt' ? `<div class="sms"><div class="from">Aftalt · Tømrerfirma Holm</div>Aftalen for ${S.sag.adresse.split(',')[0]} er godkendt ${fmtDay(S.aftale.okAt)} ${fmtTime(S.aftale.okAt)} og låst. Din kopi: <a href="#" data-action="noop">aftalt.dk/a/8k2f</a></div>`
+      : '';
+    el.innerHTML=`${head}<div class="empty" style="height:auto;padding:28px 10px 10px">${I.inbox}<div><b>Ingen afventende godkendelser</b><div class="muted">Kunden får en SMS, når der er noget at tage stilling til.</div></div></div>${last}`;
+  }
+}
+
+/* ---------- render ---------- */
+function render(){
+  const frame=document.getElementById('frame'), app=document.getElementById('app'), phone=document.getElementById('phone');
+  frame.className='frame '+S.device;
+  const sc=SCREENS[S.screen]();
+  const tabs=STEPS.slice(1,4).map(([k,l])=>`<span class="tab ${S.screen===k?'on':stepDone[k]()?'done':''}">${l}</span>`).join('');
+  const nav=`<nav class="side"><div class="logo" style="display:flex;align-items:center;gap:10px"><svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="6" fill="#1f3c8a"/><path d="M10 29.5 19.5 39 38.5 11" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.5 29.5H36" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>Aftalt</div><div class="navi">
+    <a href="#" class="${S.screen==='sag'?'on':''}" data-action="go" data-v="sag">${I.plus} Ny sag</a>
+    <a href="#" class="${['aftale','byggedag','aflevering'].includes(S.screen)?'on':''}" data-action="go" data-v="${S.sag.created?(S.aftale.status==='godkendt'?'byggedag':'aftale'):'sag'}">${I.home} Sager · 1 aktiv</a>
+    <a href="#" class="${S.screen==='sagsmappe'?'on':''}" data-action="go" data-v="sagsmappe">${I.folder} Sagsmapper</a>
+    <a href="#" data-action="noop">${I.list} Tjeklister</a></div>
+    <div class="firm"><div class="tick on" style="width:34px;height:34px;border-radius:9px;background:var(--ink);color:var(--ground);font-size:12px">TH</div><div style="min-width:0"><div style="font-weight:600;font-size:13px">Tømrerfirma Holm</div><div class="muted" style="font-size:11.5px">Dansk Håndværk · medlem</div></div></div></nav>`;
+  app.innerHTML=`${nav}<div class="main"><div class="head"><div><div class="sub">${sc.sub||''}</div><h1>${sc.title}</h1></div><div class="tabs">${tabs}</div></div>
+    <div class="body">${sc.body}</div><div class="foot">${sc.actions}</div></div>`;
+  renderKunde();
+  // customer phone: desktop shows beside; mobile swaps
+  const mobileKunde = S.device==='mobile' && S.showKunde;
+  phone.hidden = S.device==='mobile' ? !mobileKunde : false;
+  frame.hidden = mobileKunde;
+  phone.querySelector('.switch')?.remove();
+  if(mobileKunde){ phone.insertAdjacentHTML('beforeend',`<button type="button" class="btn switch" style="height:40px;font-size:13px" data-action="kundeBack">Tilbage til håndværkerens telefon</button>`); }
+  // steps + clock + device
+  document.getElementById('steps').innerHTML=STEPS.map(([k,l],i)=>`<button type="button" class="step ${S.screen===k?'active':''} ${stepDone[k]()?'done':''}" data-action="go" data-v="${k}"><b>${stepDone[k]()?'✓':i+1}</b>${l}</button>`).join('');
+  document.querySelector('#clock span').textContent=`${WD[S.clock.getDay()]} ${fmtDate(S.clock)} · ${fmtTime(S.clock)}`;
+  document.getElementById('devMobile').classList.toggle('on',S.device==='mobile');
+  document.getElementById('devDesktop').classList.toggle('on',S.device==='desktop');
+  fit();
+}
+function fit(){
+  const stage=document.getElementById('stage'), sc=document.getElementById('scaler');
+  sc.style.transform='none';
+  const w=sc.scrollWidth, avail=stage.clientWidth-8;
+  const k=Math.min(1,avail/w);
+  sc.style.transform=`scale(${k})`;
+  stage.style.height = k<1 ? (sc.offsetHeight*k+72)+'px' : '';
+}
+window.addEventListener('resize',fit);
+
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast._h); toast._h=setTimeout(()=>t.classList.remove('show'),2600); }
+function showPdf(){
+  const host=document.getElementById('modalHost');
+  host.innerHTML=`<div class="modal" data-action="closeModal"><div class="paper" role="dialog" aria-label="Sagsmappe som PDF"><div class="row between" style="margin-bottom:18px"><div><div class="eyebrow">Sagsmappe · tidsstemplet udskrift</div><h2>Sag ${S.sag.nr} · ${S.sag.adresse}</h2><div class="small">Tømrerfirma Holm ApS · kunde ${S.sag.kunde} · ${S.sag.fag} · genereret ${fmtDate(S.clock)} ${fmtTime(S.clock)}</div></div><span class="pill">${fotoCount()} fotos</span></div>
+  <div class="tl">${S.events.map(e=>evRow(e,false)).join('')}</div>
+  <p class="small" style="margin:20px 0 0;color:#7B807E">Alle hændelser er registreret med tid, bruger og, hvor relevant, position. Fotos ligger som bilag i fuld opløsning. I den rigtige version er dokumentet kryptografisk signeret.</p>
+  <div class="row" style="margin-top:20px;justify-content:flex-end"><button type="button" class="btn" data-action="closeModal">Luk</button></div></div></div>`;
+}
+
+/* ---------- actions ---------- */
+const NOTES={membran:'Membran i to lag, hjørner og rørgennemføringer forstærket med bånd. Tørretid overholdt.',roer:'Afløb og tilslutninger trykprøvet før gulvet lukkes. Ingen utætheder.',fliser:'Fald mod afløb målt til 15 mm pr. meter. Fuger efter leverandørens anvisning.',vvs:'Bruser og afløb testet med vand i 20 minutter.',el:'Spots og stik afprøvet, HPFI testet.'};
+function enter(screen){
+  if(screen==='byggedag' && !S.stageDates.byggedag){ S.stageDates.byggedag=true; S.clock=new Date(DAYS.byggedag); log('ind','Tjekket ind på adressen','Position bekræftet · '+S.sag.adresse.split(',')[0]); }
+  if(screen==='aflevering' && !S.stageDates.aflevering){ S.stageDates.aflevering=true; S.clock=new Date(DAYS.aflevering); }
+  S.screen=screen; S.showKunde=false;
+}
+const A={
+  device(v){ S.device=v; S.showKunde=false; },
+  reset(){ S=fresh(); toast('Prototypen er nulstillet'); },
+  go(v){ if(v!=='sag' && !S.sag.created){ toast('Opret sagen først'); S.screen='sag'; return; } enter(v); },
+  fag(v){ S.sag.fag=v; },
+  opret(){ S.sag.created=true; log('sag','Sag oprettet','Adresse, kunde og fagtype registreret af Tømrerfirma Holm'); tick(2); enter('aftale'); toast('Sagen er oprettet. Tilbuddet er hentet fra Dinero.'); },
+  sendAftale(){ tick(5); S.aftale.status='sendt'; S.aftale.sentAt=new Date(S.clock); log('send','Aftale sendt til kunde','SMS-link til '+S.sag.mobil+' · '+kr(S.aftale.pris)+' DKK · med og ikke med'); if(S.device==='mobile'){ S.showKunde=true; } toast('SMS sendt til '+S.sag.kunde); },
+  kunde(){ S.showKunde=true; }, kundeBack(){ S.showKunde=false; },
+  okAftale(){ tick(323); S.aftale.status='godkendt'; S.aftale.okAt=new Date(S.clock); log('godk','Aftale godkendt af kunde','SMS-kode · '+kr(S.aftale.pris)+' DKK · med og ikke med låst'); S.showKunde=false; toast('Aftalen er godkendt og låst'); },
+  foto(v){ const c=cp(v); if(cpLocked(c)) return; tick(c.fotos.length?2:9); c.fotos.push({t:new Date(S.clock)}); const d=(c.obl?'Obligatorisk · ':'')+c.fotos.length+(c.fotos.length>1?' fotos':' foto')+' · position bekræftet'+(c.ved?' · '+c.ved:'')+(c.note?' · talenote':''); const ev=S.events.find(e=>e.title==='Checkpoint: '+c.navn); if(ev) ev.detail=d; else log('cp','Checkpoint: '+c.navn,d); },
+  fotoNext(){ const c=S.cps.find(x=>!cpDone(x)&&!cpLocked(x)); if(!c){ toast('Alle checkpoints er dokumenteret'); return; } A.foto(c.id); toast('Foto gemt under "'+c.navn+'"'); },
+  note(v){ const c=cp(v); tick(1); c.note={text:NOTES[v]||'Note indtalt.',t:new Date(S.clock)}; S.events.filter(e=>e.title==='Checkpoint: '+c.navn).forEach(e=>e.detail+=' · talenote'); toast('Talenote skrevet ud'); },
+  nytTil(){ S.draft={titel:'Rådden bjælke under gulv',loft:6500}; },
+  dropTil(){ S.draft=null; },
+  gemTil(){ tick(14); const t={id:'t'+Date.now(),titel:S.draft.titel,loft:Number(String(S.draft.loft).replace(/\D/g,''))||0,fotos:1,status:'sendt',at:new Date(S.clock),sentAt:new Date(S.clock),okAt:null}; S.tillaeg.push(t); S.draft=null; log('send','Tillæg sendt til kunde',t.titel+' · maks. '+kr(t.loft)+' DKK · 1 foto · arbejdet sat på pause'); if(S.device==='mobile') S.showKunde=true; toast('Tillæg sendt til '+S.sag.kunde); },
+  sendTil(v){ const t=S.tillaeg.find(x=>x.id===v); tick(3); t.status='sendt'; t.sentAt=new Date(S.clock); log('send','Tillæg sendt til kunde',t.titel+' · maks. '+kr(t.loft)+' DKK'); if(S.device==='mobile') S.showKunde=true; },
+  okTil(v){ const t=S.tillaeg.find(x=>x.id===v); tick(22); t.status='godkendt'; t.okAt=new Date(S.clock); log('godk','Tillæg godkendt: '+t.titel,'SMS-kode · maks. '+kr(t.loft)+' DKK · arbejde fortsat '+fmtTime(new Date(S.clock.getTime()+3*60000))); S.showKunde=false; toast('Tillægget er godkendt. Arbejdet kan fortsætte.'); },
+  nyMangel(){ tick(6); S.mangler.push({id:'m'+Date.now(),titel:'Fuge ved bruseniche skal rettes',frist:new Date(2026,10,10),udbedret:false}); toast('Mangel noteret med frist'); },
+  sendKvit(){ tick(8); S.kvit.status='sendt'; S.kvit.sentAt=new Date(S.clock); log('send','Aflevering sendt til kundens kvittering','Tjekliste '+S.cps.filter(cpDone).length+'/'+S.cps.length+(S.mangler.length?' · '+S.mangler.length+' mangel, frist '+fmtDay(S.mangler[0].frist):' · ingen mangler')); if(S.device==='mobile') S.showKunde=true; toast('SMS sendt til '+S.sag.kunde); },
+  okKvit(){ tick(22); S.kvit.status='kvitteret'; S.kvit.at=new Date(S.clock); log('godk','Aflevering kvitteret af kunde','SMS-kode · garantiperioden starter'+(S.mangler.length?' · '+S.mangler.length+' mangel, frist '+fmtDay(S.mangler[0].frist):'')); S.showKunde=false; toast('Kunden har kvitteret'); },
+  udbedr(v){ const m=S.mangler.find(x=>x.id===v); S.clock=new Date(2026,10,10,13,5); m.udbedret=true; m.udbedretAt=new Date(S.clock); log('cp','Mangel udbedret: '+m.titel,'1 foto · kunde kvitteret samme dag'); toast('Mangel lukket med foto'); },
+  klage(){ S.clock=new Date(2028,4,2,9,40); log('klage','Reklamation: fugt ved gulv','Modtaget fra kunde · firmaets svar 4. maj · sag sendt til foreningen 13. maj'); S.klage={open:new Date(2028,4,14,10,0),consent:new Date(2028,4,13)}; S.clock=new Date(2028,4,14,10,0); toast('18 måneder senere: foreningen åbner sagsmappen'); },
+  pdf(){ showPdf(); return 'nomodalrender'; },
+  closeModal(){ document.getElementById('modalHost').innerHTML=''; return 'noRender'; },
+  noop(){ toast('Ikke med i prototypen'); return 'noRender'; }
+};
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-action]'); if(!el) return;
+  if(el.classList.contains('modal') && e.target!==el) return;
+  e.preventDefault();
+  const r=A[el.dataset.action]?.(el.dataset.v);
+  if(r!=='noRender') render();
+});
+document.addEventListener('input',e=>{
+  const b=e.target.dataset.bind; if(!b) return;
+  if(b.startsWith('draft')) S.draft[b==='draftTitel'?'titel':'loft']=e.target.value; else S.sag[b]=e.target.value;
+});
+S=fresh(); render();
+})();
+</script>
