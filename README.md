@@ -7,6 +7,7 @@ Live (GitHub Pages fra `main`): https://ralf-commits.github.io/aftalt/ sender vi
 ## Indhold
 - `index.html`: sender videre til `salgsside/`, så salgssiden er forsiden.
 - `prototype/index.html`: interaktiv prototype i én fil (mobil/desktop, simuleret ur, kundens telefon). Åbn direkte i browseren. Ingen build.
+- `moede/index.html` og `moede/Aftalt-salgsmoede.pdf`: mødesiden. Sagen fortalt kapitel for kapitel som præsentation, med fire AI-illustrationer. Live på `/aftalt/moede/`.
 - `salgsside/index.html`: one-pager til salgsmødet med Dansk Håndværk. Har billedpladser til genererede billeder; se `salgsside/README.md`.
 - `design-system/tokens.json` og `design-system/README.md`: farver, typografi, afstande og brandbog. Kilden til alt visuelt.
 
@@ -20,3 +21,5 @@ Regler:
 4. Tonen er rolig og udramatisk. Intet pral, ingen emojis. Tekst på dansk.
 5. Fotos i prototypen er pladsholdere; rigtig kameraadgang kommer i det rigtige produkt.
 6. Hold det som én HTML-fil uden build, så den kan åbnes på en mødeprojektor uden net (fonte kan indlejres).
+7. Ændringer leveres som pull request mod main (aldrig gh-pages). Ralf ser ændringen og merger. Main går live på GitHub Pages få minutter efter merge.
+8. Sagens fakta (navne, beløb, datoer, koder) står i `salgsside/README.md` og skal være ens på alle sider.

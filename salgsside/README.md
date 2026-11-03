@@ -23,13 +23,21 @@ Sådan udfyldes en plads:
 3. Indsæt `<img src="billeder/hero.jpg" alt="...">` som første barn i `<figure>`. Pladsteksten skjules automatisk, og rammen bliver fast.
 4. Skriv en kort, saglig `alt`-tekst på dansk.
 
-| `data-billede` | Format | Motiv |
-|---|---|---|
-| `hero` | 4:5 | Tømrer fotograferer vådrumsmembranen med telefonen, før der sættes fliser op |
-| `sagsmappe` | 16:9 | Sagsbehandler i foreningen åbner en sag på en bærbar |
-| `forening` | 4:3 | To fra foreningen gennemgår en sag ved et mødebord |
-| `haandvaerker` | 4:3 | Håndværkerhænder med telefon, talenote på byggepladsen |
-| `boligejer` | 4:3 | Par i deres nyrenoverede badeværelse kigger på en telefon |
+| `data-billede` | Format | Motiv | Status |
+|---|---|---|---|
+| `hero` | 4:5 | Tømrer fotograferer vådrumsmembranen med telefonen, før der sættes fliser op | Midlertidigt: `membran.jpg` |
+| `sagsmappe` | 16:9 | Sagsbehandler i foreningen åbner en sag på en bærbar | Mangler |
+| `forening` | 4:3 | To fra foreningen gennemgår en sag ved et mødebord | Mangler |
+| `haandvaerker` | 4:3 | Håndværkerhænder med telefon, talenote på byggepladsen | Mangler |
+| `boligejer` | 4:3 | Par i deres nyrenoverede badeværelse kigger på en telefon | Midlertidigt: `aflevering.jpg` |
+
+### Sagens fotos
+
+`billeder/bjaelke.jpg`, `roer.jpg`, `membran.jpg` og `aflevering.jpg` er de fire AI-illustrationer fra mødesiden (`moede/`). De bruges i kundens telefon (tillægget) og som miniaturer i sagsmappen, og midlertidigt i `hero` og `boligejer`, indtil der er billeder til de motiver. Erstattes et midlertidigt billede, så gem det nye som `<data-billede>.jpg` og ret `src`.
+
+### Sagens fakta (samme på salgsside, mødeside og prototype)
+
+Kunde Mette Lund, Ved Søen 8, 3450 Allerød. Tømrerfirma Holm ApS (Thomas Holm). Sag 2026-0142. Aftale 69.576 kr. inkl. moms, godkendt 28. okt kl. 19:35 med kode 482 917. Rådden bjælke fundet 3. nov kl. 08:10; tillæg med prisloft 6.500 kr. inkl. moms godkendt 3. nov kl. 09:42 med kode 306 118. Rør før lukning 4. nov kl. 11:10. Membran før fliser 5. nov kl. 14:30. Aflevering kvitteret 12. nov kl. 15:20 med kode 771 240. Prototypens ur er simuleret, så dens tidspunkter flytter sig, når man klikker.
 
 Stil for alle billeder: dokumentarisk, naturligt dagslys, varme og dæmpede farver, der passer til puds-grunden (`ground-100`). Danske omgivelser. Ingen tekst eller logoer i billedet, intet poseret smil, ingen stockfoto-stemning. Ingen skærme med læsbart indhold.
 
