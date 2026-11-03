@@ -134,6 +134,7 @@ a.ghost{text-decoration:none;display:inline-flex;align-items:center}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line2);background:var(--surface);color:var(--ink);font-weight:500;font-size:14px}
 .chip.on{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.chip:disabled{opacity:.4;cursor:not-allowed}
 .list{display:flex;flex-direction:column;gap:7px;font-size:14px}
 .list .it{display:flex;gap:10px;align-items:flex-start}
 .list .it b{width:18px;flex-shrink:0;text-align:center}
@@ -243,6 +244,52 @@ const fmtDay=d=>`${d.getDate()}. ${MON[d.getMonth()]}`;
 const fmtDate=d=>`${fmtDay(d)} ${d.getFullYear()}`;
 const WD=['søndag','mandag','tirsdag','onsdag','torsdag','fredag','lørdag'];
 
+/* ---------- fag: hver fagtype er sin egen sag ---------- */
+const FAG={
+  'Vådrum':{
+    nr:'2026-0142', pris:69576, fil:'Tilbud_VedSoen8.pdf',
+    med:['Nedrivning af eksisterende badeværelse','Ny vådrumsmembran, fliser og fuger','VVS: nyt afløb og bruser (underleverandør)','El: 2 stikkontakter og 4 spots'],
+    ikke:['Maling af loft','Nyt toilet (kunden leverer selv)','Bortkørsel af affald'],
+    kMed:['Nedrivning','Membran, fliser, fuger','VVS: afløb og bruser','El: 2 stik, 4 spots'],
+    kIkke:['Maling af loft','Nyt toilet (du leverer)','Bortkørsel af affald'],
+    cps:[
+      {id:'membran',navn:'Membran før fliser',obl:true,ved:'Håndværker'},
+      {id:'roer',navn:'Rør før lukning',obl:true,ved:'VVS-underleverandør'},
+      {id:'fliser',navn:'Fliser og fald mod afløb',obl:false,needs:['membran','roer']},
+      {id:'vvs',navn:'VVS tilsluttet og tæthedstestet',obl:false,needs:['roer']},
+      {id:'el',navn:'El afprøvet',obl:false}
+    ],
+    notes:{membran:'Membran i to lag, hjørner og rørgennemføringer forstærket med bånd. Tørretid overholdt.',roer:'Afløb og tilslutninger trykprøvet før gulvet lukkes. Ingen utætheder.',fliser:'Fald mod afløb målt til 15 mm pr. meter. Fuger efter leverandørens anvisning.',vvs:'Bruser og afløb testet med vand i 20 minutter.',el:'Spots og stik afprøvet, HPFI testet.'},
+    laas:'Fliser kan først dokumenteres, når membran og rør er fotograferet. Skønsmanden laver sjældent destruktive indgreb, så fotos før lukning er det eneste bevis for skjult arbejde.',
+    tillaeg:{titel:'Rådden bjælke under gulv',loft:6500},
+    mangel:'Fuge ved bruseniche skal rettes',
+    aflevering:new Date(2026,10,7,14,50), frist:new Date(2026,10,10),
+    klage:{demo:'en klage over fugt ved gulvet',titel:'Reklamation: fugt ved gulv'}
+  },
+  'Tag':{
+    nr:'2026-0157', pris:286250, fil:'Tilbud_VedSoen8_tag.pdf',
+    med:['Nedtagning af eksisterende tagsten og lægter','Nyt diffusionsåbent undertag og nye lægter','Nye teglsten med rygning og tagfod','Zinkinddækning om skorsten og 2 ovenlysvinduer (blikkenslager)'],
+    ikke:['Tagrender og nedløb (genbruges)','Udskiftning af spær','Stillads ud over 4 uger'],
+    kMed:['Nedtagning','Undertag og lægter','Teglsten, rygning, tagfod','Inddækninger i zink'],
+    kIkke:['Tagrender og nedløb','Udskiftning af spær','Stillads ud over 4 uger'],
+    cps:[
+      {id:'undertag',navn:'Undertag før lægter',obl:true,ved:'Håndværker'},
+      {id:'inddaekning',navn:'Inddækning ved skorsten før tagsten',obl:true,ved:'Blikkenslager (underleverandør)'},
+      {id:'tagsten',navn:'Tagsten, rygning og tagfod',obl:false,needs:['undertag','inddaekning']},
+      {id:'ventilation',navn:'Ventilation ved tagfod og kip',obl:false,needs:['undertag']},
+      {id:'ovenlys',navn:'Ovenlysvinduer inddækket og tætte',obl:false}
+    ],
+    notes:{undertag:'Undertag lagt med 15 cm overlæg, samlinger tapet. Ingen huller ved gennemføringer.',inddaekning:'Zinkinddækning ført op ad skorstenen og fuget i fugen. Afvandingsrende bag skorstenen.',tagsten:'Tagsten skruet i hver tredje række og ved gavle. Rygning lagt i mørtel med bånd.',ventilation:'Fuglegitter og ventilationsspalte ved tagfod. Ventilerede rygningssten.',ovenlys:'Inddækningskraver monteret efter vinduesproducentens vejledning. Vandtest med haveslange.'},
+    laas:'Tagsten kan først dokumenteres, når undertag og inddækning er fotograferet. Tagstenene skjuler begge dele, så fotos før lukning er det eneste bevis for skjult arbejde.',
+    tillaeg:{titel:'Rådne spærfødder ved tagfod',loft:9800},
+    mangel:'Rygningssten ved østgavlen skal fastgøres',
+    aflevering:new Date(2026,10,20,14,30), frist:new Date(2026,10,27),
+    klage:{demo:'en klage over vand ved skorstenen',titel:'Reklamation: vand ved skorsten'}
+  }
+};
+const F=()=>FAG[S.sag.fag]||FAG['Vådrum'];
+const mkCps=fag=>FAG[fag].cps.map(c=>({...c,fotos:[],note:null}));
+
 /* ---------- state ---------- */
 let S;
 function fresh(){
@@ -251,19 +298,13 @@ function fresh(){
     clock:new Date(2026,9,28,14,5),
     sag:{adresse:'Ved Søen 8, 3450 Allerød',kunde:'Mette Lund',mobil:'+45 21 44 56 78',fag:'Vådrum',created:false,nr:'2026-0142'},
     aftale:{status:'kladde',pris:69576,sentAt:null,okAt:null},
-    cps:[
-      {id:'membran',navn:'Membran før fliser',obl:true,fotos:[],note:null,ved:'Håndværker'},
-      {id:'roer',navn:'Rør før lukning',obl:true,fotos:[],note:null,ved:'VVS-underleverandør'},
-      {id:'fliser',navn:'Fliser og fald mod afløb',obl:false,fotos:[],note:null,needs:['membran','roer']},
-      {id:'vvs',navn:'VVS tilsluttet og tæthedstestet',obl:false,fotos:[],note:null,needs:['roer']},
-      {id:'el',navn:'El afprøvet',obl:false,fotos:[],note:null}
-    ],
+    cps:mkCps('Vådrum'),
     tillaeg:[], draft:null,
     mangler:[], kvit:{status:'ingen',at:null},
     klage:null, events:[], checkedIn:false, stageDates:{}
   };
 }
-const DAYS={byggedag:new Date(2026,10,3,7,52), aflevering:new Date(2026,10,7,14,50)};
+const DAYS={byggedag:new Date(2026,10,3,7,52)};
 function tick(min){ S.clock=new Date(S.clock.getTime()+min*60000); }
 function log(kind,title,detail){ S.events.push({t:new Date(S.clock),kind,title,detail}); }
 const fotoCount=()=>S.cps.reduce((a,c)=>a+c.fotos.length,0)+S.tillaeg.reduce((a,t)=>a+t.fotos,0)+S.mangler.reduce((a,m)=>a+(m.udbedret?2:1),0);
@@ -292,8 +333,8 @@ function scrSag(){
           <div class="field"><label for="f-kunde">Kunde</label><input id="f-kunde" data-bind="kunde" value="${s.kunde}"></div>
           <div class="field"><label for="f-mobil">Kundens mobil</label><input id="f-mobil" data-bind="mobil" value="${s.mobil}"></div>
         </div>
-        <div class="field"><span class="eyebrow">Fagtype · bestemmer tjeklisten</span>
-          <div class="chips">${['Vådrum','Tag','Andet'].map(f=>`<button type="button" class="chip ${s.fag===f?'on':''}" data-action="fag" data-v="${f}">${f}</button>`).join('')}</div>
+        <div class="field"><span class="eyebrow">Fagtype · bestemmer tjekliste og tilbud</span>
+          <div class="chips">${['Vådrum','Tag','Andet'].map(f=>`<button type="button" class="chip ${s.fag===f?'on':''}" data-action="fag" data-v="${f}" ${s.created&&s.fag!==f?'disabled':''}>${f}</button>`).join('')}</div>${s.created?'<p class="small" style="margin:6px 0 0">Fagtypen er låst, fordi sagen er oprettet. Start forfra for at prøve et andet fag.</p>':''}
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:14px">
@@ -326,18 +367,13 @@ function scrAftale(){
     <div class="cols">
       <div style="display:flex;flex-direction:column;gap:14px">
         <div class="card"><div class="row"><div class="tick" style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);color:var(--accent)">${I.file}</div>
-          <div style="min-width:0"><div style="font-weight:600">Tilbud_VedSoen8.pdf</div><div class="muted">${kr(a.pris)} DKK inkl. moms · uploadet 28. okt 14:05</div></div></div></div>
+          <div style="min-width:0"><div style="font-weight:600">${F().fil}</div><div class="muted">${kr(a.pris)} DKK inkl. moms · uploadet 28. okt 14:05</div></div></div></div>
         <div class="card"><span class="eyebrow" style="color:var(--good)">Med i aftalen</span>
           <div class="list">
-            <div class="it"><b style="color:var(--good)">✓</b><span>Nedrivning af eksisterende badeværelse</span></div>
-            <div class="it"><b style="color:var(--good)">✓</b><span>Ny vådrumsmembran, fliser og fuger</span></div>
-            <div class="it"><b style="color:var(--good)">✓</b><span>VVS: nyt afløb og bruser (underleverandør)</span></div>
-            <div class="it"><b style="color:var(--good)">✓</b><span>El: 2 stikkontakter og 4 spots</span></div></div></div>
+            ${F().med.map(x=>`<div class="it"><b style="color:var(--good)">✓</b><span>${x}</span></div>`).join('')}</div></div>
         <div class="card"><span class="eyebrow" style="color:var(--bad)">Ikke med</span>
           <div class="list">
-            <div class="it"><b style="color:var(--bad)">–</b><span>Maling af loft</span></div>
-            <div class="it"><b style="color:var(--bad)">–</b><span>Nyt toilet (kunden leverer selv)</span></div>
-            <div class="it"><b style="color:var(--bad)">–</b><span>Bortkørsel af affald</span></div></div></div>
+            ${F().ikke.map(x=>`<div class="it"><b style="color:var(--bad)">–</b><span>${x}</span></div>`).join('')}</div></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:14px">
         <div class="card"><span class="eyebrow">Status</span>${status}
@@ -389,7 +425,7 @@ function scrByggedag(){
         ${draft}
         ${S.tillaeg.map(tilCard).join('')}
         ${S.draft?'':`<button type="button" class="btn" data-action="nytTil" style="align-self:flex-start">${I.plus} Nyt tillæg (uforudset arbejde)</button>`}
-        <div class="card"><span class="eyebrow">Sådan virker låsen</span><p class="small" style="margin:0">Fliser kan først dokumenteres, når membran og rør er fotograferet. Skønsmanden laver sjældent destruktive indgreb, så fotos før lukning er det eneste bevis for skjult arbejde.</p></div>
+        <div class="card"><span class="eyebrow">Sådan virker låsen</span><p class="small" style="margin:0">${F().laas}</p></div>
       </div>
     </div>`,
     actions:`<button type="button" class="btn icon" aria-label="Tag foto" data-action="fotoNext">${I.camera}</button><button type="button" class="btn primary grow" data-action="go" data-v="aflevering" ${oblDone?'':'disabled'}>${oblDone?'Gå til aflevering':'Aflevering låst: obligatoriske fotos mangler'}</button>`
@@ -409,7 +445,7 @@ function scrAflevering(){
     : k.status==='sendt' ? `<button type="button" class="btn grow deskonly" disabled>Afventer kundens kvittering</button><button type="button" class="btn grow mobileonly" data-action="kunde">Vis kundens telefon</button>`
     : `<button type="button" class="btn primary grow" data-action="go" data-v="sagsmappe">${I.folder} Afslut og gem sagsmappe</button>`;
   return {
-    title:`Aflevering · ${WD[DAYS.aflevering.getDay()]} ${fmtDay(DAYS.aflevering)}`, sub:`${S.sag.adresse.split(',')[0]} · Sag ${S.sag.nr}`,
+    title:`Aflevering · ${WD[F().aflevering.getDay()]} ${fmtDay(F().aflevering)}`, sub:`${S.sag.adresse.split(',')[0]} · Sag ${S.sag.nr}`,
     body:`<div class="cols">
       <div style="display:flex;flex-direction:column;gap:14px">
         <div class="card"><span class="eyebrow">Tjekliste · ${S.sag.fag.toLowerCase()}</span><div class="list">
@@ -441,7 +477,7 @@ function scrSagsmappe(){
           <div class="it"><span class="tick ${S.tillaeg.length&&S.tillaeg.every(t=>t.status==='godkendt')?'on':'off'}">✓</span><span>Ekstraarbejde godkendt før udførelse</span></div>
           <div class="it"><span class="tick ${S.cps.filter(c=>c.obl).every(cpDone)?'on':'off'}">✓</span><span>Skjult arbejde fotograferet før lukning</span></div>
           <div class="it"><span class="tick ${S.kvit.status==='kvitteret'?'on':'off'}">✓</span><span>Aflevering og mangler kvitteret af kunden</span></div></div></div>
-        ${S.klage?'':`<div class="card"><span class="eyebrow">Demo</span><p class="small" style="margin:0">Spol 18 måneder frem og se, hvad foreningen får, når der kommer en klage over fugt ved gulvet.</p><button type="button" class="btn" style="align-self:flex-start" data-action="klage">Simulér klage i 2028</button></div>`}
+        ${S.klage?'':`<div class="card"><span class="eyebrow">Demo</span><p class="small" style="margin:0">Spol 18 måneder frem og se, hvad foreningen får, når der kommer ${F().klage.demo}.</p><button type="button" class="btn" style="align-self:flex-start" data-action="klage">Simulér klage i 2028</button></div>`}
       </div>
     </div>`,
     actions:`<button type="button" class="btn primary grow" data-action="pdf">${I.file} Vis sagsmappe som PDF</button><button type="button" class="btn deskonly" data-action="reset">Start forfra</button>`
@@ -456,8 +492,8 @@ function renderKunde(){
   if(p==='aftale'){
     el.innerHTML=`${head}<div><div class="eyebrow">Tømrerfirma Holm ApS</div><h2 style="font-family:var(--display);margin:4px 0 0;font-size:21px;line-height:1.2">Godkend aftalen for ${S.sag.adresse.split(',')[0]}</h2></div>
     <div class="price"><span class="small">Samlet pris</span><b>${kr(S.aftale.pris)}</b></div><div class="muted" style="margin-top:-8px">DKK inkl. moms · 30 % ved start, 40 % midtvejs, 30 % ved aflevering</div>
-    <div class="two"><div class="card" style="padding:12px"><span class="eyebrow" style="color:var(--good)">Med</span><div class="list" style="font-size:13px"><span>Nedrivning</span><span>Membran, fliser, fuger</span><span>VVS: afløb og bruser</span><span>El: 2 stik, 4 spots</span></div></div>
-    <div class="card" style="padding:12px"><span class="eyebrow" style="color:var(--bad)">Ikke med</span><div class="list" style="font-size:13px"><span>Maling af loft</span><span>Nyt toilet (du leverer)</span><span>Bortkørsel af affald</span></div></div></div>
+    <div class="two"><div class="card" style="padding:12px"><span class="eyebrow" style="color:var(--good)">Med</span><div class="list" style="font-size:13px">${F().kMed.map(x=>`<span>${x}</span>`).join('')}</div></div>
+    <div class="card" style="padding:12px"><span class="eyebrow" style="color:var(--bad)">Ikke med</span><div class="list" style="font-size:13px">${F().kIkke.map(x=>`<span>${x}</span>`).join('')}</div></div></div>
     <p class="small" style="margin:0">Se <a href="#" data-action="noop" style="color:var(--accent);font-weight:600">tilbuddet (PDF) og vilkårene</a>. Ændringer undervejs sendes som tillæg, som du godkender på samme måde.</p>
     <div class="kfoot"><div class="field"><label for="k-kode">Kode fra SMS</label><input id="k-kode" class="code" value="482 917"></div>
     <button type="button" class="btn primary" data-action="okAftale">Godkend aftalen</button><div class="muted" style="text-align:center">Aftalen låses og tidsstemples. Du får en kopi på SMS.</div></div>`;
@@ -532,34 +568,33 @@ function showPdf(){
 }
 
 /* ---------- actions ---------- */
-const NOTES={membran:'Membran i to lag, hjørner og rørgennemføringer forstærket med bånd. Tørretid overholdt.',roer:'Afløb og tilslutninger trykprøvet før gulvet lukkes. Ingen utætheder.',fliser:'Fald mod afløb målt til 15 mm pr. meter. Fuger efter leverandørens anvisning.',vvs:'Bruser og afløb testet med vand i 20 minutter.',el:'Spots og stik afprøvet, HPFI testet.'};
 function enter(screen){
   if(screen==='byggedag' && !S.stageDates.byggedag){ S.stageDates.byggedag=true; S.clock=new Date(DAYS.byggedag); log('ind','Tjekket ind på adressen','Position bekræftet · '+S.sag.adresse.split(',')[0]); }
-  if(screen==='aflevering' && !S.stageDates.aflevering){ S.stageDates.aflevering=true; S.clock=new Date(DAYS.aflevering); }
+  if(screen==='aflevering' && !S.stageDates.aflevering){ S.stageDates.aflevering=true; S.clock=new Date(F().aflevering); }
   S.screen=screen; S.showKunde=false;
 }
 const A={
   device(v){ S.device=v; S.showKunde=false; },
   reset(){ S=fresh(); toast('Prototypen er nulstillet'); },
   go(v){ if(v!=='sag' && !S.sag.created){ toast('Opret sagen først'); S.screen='sag'; return; } enter(v); },
-  fag(v){ S.sag.fag=v; },
+  fag(v){ if(S.sag.created){ toast('Fagtypen er låst. Start forfra for at skifte.'); return; } const f=FAG[v]||FAG['Vådrum']; S.sag.fag=v; S.sag.nr=f.nr; S.aftale.pris=f.pris; S.cps=mkCps(FAG[v]?v:'Vådrum'); },
   opret(){ S.sag.created=true; log('sag','Sag oprettet','Adresse, kunde og fagtype registreret af Tømrerfirma Holm'); tick(2); enter('aftale'); toast('Sagen er oprettet. Tilbuddet er hentet fra Dinero.'); },
   sendAftale(){ tick(5); S.aftale.status='sendt'; S.aftale.sentAt=new Date(S.clock); log('send','Aftale sendt til kunde','SMS-link til '+S.sag.mobil+' · '+kr(S.aftale.pris)+' DKK · med og ikke med'); if(S.device==='mobile'){ S.showKunde=true; } toast('SMS sendt til '+S.sag.kunde); },
   kunde(){ S.showKunde=true; }, kundeBack(){ S.showKunde=false; },
   okAftale(){ tick(323); S.aftale.status='godkendt'; S.aftale.okAt=new Date(S.clock); log('godk','Aftale godkendt af kunde','SMS-kode · '+kr(S.aftale.pris)+' DKK · med og ikke med låst'); S.showKunde=false; toast('Aftalen er godkendt og låst'); },
   foto(v){ const c=cp(v); if(cpLocked(c)) return; tick(c.fotos.length?2:9); c.fotos.push({t:new Date(S.clock)}); const d=(c.obl?'Obligatorisk · ':'')+c.fotos.length+(c.fotos.length>1?' fotos':' foto')+' · position bekræftet'+(c.ved?' · '+c.ved:'')+(c.note?' · talenote':''); const ev=S.events.find(e=>e.title==='Checkpoint: '+c.navn); if(ev) ev.detail=d; else log('cp','Checkpoint: '+c.navn,d); },
   fotoNext(){ const c=S.cps.find(x=>!cpDone(x)&&!cpLocked(x)); if(!c){ toast('Alle checkpoints er dokumenteret'); return; } A.foto(c.id); toast('Foto gemt under "'+c.navn+'"'); },
-  note(v){ const c=cp(v); tick(1); c.note={text:NOTES[v]||'Note indtalt.',t:new Date(S.clock)}; S.events.filter(e=>e.title==='Checkpoint: '+c.navn).forEach(e=>e.detail+=' · talenote'); toast('Talenote skrevet ud'); },
-  nytTil(){ S.draft={titel:'Rådden bjælke under gulv',loft:6500}; },
+  note(v){ const c=cp(v); tick(1); c.note={text:F().notes[v]||'Note indtalt.',t:new Date(S.clock)}; S.events.filter(e=>e.title==='Checkpoint: '+c.navn).forEach(e=>e.detail+=' · talenote'); toast('Talenote skrevet ud'); },
+  nytTil(){ S.draft={...F().tillaeg}; },
   dropTil(){ S.draft=null; },
   gemTil(){ tick(14); const t={id:'t'+Date.now(),titel:S.draft.titel,loft:Number(String(S.draft.loft).replace(/\D/g,''))||0,fotos:1,status:'sendt',at:new Date(S.clock),sentAt:new Date(S.clock),okAt:null}; S.tillaeg.push(t); S.draft=null; log('send','Tillæg sendt til kunde',t.titel+' · maks. '+kr(t.loft)+' DKK · 1 foto · arbejdet sat på pause'); if(S.device==='mobile') S.showKunde=true; toast('Tillæg sendt til '+S.sag.kunde); },
   sendTil(v){ const t=S.tillaeg.find(x=>x.id===v); tick(3); t.status='sendt'; t.sentAt=new Date(S.clock); log('send','Tillæg sendt til kunde',t.titel+' · maks. '+kr(t.loft)+' DKK'); if(S.device==='mobile') S.showKunde=true; },
   okTil(v){ const t=S.tillaeg.find(x=>x.id===v); tick(22); t.status='godkendt'; t.okAt=new Date(S.clock); log('godk','Tillæg godkendt: '+t.titel,'SMS-kode · maks. '+kr(t.loft)+' DKK · arbejde fortsat '+fmtTime(new Date(S.clock.getTime()+3*60000))); S.showKunde=false; toast('Tillægget er godkendt. Arbejdet kan fortsætte.'); },
-  nyMangel(){ tick(6); S.mangler.push({id:'m'+Date.now(),titel:'Fuge ved bruseniche skal rettes',frist:new Date(2026,10,10),udbedret:false}); toast('Mangel noteret med frist'); },
+  nyMangel(){ tick(6); S.mangler.push({id:'m'+Date.now(),titel:F().mangel,frist:new Date(F().frist),udbedret:false}); toast('Mangel noteret med frist'); },
   sendKvit(){ tick(8); S.kvit.status='sendt'; S.kvit.sentAt=new Date(S.clock); log('send','Aflevering sendt til kundens kvittering','Tjekliste '+S.cps.filter(cpDone).length+'/'+S.cps.length+(S.mangler.length?' · '+S.mangler.length+' mangel, frist '+fmtDay(S.mangler[0].frist):' · ingen mangler')); if(S.device==='mobile') S.showKunde=true; toast('SMS sendt til '+S.sag.kunde); },
   okKvit(){ tick(22); S.kvit.status='kvitteret'; S.kvit.at=new Date(S.clock); log('godk','Aflevering kvitteret af kunde','SMS-kode · garantiperioden starter'+(S.mangler.length?' · '+S.mangler.length+' mangel, frist '+fmtDay(S.mangler[0].frist):'')); S.showKunde=false; toast('Kunden har kvitteret'); },
-  udbedr(v){ const m=S.mangler.find(x=>x.id===v); S.clock=new Date(2026,10,10,13,5); m.udbedret=true; m.udbedretAt=new Date(S.clock); log('cp','Mangel udbedret: '+m.titel,'1 foto · kunde kvitteret samme dag'); toast('Mangel lukket med foto'); },
-  klage(){ S.clock=new Date(2028,4,2,9,40); log('klage','Reklamation: fugt ved gulv','Modtaget fra kunde · firmaets svar 4. maj · sag sendt til foreningen 13. maj'); S.klage={open:new Date(2028,4,14,10,0),consent:new Date(2028,4,13)}; S.clock=new Date(2028,4,14,10,0); toast('18 måneder senere: foreningen åbner sagsmappen'); },
+  udbedr(v){ const m=S.mangler.find(x=>x.id===v); S.clock=new Date(m.frist.getTime()+13*3600000+5*60000); m.udbedret=true; m.udbedretAt=new Date(S.clock); log('cp','Mangel udbedret: '+m.titel,'1 foto · kunde kvitteret samme dag'); toast('Mangel lukket med foto'); },
+  klage(){ S.clock=new Date(2028,4,2,9,40); log('klage',F().klage.titel,'Modtaget fra kunde · firmaets svar 4. maj · sag sendt til foreningen 13. maj'); S.klage={open:new Date(2028,4,14,10,0),consent:new Date(2028,4,13)}; S.clock=new Date(2028,4,14,10,0); toast('18 måneder senere: foreningen åbner sagsmappen'); },
   pdf(){ showPdf(); return 'nomodalrender'; },
   closeModal(){ document.getElementById('modalHost').innerHTML=''; return 'noRender'; },
   noop(){ toast('Ikke med i prototypen'); return 'noRender'; }

@@ -39,6 +39,8 @@ Sådan udfyldes en plads:
 
 Kunde Mette Lund, Ved Søen 8, 3450 Allerød. Tømrerfirma Holm ApS (Thomas Holm). Sag 2026-0142. Aftale 69.576 kr. inkl. moms, godkendt 28. okt kl. 19:35 med kode 482 917. Rådden bjælke fundet 3. nov kl. 08:10; tillæg med prisloft 6.500 kr. inkl. moms godkendt 3. nov kl. 09:42 med kode 306 118. Rør før lukning 4. nov kl. 11:10. Membran før fliser 5. nov kl. 14:30. Aflevering kvitteret 12. nov kl. 15:20 med kode 771 240. Prototypens ur er simuleret, så dens tidspunkter flytter sig, når man klikker.
 
+Prototypen har også en tag-sag, når man vælger fagtypen Tag (kun i prototypen, ikke på salgssiden eller mødesiden): samme kunde og adresse, sag 2026-0157, nyt tegltag for 286.250 kr. inkl. moms. Obligatoriske checkpoints: undertag før lægter og inddækning ved skorsten før tagsten. Tillæg: rådne spærfødder ved tagfod, prisloft 9.800 kr. Aflevering 20. nov; mangel: rygningssten ved østgavlen, frist 27. nov. Fagtypen Andet bruger stadig vådrumssagen. Opsætningen pr. fag står i `FAG` øverst i prototypens script.
+
 Stil for alle billeder: dokumentarisk, naturligt dagslys, varme og dæmpede farver, der passer til puds-grunden (`ground-100`). Danske omgivelser. Ingen tekst eller logoer i billedet, intet poseret smil, ingen stockfoto-stemning. Ingen skærme med læsbart indhold.
 
 Billederne skal ikke ændre layoutet. Rør ikke telefonen, sagsmappen og stemplerne; de er bygget i HTML og skal forblive tekst.
