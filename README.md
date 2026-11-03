@@ -2,9 +2,15 @@
 
 Dokumentationslag til håndværkere ("Det aftalte, dokumenteret."). Kunde: Dansk Håndværk (garantiordningen).
 
+Live: https://ralf-commits.github.io/aftalt/ (salgssiden) og https://ralf-commits.github.io/aftalt/prototype/ (prototypen). GitHub Pages bygger fra `main`.
+
 ## Indhold
-- `prototype/index.html`: interaktiv prototype i én fil (mobil/desktop, simuleret ur, kundens telefon). Åbn direkte i browseren. Ingen build.
+- `index.html`: salgssiden. Viser ideen for Dansk Håndværk; knapperne "Se prototypen" peger på `prototype/`.
+- `prototype/index.html`: interaktiv prototype i én fil (mobil/desktop, simuleret ur, kundens telefon). Knappen "Til salgssiden" i topbaren peger tilbage på `../`. Åbn direkte i browseren. Ingen build.
 - `design-system/tokens.json` og `design-system/README.md`: farver, typografi, afstande og brandbog. Kilden til alt visuelt.
+
+## Billedpladser på salgssiden
+Billeder er endnu ikke lavet. Hver plads er en `<figure class="billedplads" data-billede="..." data-prompt="...">`; `data-prompt` beskriver billedet. Læg et `<img>` ind i figuren, så skjules pladsteksten automatisk.
 
 ## Til AI-værktøjer (ChatGPT, Claude m.fl.)
 Opgave: gør prototypen visuelt skarpere til et salgsmøde med Dansk Håndværk.
