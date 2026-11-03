@@ -20,4 +20,3 @@ Regler:
 4. Tonen er rolig og udramatisk. Intet pral, ingen emojis. Tekst på dansk.
 5. Fotos i prototypen er pladsholdere; rigtig kameraadgang kommer i det rigtige produkt.
 6. Hold det som én HTML-fil uden build, så den kan åbnes på en mødeprojektor uden net (fonte kan indlejres).
-7. Ændringer som pull request, aldrig direkte på main.
