@@ -5,6 +5,8 @@ Dokumentationslag til håndværkere ("Det aftalte, dokumenteret."). Kunde: Dansk
 Live (GitHub Pages fra `main`): https://ralf-commits.github.io/aftalt/ sender videre til salgssiden; prototypen ligger på https://ralf-commits.github.io/aftalt/prototype/.
 
 ## Indhold
+- `demo/index.html`: vælg mellem Aftalt og Dansk Håndværk-medlemsudgaven.
+- `dansk-haandvaerk/index.html`: indgang til den fælles prototype med Dansk Håndværk-tema. Se `demo/README.md` for brandstatus.
 - `index.html`: sender videre til `salgsside/`, så salgssiden er forsiden.
 - `prototype/index.html`: interaktiv prototype i én fil (mobil/desktop, simuleret ur, kundens telefon). Åbn direkte i browseren. Ingen build.
 - `moede/index.html` og `moede/Aftalt-salgsmoede.pdf`: mødesiden. Sagen fortalt kapitel for kapitel som præsentation, med fire AI-illustrationer. Live på `/aftalt/moede/`.

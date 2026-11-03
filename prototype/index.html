@@ -3,6 +3,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aftalt</title>
+<script>
+// A strict allowlist selects presentation only; case data and actions stay shared.
+if(new URLSearchParams(location.search).get('brand')==='dansk-haandvaerk'){
+  document.documentElement.dataset.brand='dansk-haandvaerk';
+  document.documentElement.dataset.theme='light';
+  document.title='Dansk Håndværk · Digital sagsmappe';
+}
+</script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -193,6 +201,34 @@ a.ghost{text-decoration:none;display:inline-flex;align-items:center}
 .mobileonly{display:none}
 @container app (max-width:699px){.mobileonly{display:inline-flex}.deskonly{display:none}}
 .switch{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:3}
+/* Whitelabel concept: existing palette tokens, pending official brand assets. */
+.dhv-wordmark{display:flex;flex-direction:column;gap:4px;font-family:var(--body);font-weight:600;font-size:20px;line-height:1.05;letter-spacing:-.01em}
+.dhv-wordmark small{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;line-height:1.4;color:inherit}
+.tenant-kicker{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.tenant-customer{display:grid;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.tenant-customer .dhv-wordmark{color:var(--accent)}
+.tenant-customer + .muted svg{width:16px;height:16px;flex-shrink:0}
+[data-brand="dansk-haandvaerk"] .kbody>*{flex-shrink:0}
+[data-brand="dansk-haandvaerk"] .kfoot{position:static}
+[data-brand="dansk-haandvaerk"] .phone.customer-mobile .kbody{padding-bottom:72px}
+[data-brand="dansk-haandvaerk"] .it>b{white-space:nowrap}
+
+:root[data-brand="dansk-haandvaerk"]{--ground:#f7f6f1;--shell:#efede6;--display:'IBM Plex Sans','Helvetica Neue',Arial,sans-serif;--r:4px}
+[data-brand="dansk-haandvaerk"] .topbar{background:var(--surface);border-top:4px solid var(--accent);padding-block:16px;gap:16px}
+[data-brand="dansk-haandvaerk"] .topbar>.brand{color:var(--accent);padding-right:24px;border-right:1px solid var(--line)}
+[data-brand="dansk-haandvaerk"] .brand small{color:inherit}
+[data-brand="dansk-haandvaerk"] .side{background:var(--accent);color:var(--accent-ink);border:0;padding:24px 16px}
+[data-brand="dansk-haandvaerk"] .side .logo{padding:0 8px 32px}
+[data-brand="dansk-haandvaerk"] .side .navi{gap:8px}
+[data-brand="dansk-haandvaerk"] .side .navi a{color:var(--accent-ink);border-radius:4px;padding:12px 8px}
+[data-brand="dansk-haandvaerk"] .side .navi a.on{background:var(--surface);color:var(--accent)}
+[data-brand="dansk-haandvaerk"] .side .firm{background:var(--surface);color:var(--ink);border:0;border-radius:4px;padding:12px}
+[data-brand="dansk-haandvaerk"] .head{padding-top:24px;padding-bottom:16px}
+[data-brand="dansk-haandvaerk"] .card,[data-brand="dansk-haandvaerk"] .btn,[data-brand="dansk-haandvaerk"] input,[data-brand="dansk-haandvaerk"] .tab{border-radius:4px}
+[data-brand="dansk-haandvaerk"] .frame.desktop{border-radius:10px;box-shadow:none}
+[data-brand="dansk-haandvaerk"] .phone .lbl{background:var(--accent);color:var(--accent-ink)}
+[data-brand="dansk-haandvaerk"] .paper .dhv-wordmark{color:var(--accent);margin-bottom:24px}
+@media(max-width:600px){[data-brand="dansk-haandvaerk"] .topbar>.brand{border:0;padding-right:0}}
 </style>
 
 <div class="shell">
@@ -221,6 +257,26 @@ a.ghost{text-decoration:none;display:inline-flex;align-items:center}
 <script>
 (function(){
 'use strict';
+/* ---------- shared brand presentation ---------- */
+const isMemberBrand=document.documentElement.dataset.brand==='dansk-haandvaerk';
+const aftaltMark=document.querySelector('.topbar .brand .mark').outerHTML;
+const memberWordmark='<span class="dhv-wordmark">Dansk Håndværk<small>Digital sagsmappe</small></span>';
+const BRAND=isMemberBrand ? {
+  name:'Dansk Håndværk', wordmark:memberWordmark,
+  customerHeading:'Dansk Håndværk · åbnet fra SMS, intet login',
+  receiptLabel:'Åbn din sagsmappe', agreementLabel:'Åbn din aftale'
+} : {
+  name:'Aftalt', wordmark:aftaltMark+'Aftalt',
+  customerHeading:'aftalt.dk/g/8k2f · åbnet fra SMS, intet login',
+  receiptLabel:'aftalt.dk/m/8k2f', agreementLabel:'aftalt.dk/a/8k2f'
+};
+if(isMemberBrand){
+  document.querySelector('.topbar .brand').innerHTML=BRAND.wordmark+'<small>prototype</small>';
+  document.querySelector('.phone .lbl').textContent='Dansk Håndværk · kundens telefon';
+  const back=document.querySelector('.back');
+  back.href='../demo/'; back.textContent='Vælg prototype';
+}
+
 /* ---------- icons ---------- */
 const I = {
   camera:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
@@ -488,7 +544,7 @@ const SCREENS={sag:scrSag,aftale:scrAftale,byggedag:scrByggedag,aflevering:scrAf
 /* ---------- kunde (SMS-link) ---------- */
 function renderKunde(){
   const p=pending(), el=document.getElementById('kunde');
-  const head=`<div class="muted" style="display:flex;gap:6px;align-items:center">${I.lock}<span>aftalt.dk/g/8k2f · åbnet fra SMS, intet login</span></div>`;
+  const head=`${isMemberBrand?`<div class="tenant-customer">${BRAND.wordmark}<span class="small">En service til medlemmer og deres kunder</span></div>`:''}<div class="muted" style="display:flex;gap:6px;align-items:center">${I.lock}<span>${BRAND.customerHeading}</span></div>`;
   if(p==='aftale'){
     el.innerHTML=`${head}<div><div class="eyebrow">Tømrerfirma Holm ApS</div><h2 style="font-family:var(--display);margin:4px 0 0;font-size:21px;line-height:1.2">Godkend aftalen for ${S.sag.adresse.split(',')[0]}</h2></div>
     <div class="price"><span class="small">Samlet pris</span><b>${kr(S.aftale.pris)}</b></div><div class="muted" style="margin-top:-8px">DKK inkl. moms · 30 % ved start, 40 % midtvejs, 30 % ved aflevering</div>
@@ -513,8 +569,8 @@ function renderKunde(){
     <div class="kfoot"><div class="field"><label for="k-kode3">Kode fra SMS</label><input id="k-kode3" class="code" value="771 240"></div>
     <button type="button" class="btn primary" data-action="okKvit">Kvittér for aflevering</button></div>`;
   } else {
-    const last = S.kvit.status==='kvitteret' ? `<div class="sms"><div class="from">Aftalt · Tømrerfirma Holm</div>Tak, ${S.sag.kunde.split(' ')[0]}. Din kvittering er modtaget ${fmtTime(S.kvit.at)}. Her er din sagsmappe for ${S.sag.adresse.split(',')[0]}: <a href="#" data-action="noop">aftalt.dk/m/8k2f</a> (gemmes i 10 år).</div>`
-      : S.aftale.status==='godkendt' ? `<div class="sms"><div class="from">Aftalt · Tømrerfirma Holm</div>Aftalen for ${S.sag.adresse.split(',')[0]} er godkendt ${fmtDay(S.aftale.okAt)} ${fmtTime(S.aftale.okAt)} og låst. Din kopi: <a href="#" data-action="noop">aftalt.dk/a/8k2f</a></div>`
+    const last = S.kvit.status==='kvitteret' ? `<div class="sms"><div class="from">${BRAND.name} · Tømrerfirma Holm</div>Tak, ${S.sag.kunde.split(' ')[0]}. Din kvittering er modtaget ${fmtTime(S.kvit.at)}. Her er din sagsmappe for ${S.sag.adresse.split(',')[0]}: <a href="#" data-action="noop">${BRAND.receiptLabel}</a> (gemmes i 10 år).</div>`
+      : S.aftale.status==='godkendt' ? `<div class="sms"><div class="from">${BRAND.name} · Tømrerfirma Holm</div>Aftalen for ${S.sag.adresse.split(',')[0]} er godkendt ${fmtDay(S.aftale.okAt)} ${fmtTime(S.aftale.okAt)} og låst. Din kopi: <a href="#" data-action="noop">${BRAND.agreementLabel}</a></div>`
       : '';
     el.innerHTML=`${head}<div class="empty" style="height:auto;padding:28px 10px 10px">${I.inbox}<div><b>Ingen afventende godkendelser</b><div class="muted">Kunden får en SMS, når der er noget at tage stilling til.</div></div></div>${last}`;
   }
@@ -526,17 +582,18 @@ function render(){
   frame.className='frame '+S.device;
   const sc=SCREENS[S.screen]();
   const tabs=STEPS.slice(1,4).map(([k,l])=>`<span class="tab ${S.screen===k?'on':stepDone[k]()?'done':''}">${l}</span>`).join('');
-  const nav=`<nav class="side"><div class="logo" style="display:flex;align-items:center;gap:10px"><svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="6" fill="#1f3c8a"/><path d="M10 29.5 19.5 39 38.5 11" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.5 29.5H36" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>Aftalt</div><div class="navi">
+  const nav=`<nav class="side"><div class="logo" style="display:flex;align-items:center;gap:10px">${BRAND.wordmark}</div><div class="navi">
     <a href="#" class="${S.screen==='sag'?'on':''}" data-action="go" data-v="sag">${I.plus} Ny sag</a>
     <a href="#" class="${['aftale','byggedag','aflevering'].includes(S.screen)?'on':''}" data-action="go" data-v="${S.sag.created?(S.aftale.status==='godkendt'?'byggedag':'aftale'):'sag'}">${I.home} Sager · 1 aktiv</a>
     <a href="#" class="${S.screen==='sagsmappe'?'on':''}" data-action="go" data-v="sagsmappe">${I.folder} Sagsmapper</a>
     <a href="#" data-action="noop">${I.list} Tjeklister</a></div>
     <div class="firm"><div class="tick on" style="width:34px;height:34px;border-radius:9px;background:var(--ink);color:var(--ground);font-size:12px">TH</div><div style="min-width:0"><div style="font-weight:600;font-size:13px">Tømrerfirma Holm</div><div class="muted" style="font-size:11.5px">Dansk Håndværk · medlem</div></div></div></nav>`;
-  app.innerHTML=`${nav}<div class="main"><div class="head"><div><div class="sub">${sc.sub||''}</div><h1>${sc.title}</h1></div><div class="tabs">${tabs}</div></div>
+  app.innerHTML=`${nav}<div class="main"><div class="head"><div>${isMemberBrand?'<div class="tenant-kicker">Dansk Håndværk · medlemssystem</div>':''}<div class="sub">${sc.sub||''}</div><h1>${sc.title}</h1></div><div class="tabs">${tabs}</div></div>
     <div class="body">${sc.body}</div><div class="foot">${sc.actions}</div></div>`;
   renderKunde();
   // customer phone: desktop shows beside; mobile swaps
   const mobileKunde = S.device==='mobile' && S.showKunde;
+  phone.classList.toggle('customer-mobile',mobileKunde);
   phone.hidden = S.device==='mobile' ? !mobileKunde : false;
   frame.hidden = mobileKunde;
   phone.querySelector('.switch')?.remove();
@@ -561,7 +618,7 @@ window.addEventListener('resize',fit);
 function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast._h); toast._h=setTimeout(()=>t.classList.remove('show'),2600); }
 function showPdf(){
   const host=document.getElementById('modalHost');
-  host.innerHTML=`<div class="modal" data-action="closeModal"><div class="paper" role="dialog" aria-label="Sagsmappe som PDF"><div class="row between" style="margin-bottom:18px"><div><div class="eyebrow">Sagsmappe · tidsstemplet udskrift</div><h2>Sag ${S.sag.nr} · ${S.sag.adresse}</h2><div class="small">Tømrerfirma Holm ApS · kunde ${S.sag.kunde} · ${S.sag.fag} · genereret ${fmtDate(S.clock)} ${fmtTime(S.clock)}</div></div><span class="pill">${fotoCount()} fotos</span></div>
+  host.innerHTML=`<div class="modal" data-action="closeModal"><div class="paper" role="dialog" aria-label="Sagsmappe som PDF">${isMemberBrand?BRAND.wordmark:''}<div class="row between" style="margin-bottom:18px"><div><div class="eyebrow">Sagsmappe · tidsstemplet udskrift</div><h2>Sag ${S.sag.nr} · ${S.sag.adresse}</h2><div class="small">Tømrerfirma Holm ApS · kunde ${S.sag.kunde} · ${S.sag.fag} · genereret ${fmtDate(S.clock)} ${fmtTime(S.clock)}</div></div><span class="pill">${fotoCount()} fotos</span></div>
   <div class="tl">${S.events.map(e=>evRow(e,false)).join('')}</div>
   <p class="small" style="margin:20px 0 0;color:#7B807E">Alle hændelser er registreret med tid, bruger og, hvor relevant, position. Fotos ligger som bilag i fuld opløsning. I den rigtige version er dokumentet kryptografisk signeret.</p>
   <div class="row" style="margin-top:20px;justify-content:flex-end"><button type="button" class="btn" data-action="closeModal">Luk</button></div></div></div>`;
