@@ -10,6 +10,7 @@ Live (GitHub Pages fra `main`): https://ralf-commits.github.io/aftalt/ sender vi
 - `moede/index.html` og `moede/Aftalt-salgsmoede.pdf`: mødesiden. Sagen fortalt kapitel for kapitel som præsentation, med fire AI-illustrationer. Live på `/aftalt/moede/`.
 - `salgsside/index.html`: one-pager til salgsmødet med Dansk Håndværk. Har billedpladser til genererede billeder; se `salgsside/README.md`.
 - `design-system/tokens.json` og `design-system/README.md`: farver, typografi, afstande og brandbog. Kilden til alt visuelt.
+- `design-system/dansk-haandvaerk/`: Dansk Håndværks farver, font og logo til medlemsudgaven. Se mappens README for regler.
 
 ## Til AI-værktøjer (ChatGPT, Claude m.fl.)
 Opgave: gør prototypen visuelt skarpere til et salgsmøde med Dansk Håndværk.
