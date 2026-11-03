@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="da">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aftalt · To udgaver</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+:root{--ground:#efede6;--surface:#fff;--ink:#1c1a17;--muted:#4f4c45;--quiet:#716d63;--line:#dcd9cf;--blue:#1f3c8a;--pale:#e1e8fa;--sans:'IBM Plex Sans','Helvetica Neue',Arial,sans-serif;--display:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.5 var(--sans)}main{max-width:1120px;padding:48px 24px;margin:auto}header{display:grid;gap:16px;max-width:700px;padding-bottom:32px}h1,h2,p{margin:0}h1{font:700 40px/1.1 var(--display);letter-spacing:-.015em}h2{font:700 24px/1.2 var(--display)}.label{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--quiet)}.cards{display:grid;grid-template-columns:1fr 1fr;gap:24px}.card{border:1px solid var(--line);background:var(--surface);border-radius:16px;overflow:hidden}.identity{min-height:200px;padding:32px;display:flex;flex-direction:column;justify-content:center;gap:12px;background:var(--pale);color:var(--blue)}.identity svg{width:40px;height:40px}.wordmark{font:700 40px/1.1 var(--display)}.member{background:var(--blue);color:var(--surface)}.member .wordmark{font:600 32px/1.1 var(--sans)}.body{display:grid;gap:24px;padding:32px}.body p{color:var(--muted);min-height:48px}a.button{display:block;min-height:44px;text-align:center;padding:12px 24px;background:var(--blue);color:var(--surface);border-radius:10px;text-decoration:none;font-weight:600}a:focus-visible{outline:2px solid var(--blue);outline-offset:4px}footer{padding-top:24px;display:grid;gap:12px;font-size:13px;color:var(--quiet)}footer a{color:var(--blue)}@media(max-width:700px){main{padding:32px 16px}.cards{grid-template-columns:1fr}h1{font-size:24px}.body,.identity{padding:24px}.identity{min-height:160px}}
+/* Dansk Håndværk-kortet i DH's eget udtryk: design-system/dansk-haandvaerk/ */
+@font-face{font-family:'Lexend';font-style:normal;font-weight:100 900;font-display:swap;src:url(../design-system/dansk-haandvaerk/fonts/lexend-latin-wght-normal.woff2) format('woff2')}
+.dhv{--dhv-blue:#005489;--dhv-mid:#5484A5;--dhv-pale:#E8ECF3;--dhv-ink:#1D1D1B;font-family:'Lexend','Helvetica Neue',Arial,sans-serif;border-radius:4px;border-color:#D2DEE9;border-top:4px solid var(--dhv-blue)}
+.dhv .identity{background:var(--dhv-pale);color:var(--dhv-blue);align-items:flex-start}
+.dhv .identity img{display:block;width:280px;max-width:100%;height:auto}
+.dhv .identity span{font-size:12px;font-weight:500;letter-spacing:.07em;text-transform:uppercase}
+.dhv h2{font:600 24px/1.2 'Lexend','Helvetica Neue',Arial,sans-serif;color:var(--dhv-ink)}
+.dhv .body p{color:var(--dhv-ink)}
+.dhv a.button{background:var(--dhv-blue);border-radius:4px;font-weight:500}
+.dhv a:focus-visible{outline-color:var(--dhv-blue)}
+</style>
+<main>
+<header><div class="label">Præsentation / To udgaver</div><h1>Samme sag.<br>To forskellige afsendere.</h1><p>Prøv forløbet fra aftale til sagsmappe som Aftalt og som en medlemsservice fra Dansk Håndværk.</p></header>
+<div class="cards">
+<article class="card"><div class="identity"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="6" fill="currentColor"/><path d="M10 29.5 19.5 39 38.5 11M25.5 29.5H36" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="wordmark">Aftalt</div><span>Det aftalte, dokumenteret.</span></div><div class="body"><h2>Aftalt-prototypen</h2><p>Produktets eget udtryk. Aftaler, dokumentation og kundens godkendelse samlet ét sted.</p><a class="button" href="../prototype/">Åbn Aftalt →</a></div></article>
+<article class="card dhv"><div class="identity"><img src="../design-system/dansk-haandvaerk/dhv-logo.png" alt="Dansk Håndværk"><span>Digital sagsmappe · en service til medlemmerne</span></div><div class="body"><h2>Medlemsudgaven</h2><p>Dansk Håndværk som afsender. Medlemmets virksomhed står fortsat for arbejdet og aftalen med kunden.</p><a class="button" href="../dansk-haandvaerk/">Åbn medlemsudgaven →</a></div></article>
+</div><footer><span>Begge udgaver er demonstrationer. SMS, tid og godkendelser er simuleret.</span><span>Dansk Håndværk-udgaven er et forslag baseret på logo og designværdier fra dhv.dk.</span><a href="../salgsside/">Til salgssiden</a></footer>
+</main></html>
