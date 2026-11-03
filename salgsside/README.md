@@ -26,9 +26,9 @@ Sådan udfyldes en plads:
 | `data-billede` | Format | Motiv | Status |
 |---|---|---|---|
 | `hero` | 4:5 | Tømrer fotograferer vådrumsmembranen med telefonen, før der sættes fliser op | Midlertidigt: `membran.jpg` |
-| `sagsmappe` | 16:9 | Sagsbehandler i foreningen åbner en sag på en bærbar | Mangler |
-| `forening` | 4:3 | To fra foreningen gennemgår en sag ved et mødebord | Mangler |
-| `haandvaerker` | 4:3 | Håndværkerhænder med telefon, talenote på byggepladsen | Mangler |
+| `sagsmappe` | 16:9 | Sagsbehandler i foreningen åbner en sag på en bærbar | `sagsmappe.jpg` |
+| `forening` | 4:3 | To fra foreningen gennemgår en sag ved et mødebord | `forening.jpg` |
+| `haandvaerker` | 4:3 | Håndværkerhænder med telefon, talenote på byggepladsen | `haandvaerker.jpg` |
 | `boligejer` | 4:3 | Par i deres nyrenoverede badeværelse kigger på en telefon | Midlertidigt: `aflevering.jpg` |
 
 ### Sagens fotos
