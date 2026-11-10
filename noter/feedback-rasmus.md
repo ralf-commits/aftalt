@@ -15,7 +15,8 @@ Givet på Dansk Håndværk-udgaven af prototypen (`main`, efter PR #7). Arbejdet
 ## Opgaver
 
 - [x] Ny sag som trin-for-trin: kontakt, hvor (inde/ude, rum), hvad (spørgsmål der afgør fag), autorisationer og garanti, tjekliste, pris og "ikke med".
-- [ ] Research-notat: konkrete krav fra BR18, SBi-anvisning 252 (vådrum), GVK, Byg-Erfa og Dansk Håndværks garantibetingelser. Vådrum først.
+- [x] Research-notat for vådrum: `noter/research-vaadrum.md`. BR18, SBi-anvisning 252, Byg-Erfa, autorisationer og Dansk Håndværk Garanti. GVK viste sig at være Gulvbranchens Vådrumskontrol (kun vinyl). Punkter mærket [verificér] skal tjekkes mod kilderne.
+- [ ] Tjekliste i prototypen udvidet fra notatets 23 punkter (i dag 5 checkpoints).
 - [x] Farve til kundens side. Lyng (`lyng-700`/`lyng-100`/`on-lyng`) er tilføjet designsystemet efter Ralfs ok.
 - [x] Salgsside: udvekslingsflow med to telefoner i zigzag.
 - [ ] Salgsside: filmstrimmel med de fem skærme vandret.

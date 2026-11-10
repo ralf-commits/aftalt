@@ -412,9 +412,9 @@ const FAGINFO={
   el:{navn:'El',hvem:'Holm El · underleverandør',krav:'Autoriseret elinstallatør · Sikkerhedsstyrelsen'},
   blik:{navn:'Blikkenslager',hvem:'Nordsjællands Blik ApS · underleverandør',krav:'Medlem af Dansk Håndværk'}
 };
-/* Hvilke regler hvert checkpoint bygger på. Foreløbige henvisninger; verificeres mod noter/research-vaadrum.md. */
+/* Hvilke regler hvert checkpoint bygger på. Vådrum er afstemt med noter/research-vaadrum.md; tag er endnu ikke researchet. */
 const KILDE={
-  membran:'SBi-anvisning 252 · GVK', roer:'BR18 · autoriseret VVS', fliser:'SBi-anvisning 252', vvs:'Autoriseret VVS', el:'Autoriseret el',
+  membran:'BR18 § 339 · SBi-anvisning 252', roer:'BR18 § 339 · Byg-Erfa · autoriseret VVS', fliser:'BR18 § 339 · SBi-anvisning 252', vvs:'Autoriseret VVS · Sikkerhedsstyrelsen', el:'Autoriseret el · Sikkerhedsstyrelsen',
   undertag:'Byg-Erfa · producentens anvisning', inddaekning:'Byg-Erfa', tagsten:'Producentens anvisning', ventilation:'BR18', ovenlys:'Producentens anvisning'
 };
 const CPFAG={el:'el'};
@@ -458,7 +458,7 @@ function nsTrinBody(){
     <div class="card" style="gap:0;padding-block:6px">${cps.map((c,i)=>`<div class="row between" style="padding:10px 0;${i?'border-top:1px solid var(--line)':''}">
       <div style="min-width:0"><div style="font-weight:600">${c.navn}</div><div class="stamp">${KILDE[c.id]||''}</div></div>
       ${c.obl?`<span class="pill warn">${I.camera} Foto før lukning</span>`:`<span class="pill neutral">Checkpoint</span>`}</div>`).join('')}</div>
-    <p class="small" style="margin:0">Tjeklisten bygger på branchens egne regler: Bygningsreglementet (BR18), SBi-anvisninger, GVK og Byg-Erfa. Pris og hvad der ikke er med kommer i næste trin.</p>`;
+    <p class="small" style="margin:0">Tjeklisten bygger på branchens egne regler: Bygningsreglementet (BR18), SBi-anvisning 252 og Byg-Erfa. Pris og hvad der ikke er med kommer i næste trin.</p>`;
 }
 
 function scrSag(){
