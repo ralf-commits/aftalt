@@ -320,14 +320,20 @@ const FAG={
     kMed:['Nedrivning','Membran, fliser, fuger','VVS: afløb og bruser','El: 2 stik, 4 spots'],
     kIkke:['Maling af loft','Nyt toilet (du leverer)','Bortkørsel af affald'],
     cps:[
-      {id:'membran',navn:'Membran før fliser',obl:true,ved:'Håndværker'},
-      {id:'roer',navn:'Rør før lukning',obl:true,ved:'VVS-underleverandør'},
-      {id:'fliser',navn:'Fliser og fald mod afløb',obl:false,needs:['membran','roer']},
-      {id:'vvs',navn:'VVS tilsluttet og tæthedstestet',obl:false,needs:['roer']},
-      {id:'el',navn:'El afprøvet',obl:false}
+      {id:'foer',navn:'Før nedrivning: eksisterende forhold',obl:true,ved:'Håndværker'},
+      {id:'underlag',navn:'Underlag efter nedrivning',obl:true,ved:'Håndværker',needs:['foer']},
+      {id:'vaeg',navn:'Vægopbygning før beklædning',obl:false,needs:['underlag']},
+      {id:'roer',navn:'Rør i væg før lukning',obl:true,ved:'VVS-underleverandør',needs:['underlag']},
+      {id:'taethed',navn:'Tæthedsprøvning med manometer',obl:false,ved:'VVS-underleverandør',needs:['roer']},
+      {id:'afloeb',navn:'Gulvafløb og tilslutning',obl:true,ved:'VVS-underleverandør',needs:['underlag']},
+      {id:'fald',navn:'Fald mod afløb, målt',obl:false,needs:['afloeb']},
+      {id:'manchet',navn:'Rørgennemføringer med manchetter',obl:false,needs:['roer']},
+      {id:'membran',navn:'Membran før fliser',obl:true,ved:'Håndværker',needs:['roer','afloeb']},
+      {id:'fliser',navn:'Fliser og fuger',obl:false,needs:['membran']},
+      {id:'el',navn:'El: zoner og afprøvning',obl:false}
     ],
-    notes:{membran:'Membran i to lag, hjørner og rørgennemføringer forstærket med bånd. Tørretid overholdt.',roer:'Afløb og tilslutninger trykprøvet før gulvet lukkes. Ingen utætheder.',fliser:'Fald mod afløb målt til 15 mm pr. meter. Fuger efter leverandørens anvisning.',vvs:'Bruser og afløb testet med vand i 20 minutter.',el:'Spots og stik afprøvet, HPFI testet.'},
-    laas:'Fliser kan først dokumenteres, når membran og rør er fotograferet. Skønsmanden laver sjældent destruktive indgreb, så fotos før lukning er det eneste bevis for skjult arbejde.',
+    notes:{foer:'Gulv, vægge og afløb fotograferet før nedrivning. Fugtplet ved dørtrin noteret, så den ikke senere tilskrives os.',underlag:'Strøer og dæk sunde, ingen råd. Fugtmåling i træ: 11 %.',vaeg:'Vådrumsplader på stolper, forstærkning bag armatur og toilet.',roer:'Rør-i-rør med koblingsdåser, ingen skjulte samlinger uden melding.',taethed:'Trykprøvet med manometer i billedet. Tæt efter 30 minutter.',afloeb:'Nyt gulvafløb med klemring, tæt tilslutning til eksisterende faldstamme.',fald:'Fald målt med faldmåler: 1,2 % i bruseniche, intet bagfald.',manchet:'Manchetter om alle gennemføringer, tætnet til membranen. Ét foto pr. gennemføring.',membran:'Membran i to lag, hjørner og overgange med bånd, ført over afløbsflangen. Batchnummer i billedet. Tørretid overholdt.',fliser:'Fuger efter leverandørens anvisning, elastisk fuge i hjørner.',el:'Spots og stik placeret efter zonerne, HPFI testet.'},
+    laas:'Membranen kan først dokumenteres, når rør og afløb er fotograferet, og fliserne først efter membranen. Skønsmanden laver sjældent destruktive indgreb, så fotos før lukning er det eneste bevis for skjult arbejde. Tjeklistens 11 checkpoints er trukket fra BR18, SBi 252 og Byg-Erfa; hele grundlaget står i noter/research-vaadrum.md.',
     tillaeg:{titel:'Rådden bjælke under gulv',loft:6500},
     mangel:'Fuge ved bruseniche skal rettes',
     aflevering:new Date(2026,10,7,14,50), frist:new Date(2026,10,10),
@@ -414,7 +420,7 @@ const FAGINFO={
 };
 /* Hvilke regler hvert checkpoint bygger på. Vådrum er afstemt med noter/research-vaadrum.md; tag er endnu ikke researchet. */
 const KILDE={
-  membran:'BR18 § 339 · SBi-anvisning 252', roer:'BR18 § 339 · Byg-Erfa · autoriseret VVS', fliser:'BR18 § 339 · SBi-anvisning 252', vvs:'Autoriseret VVS · Sikkerhedsstyrelsen', el:'Autoriseret el · Sikkerhedsstyrelsen',
+  foer:'Byg-Erfa (typiske skader ved renovering)', underlag:'BR18 § 339 · Byg-Erfa', vaeg:'SBi-anvisning 252', roer:'Byg-Erfa (meldesystem) · autoriseret VVS', taethed:'DS 439 · autoriseret VVS', afloeb:'DS 432 · Byg-Erfa · autorisation', fald:'SBi-anvisning 252 (ca. 1 %)', manchet:'BR18 § 339 · Byg-Erfa', membran:'BR18 § 339 · SBi-anvisning 252', fliser:'SBi-anvisning 252', el:'Autoriseret el · DS/HD 60364-7-701',
   undertag:'Byg-Erfa · producentens anvisning', inddaekning:'Byg-Erfa', tagsten:'Producentens anvisning', ventilation:'BR18', ovenlys:'Producentens anvisning'
 };
 const CPFAG={el:'el'};

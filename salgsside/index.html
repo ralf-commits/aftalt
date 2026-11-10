@@ -234,6 +234,23 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
   .ud:nth-child(even) .ud-tekst{order:2}
   .ud:nth-child(even){grid-template-columns:1fr 280px}
 }
+/* Filmstrimmel: de fem skærme vandret */
+.filmstrip{display:flex;gap:var(--space-4);overflow-x:auto;padding:var(--space-1) var(--space-1) var(--space-4);scroll-snap-type:x proximity}
+.skaerm{flex:0 0 236px;scroll-snap-align:start;display:flex;flex-direction:column;background:var(--surface-100);border:1px solid var(--line-200);border-radius:var(--radius-md);overflow:hidden}
+.skaerm .shead{display:flex;align-items:baseline;gap:var(--space-2);padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--line-100)}
+.skaerm .shead b{font-family:var(--mono);font-size:12.5px;color:var(--snor-700)}
+.skaerm .shead span{font-weight:600;font-size:14.5px}
+.skaerm .sbody{display:flex;flex-direction:column;gap:var(--space-2);padding:var(--space-3) var(--space-4) var(--space-4);font-size:12.5px;color:var(--ink-600);flex:1}
+.skaerm .srow{display:flex;align-items:center;gap:var(--space-2);background:var(--surface-200);border-radius:var(--radius-sm);padding:6px 8px;min-width:0}
+.skaerm .srow.kunde{background:var(--lyng-100);color:var(--lyng-700)}
+.skaerm .srow .ok{color:var(--kvit-600);flex-shrink:0}
+.skaerm .sfoot{margin-top:auto;padding:var(--space-2) var(--space-4) var(--space-3);font-family:var(--mono);font-size:11px;color:var(--ink-400);border-top:1px solid var(--line-100)}
+/* Bygget på branchens regler */
+.grid-regler{display:grid;gap:var(--space-4);grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+.regel{background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-md);padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-2);min-width:0}
+.regel .slags{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-400)}
+.regel b{font-size:15px}
+.regel p{margin:0;font-size:13.5px;color:var(--ink-600)}
 </style>
 </head>
 <body>
@@ -567,6 +584,66 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
     </div>
   </section>
 
+  <section id="skaerme" class="wrap section" aria-labelledby="skaerme-titel">
+    <div class="section-head">
+      <span class="label">Fem skærme</span>
+      <h2 id="skaerme-titel" class="display-md">Hele sagen, fra venstre mod højre</h2>
+      <p class="lede">Det er alt, hvad håndværkeren ser. Fem skærme i rækkefølge, samme spor som sagen selv. Blå er håndværkeren, lilla er kunden.</p>
+    </div>
+    <div class="filmstrip">
+      <article class="skaerm">
+        <div class="shead"><b>1</b><span>Ny sag</span></div>
+        <div class="sbody">
+          <div class="srow"><span class="ok">✓</span>Kontakt</div>
+          <div class="srow"><span class="ok">✓</span>Hvor: inde · badeværelse</div>
+          <div class="srow"><span class="ok">✓</span>Hvad: afløb, el, nedrivning</div>
+          <div class="srow"><span class="ok">✓</span>Fag og garanti tjekket</div>
+          <div class="srow">Tjekliste: 11 checkpoints</div>
+        </div>
+        <div class="sfoot">Fem trin, før prisen sættes</div>
+      </article>
+      <article class="skaerm">
+        <div class="shead"><b>2</b><span>Aftalen</span></div>
+        <div class="sbody">
+          <div class="srow">Med: membran, fliser, VVS, el</div>
+          <div class="srow">Ikke med: maling, toilet</div>
+          <div class="srow">69.576 kr. inkl. moms</div>
+          <div class="srow kunde">Mette godkender med kode 482 917</div>
+        </div>
+        <div class="sfoot">28. okt · 19:35 · låst</div>
+      </article>
+      <article class="skaerm">
+        <div class="shead"><b>3</b><span>Byggedag</span></div>
+        <div class="sbody">
+          <div class="srow"><span class="ok">✓</span>Rør i væg · foto 11:10</div>
+          <div class="srow"><span class="ok">✓</span>Membran · foto 14:30</div>
+          <div class="srow">Fliser: låst til membranen er fotograferet</div>
+          <div class="srow kunde">Tillæg 6.500 kr. godkendt · 306 118</div>
+        </div>
+        <div class="sfoot">Fotos før lukning · tid og position</div>
+      </article>
+      <article class="skaerm">
+        <div class="shead"><b>4</b><span>Aflevering</span></div>
+        <div class="sbody">
+          <div class="srow"><span class="ok">✓</span>Tjekliste gennemgået sammen</div>
+          <div class="srow">Mangel: fuge ved bruseniche · frist 19. nov</div>
+          <div class="srow kunde">Mette kvitterer med kode 771 240</div>
+        </div>
+        <div class="sfoot">12. nov · 15:20 · kvitteret</div>
+      </article>
+      <article class="skaerm">
+        <div class="shead"><b>5</b><span>Sagsmappen</span></div>
+        <div class="sbody">
+          <div class="srow">Aftale, tillæg, fotos, kvittering</div>
+          <div class="srow">Alle tidsstempler låst ved registrering</div>
+          <div class="srow">Gemt i 10 år · åbnes ved klage</div>
+        </div>
+        <div class="sfoot">Det, foreningen får at se</div>
+      </article>
+    </div>
+    <p class="muted" style="margin:0">Prøv dem selv: <a href="../prototype/index.html">åbn prototypen</a>.</p>
+  </section>
+
   <hr class="rule">
 
   <!-- 5. Sagsmappen -->
@@ -633,6 +710,42 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
         </ul>
       </div>
     </div>
+  </section>
+
+  <section id="regler" class="wrap section" aria-labelledby="regler-titel">
+    <div class="section-head">
+      <span class="label">Grundlaget</span>
+      <h2 id="regler-titel" class="display-md">Bygget på branchens regler</h2>
+      <p class="lede">Tjeklisterne er ikke vores påfund. Hvert checkpoint er trukket fra lovkrav, anvisninger og brancheordninger, og kilden står på checkpointet i prototypen.</p>
+    </div>
+    <div class="grid-regler">
+      <article class="regel">
+        <span class="slags">Lovkrav</span>
+        <b>Bygningsreglementet, BR18 § 339</b>
+        <p>Vandtætte gulve og vægge, fald mod afløb, ingen rørgennemføringer i den vandbelastede del. Det, der skal være i orden, før der lukkes.</p>
+      </article>
+      <article class="regel">
+        <span class="slags">Anvisning</span>
+        <b>SBi-anvisning 252, Vådrum</b>
+        <p>Branchens målestok for fagmæssigt korrekt: vådzoner, fald på ca. 1 %, membranklasser. Det, skønsmanden måler imod i en tvist.</p>
+      </article>
+      <article class="regel">
+        <span class="slags">Erfaring</span>
+        <b>Byg-Erfa erfaringsblade</b>
+        <p>De typiske skader: utætte gulvafløb ved renovering, skjulte rørsamlinger, gennemføringer uden manchet. Tjeklisten fotograferer netop dem.</p>
+      </article>
+      <article class="regel">
+        <span class="slags">Lovkrav</span>
+        <b>Autorisationer</b>
+        <p>VVS, kloak og el kræver autoriseret installatør. Aftalt noterer hvem og kan slå autorisationsnummeret op i Sikkerhedsstyrelsens register.</p>
+      </article>
+      <article class="regel">
+        <span class="slags">Brancheordning</span>
+        <b>Dansk Håndværk Garanti</b>
+        <p>Fra 2026 løser foreningen selv tvister inden for 30 dage. Sagsmappen er dokumentationen, den afgørelse kan bygge på.</p>
+      </article>
+    </div>
+    <p class="muted" style="margin:0">Grundlaget for vådrum er samlet med kildehenvisninger i <a href="https://github.com/ralf-commits/aftalt/blob/main/noter/research-vaadrum.md">research-notatet</a>. Andre fag følger samme metode.</p>
   </section>
 
   <hr class="rule">
