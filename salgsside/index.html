@@ -15,6 +15,7 @@
   --ground-100:#efede6; --surface-100:#ffffff; --surface-200:#f7f6f1; --line-100:#dcd9cf; --line-200:#bfbbae;
   --ink-900:#1c1a17; --ink-600:#4f4c45; --ink-400:#716d63;
   --snor-700:#1f3c8a; --snor-100:#e1e8fa; --on-snor:#ffffff;
+  --lyng-700:#6b2d8c; --lyng-100:#f2e7f8; --on-lyng:#ffffff;
   --markering-600:#c84e0c; --markering-100:#fbe9dd;
   --kvit-600:#1e7a4a; --kvit-100:#def1e5;
   --stop-600:#b3362a; --stop-100:#f8e1dd;
@@ -35,6 +36,7 @@
   --ground-100:#141513; --surface-100:#1c1e1c; --surface-200:#232624; --line-100:#313532; --line-200:#434845;
   --ink-900:#edebe4; --ink-600:#b8b5ac; --ink-400:#8f8c82;
   --snor-700:#9db4f2; --snor-100:#1c2a4f; --on-snor:#0f1a36;
+  --lyng-700:#cfa8ee; --lyng-100:#33213f; --on-lyng:#24112f;
   --markering-600:#f0914f; --markering-100:#3d2411;
   --kvit-600:#5cc287; --kvit-100:#163a26;
   --stop-600:#e27c70; --stop-100:#3f1e1a;
@@ -46,6 +48,7 @@
   --ground-100:#141513; --surface-100:#1c1e1c; --surface-200:#232624; --line-100:#313532; --line-200:#434845;
   --ink-900:#edebe4; --ink-600:#b8b5ac; --ink-400:#8f8c82;
   --snor-700:#9db4f2; --snor-100:#1c2a4f; --on-snor:#0f1a36;
+  --lyng-700:#cfa8ee; --lyng-100:#33213f; --on-lyng:#24112f;
   --markering-600:#f0914f; --markering-100:#3d2411;
   --kvit-600:#5cc287; --kvit-100:#163a26;
   --stop-600:#e27c70; --stop-100:#3f1e1a;
@@ -195,6 +198,42 @@ a{color:var(--snor-700)}
 
 footer{border-top:1px solid var(--line-100);padding-block:var(--space-6)}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--space-4);align-items:center}
+
+/* ---------- ét forløb, to telefoner (Snor = håndværkeren, Lyng = kunden) ---------- */
+.pill-lyng{background:var(--lyng-100);color:var(--lyng-700)}
+.btn-kunde{background:var(--lyng-700);color:var(--on-lyng)}
+.roller{display:flex;flex-wrap:wrap;gap:var(--space-2)}
+.roller .prik{width:8px;height:8px;border-radius:var(--radius-pill);background:currentColor}
+.udveksling{display:grid;gap:0}
+.ud{display:grid;gap:var(--space-5);padding-block:var(--space-6)}
+.ud + .ud{border-top:1px dashed var(--line-200)}
+.ud-tekst{display:grid;gap:var(--space-2);align-content:center;max-width:56ch}
+.ud-par{display:grid;gap:var(--space-3);justify-items:center}
+.ud-pil{display:grid;justify-items:center;gap:var(--space-1);color:var(--ink-400)}
+.ud-pil > svg{width:24px;height:24px;transform:rotate(90deg)}
+.mini{width:100%;max-width:300px;background:var(--surface-100);border:1px solid var(--line-200);border-radius:28px;padding:var(--space-2);box-shadow:var(--shadow-float)}
+.mini-skaerm{border-radius:20px;background:var(--surface-200);padding:var(--space-3);display:grid;gap:var(--space-2);align-content:start;min-height:100%}
+.mini-rolle{justify-self:start}
+.mini .boble{padding:var(--space-3)}
+.mini .boble-foto{aspect-ratio:16/9}
+.btn-mini{min-height:44px;width:100%}
+.mini-liste{display:grid;gap:var(--space-1)}
+.mini-liste li{display:grid;grid-template-columns:16px 1fr;gap:var(--space-2);align-items:start;font-size:13px;line-height:18px;color:var(--ink-600)}
+.mini-liste svg{width:16px;height:16px;margin-top:1px}
+.mini-liste .ok{color:var(--kvit-600)}
+.mini-liste .ikke{color:var(--stop-600);text-align:center;font-weight:600}
+.ud-slut{display:flex;gap:var(--space-4);align-items:center;background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-lg);padding:var(--space-5)}
+@media (min-width:760px){
+  .ud-par{grid-template-columns:1fr auto 1fr;align-items:stretch}
+  .ud-pil{align-content:center;max-width:120px;text-align:center}
+  .ud-pil > svg{transform:none}
+  .ud-pil .stamp{flex-direction:column}
+}
+@media (min-width:1040px){
+  .ud{grid-template-columns:280px 1fr;align-items:center}
+  .ud:nth-child(even) .ud-tekst{order:2}
+  .ud:nth-child(even){grid-template-columns:1fr 280px}
+}
 </style>
 </head>
 <body>
@@ -225,7 +264,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
     <nav aria-label="Sektioner">
       <a href="#problemet">Problemet</a>
       <a href="#fire-ting">Det fanger</a>
-      <a href="#sagen">En sag</a>
+      <a href="#sagen">Forløbet</a>
       <a href="#sagsmappen">Sagsmappen</a>
       <a href="#tryghed">Tryghed</a>
       <a href="#pilot">Pilot</a>
@@ -343,63 +382,187 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
 
   <hr class="rule">
 
-  <!-- 4. En sag -->
+  <!-- 4. Ét forløb, to telefoner: håndværkeren (Snor) til venstre, kunden (Lyng) til højre -->
   <section id="sagen" class="wrap section" aria-labelledby="sag-titel">
     <div class="section-head">
-      <span class="label">En sag fra start til slut</span>
-      <h2 id="sag-titel" class="display-md">Badeværelset på Ved Søen 8</h2>
-      <p class="lede">Tømrerfirma Holm ApS renoverer et badeværelse for Mette Lund. Godt to uger, fem skridt. Eksemplet er konstrueret; navne og beløb er opfundne.</p>
+      <span class="label">Ét forløb, to telefoner</span>
+      <h2 id="sag-titel" class="display-md">Det, der sendes, og det, der godkendes</h2>
+      <p class="lede">Tømrerfirma Holm ApS renoverer badeværelset på Ved Søen 8 for Mette Lund. Til venstre firmaets telefon, til højre kundens. Hver udveksling ender i et stempel, som begge parter kan se. Eksemplet er konstrueret; navne og beløb er opfundne.</p>
+      <div class="roller">
+        <span class="pill pill-snor"><span class="prik" aria-hidden="true"></span>Håndværkeren</span>
+        <span class="pill pill-lyng"><span class="prik" aria-hidden="true"></span>Kunden</span>
+      </div>
     </div>
-    <div class="grid-2">
-      <ol class="flow">
-        <li class="trin">
-          <div class="trin-navn"><span class="label">1 · Sag</span><span class="title">Besigtigelse</span></div>
-          <div class="stack"><p class="muted">Mester indtaler en talenote på stedet. Aftalt laver udkastet til tilbuddet og spørger efter VVS'erens pris.</p><span class="stamp">28. okt · 14:05 · position bekræftet</span></div>
-          <span class="pill pill-kvit"><svg aria-hidden="true"><use href="#i-flueben"/></svg>Oprettet</span>
-        </li>
-        <li class="trin">
-          <div class="trin-navn"><span class="label">2 · Aftale</span><span class="title">Tilbud godkendt</span></div>
-          <div class="stack"><p class="muted">Kunden får et SMS-link med indhold, tilvalg og vilkår, og godkender med en kode.</p><span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>28. okt · 19:35 · kode 482 917</span></div>
-          <span class="pill pill-kvit"><svg aria-hidden="true"><use href="#i-laas"/></svg>Låst</span>
-        </li>
-        <li class="trin">
-          <div class="trin-navn"><span class="label">3 · Byggedag</span><span class="title">Tillæg og skjult arbejde</span></div>
-          <div class="stack"><p class="muted">En rådden bjælke bliver et tillæg med prisloft på 6.500 kr. Membranen fotograferes, før fliserne kommer op.</p><span class="stamp">3. nov · 08:10 · fundet og fotograferet</span></div>
-          <span class="pill pill-markering"><svg aria-hidden="true"><use href="#i-ur"/></svg>Afventer kunden</span>
-        </li>
-        <li class="trin">
-          <div class="trin-navn"><span class="label">4 · Aflevering</span><span class="title">Kvitteret</span></div>
-          <div class="stack"><p class="muted">Tjekliste gennemgået. En mangel noteret med frist. Kunden kvitterer.</p><span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>12. nov · 15:20 · kode 771 240</span></div>
-          <span class="pill pill-kvit"><svg aria-hidden="true"><use href="#i-flueben"/></svg>Kvitteret</span>
-        </li>
-        <li class="trin">
-          <div class="trin-navn"><span class="label">5 · Sagsmappe</span><span class="title">Klar til garantien</span></div>
-          <div class="stack"><p class="muted">Alt samles i én låst mappe, som foreningen kan åbne, hvis der kommer en klage.</p><span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>12. nov · 15:21 · sag 2026-0142</span></div>
-          <span class="pill pill-snor"><svg aria-hidden="true"><use href="#i-mappe"/></svg>Arkiveret</span>
-        </li>
-      </ol>
 
-      <!-- Kundens telefon: SMS-godkendelse af tillægget -->
-      <div class="telefon" role="img" aria-label="Kundens telefon med godkendelse af et tillæg">
-        <div class="telefon-skaerm">
-          <div class="telefon-top"><span class="caption">Tømrerfirma Holm ApS</span><span class="caption">09:42</span></div>
-          <div class="boble">
-            <span class="label">Tillæg til aftalen</span>
-            <span class="display-sm">Udskiftning af rådden bjælke</span>
-            <img class="boble-foto" src="billeder/bjaelke.jpg" alt="AI-genereret illustration: rådden bjælke i det åbne gulv">
-            <p class="caption">Fundet under nedrivning. Arbejdet fortsætter, når du har godkendt.</p>
-          </div>
-          <div class="prisfelt">
-            <div class="linje"><span>Prisloft inkl. moms</span><span class="title">6.500 kr.</span></div>
-            <div class="linje"><span class="caption">Kan ikke overskrides</span></div>
-          </div>
-          <div class="kode">
-            <span class="label">Din kode</span>
-            <span class="stamp-lg">306 118</span>
-          </div>
-          <span class="btn btn-primary">Godkend tillægget</span>
-          <span class="stamp" style="justify-self:center">3. nov 2026 · 09:42 · sag 2026-0142</span>
+    <ol class="udveksling">
+      <!-- 1. Aftalen -->
+      <li class="ud">
+        <div class="ud-tekst">
+          <span class="label">1 · Aftalen</span>
+          <h3 class="title">Tilbuddet sendes, kunden godkender</h3>
+          <p class="muted">Hvad der er med, og hvad der ikke er med, står sort på hvidt. Mette godkender med koden fra sin SMS. Herefter er aftalen låst.</p>
         </div>
+        <div class="ud-par">
+          <div class="mini mini-h" role="img" aria-label="Håndværkerens telefon: aftalen sendes til kunden">
+            <div class="mini-skaerm">
+              <span class="pill pill-snor mini-rolle">Tømrerfirma Holm ApS</span>
+              <div class="boble">
+                <span class="label">Aftale · klar til at sende</span>
+                <span class="title">Badeværelse, Ved Søen 8</span>
+                <div class="prisfelt"><div class="linje"><span>Samlet pris</span><span class="title">69.576 kr.</span></div></div>
+                <span class="caption">4 punkter med · 3 punkter ikke med</span>
+              </div>
+              <span class="btn btn-primary btn-mini">Send til kunden</span>
+            </div>
+          </div>
+          <div class="ud-pil">
+            <svg aria-hidden="true"><use href="#i-pil"/></svg>
+            <span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>28. okt · 19:35</span>
+          </div>
+          <div class="mini mini-k" role="img" aria-label="Kundens telefon: aftalen godkendes med kode">
+            <div class="mini-skaerm">
+              <span class="pill pill-lyng mini-rolle">Mette Lund</span>
+              <div class="boble">
+                <span class="label">Fra Tømrerfirma Holm ApS</span>
+                <span class="title">Godkend aftalen</span>
+                <ul class="mini-liste">
+                  <li><svg class="ok" aria-hidden="true"><use href="#i-flueben"/></svg>Membran, fliser og fuger</li>
+                  <li><svg class="ok" aria-hidden="true"><use href="#i-flueben"/></svg>VVS: afløb og bruser</li>
+                  <li><span class="ikke" aria-hidden="true">–</span>Ikke med: maling af loft</li>
+                </ul>
+              </div>
+              <div class="kode"><span class="label">Din kode</span><span class="stamp-lg">482 917</span></div>
+              <span class="btn btn-kunde btn-mini">Godkend aftalen</span>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- 2. Tillægget -->
+      <li class="ud">
+        <div class="ud-tekst">
+          <span class="label">2 · Tillægget</span>
+          <h3 class="title">Noget uforudset bliver fundet</h3>
+          <p class="muted">Under nedrivningen dukker en rådden bjælke op. Firmaet fotograferer den og sender et tillæg med prisloft. Arbejdet står stille, til Mette har godkendt.</p>
+        </div>
+        <div class="ud-par">
+          <div class="mini mini-h" role="img" aria-label="Håndværkerens telefon: tillæg med foto sendes">
+            <div class="mini-skaerm">
+              <span class="pill pill-snor mini-rolle">Tømrerfirma Holm ApS</span>
+              <div class="boble">
+                <span class="label">Tillæg · fundet 08:10</span>
+                <span class="title">Rådden bjælke under gulv</span>
+                <img class="boble-foto" src="billeder/bjaelke.jpg" alt="AI-genereret illustration: rådden bjælke i det åbne gulv">
+                <div class="prisfelt"><div class="linje"><span>Prisloft inkl. moms</span><span class="title">6.500 kr.</span></div></div>
+              </div>
+              <span class="btn btn-primary btn-mini">Send tillæg</span>
+            </div>
+          </div>
+          <div class="ud-pil">
+            <svg aria-hidden="true"><use href="#i-pil"/></svg>
+            <span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>3. nov · 09:42</span>
+          </div>
+          <div class="mini mini-k" role="img" aria-label="Kundens telefon: tillægget godkendes med kode">
+            <div class="mini-skaerm">
+              <span class="pill pill-lyng mini-rolle">Mette Lund</span>
+              <div class="boble">
+                <span class="label">Tillæg til aftalen</span>
+                <span class="title">Rådden bjælke under gulv</span>
+                <p class="caption">Maks. 6.500 kr. Arbejdet er sat på pause, indtil du godkender. Den oprindelige aftale ændres ikke.</p>
+              </div>
+              <div class="kode"><span class="label">Din kode</span><span class="stamp-lg">306 118</span></div>
+              <span class="btn btn-kunde btn-mini">Godkend tillægget</span>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- 3. Skjult arbejde -->
+      <li class="ud">
+        <div class="ud-tekst">
+          <span class="label">3 · Skjult arbejde</span>
+          <h3 class="title">Fotograferet, før det lukkes inde</h3>
+          <p class="muted">Membranen fotograferes med tid og position, før fliserne kommer op. Mette skal ikke gøre noget; hun kan se, at det er dokumenteret.</p>
+        </div>
+        <div class="ud-par">
+          <div class="mini mini-h" role="img" aria-label="Håndværkerens telefon: obligatorisk foto af membranen">
+            <div class="mini-skaerm">
+              <span class="pill pill-snor mini-rolle">Tømrerfirma Holm ApS</span>
+              <div class="boble">
+                <span class="label">Obligatorisk checkpoint</span>
+                <span class="title">Membran før fliser</span>
+                <img class="boble-foto" src="billeder/membran.jpg" alt="AI-genereret illustration: vådrumsmembran på væggen før fliser">
+                <span class="stamp"><svg aria-hidden="true"><use href="#i-position"/></svg>position bekræftet</span>
+              </div>
+              <span class="btn btn-primary btn-mini">Gem foto</span>
+            </div>
+          </div>
+          <div class="ud-pil">
+            <svg aria-hidden="true"><use href="#i-pil"/></svg>
+            <span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>5. nov · 14:30</span>
+          </div>
+          <div class="mini mini-k" role="img" aria-label="Kundens telefon: membranen er dokumenteret i huslogbogen">
+            <div class="mini-skaerm">
+              <span class="pill pill-lyng mini-rolle">Mette Lund</span>
+              <div class="boble">
+                <span class="label">Din huslogbog</span>
+                <span class="title">Membranen er dokumenteret</span>
+                <p class="caption">Fotos fra før fliserne kom op, med tid og position. De følger huset, også ved et salg.</p>
+                <span class="pill pill-kvit" style="justify-self:start"><svg aria-hidden="true"><use href="#i-flueben"/></svg>Gemt 14:30</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- 4. Afleveringen -->
+      <li class="ud">
+        <div class="ud-tekst">
+          <span class="label">4 · Afleveringen</span>
+          <h3 class="title">Gennemgået sammen, kvitteret</h3>
+          <p class="muted">Tjeklisten gennemgås på stedet. En mangel noteres med frist. Mette kvitterer, og garantiperioden starter.</p>
+        </div>
+        <div class="ud-par">
+          <div class="mini mini-h" role="img" aria-label="Håndværkerens telefon: aflevering sendes til kvittering">
+            <div class="mini-skaerm">
+              <span class="pill pill-snor mini-rolle">Tømrerfirma Holm ApS</span>
+              <div class="boble">
+                <span class="label">Aflevering</span>
+                <span class="title">Tjekliste gennemgået</span>
+                <ul class="mini-liste">
+                  <li><svg class="ok" aria-hidden="true"><use href="#i-flueben"/></svg>Membran før fliser</li>
+                  <li><svg class="ok" aria-hidden="true"><use href="#i-flueben"/></svg>Rør før lukning</li>
+                </ul>
+                <span class="pill pill-markering" style="justify-self:start"><svg aria-hidden="true"><use href="#i-ur"/></svg>Mangel med frist</span>
+              </div>
+              <span class="btn btn-primary btn-mini">Send til kvittering</span>
+            </div>
+          </div>
+          <div class="ud-pil">
+            <svg aria-hidden="true"><use href="#i-pil"/></svg>
+            <span class="stamp"><svg aria-hidden="true"><use href="#i-laas"/></svg>12. nov · 15:20</span>
+          </div>
+          <div class="mini mini-k" role="img" aria-label="Kundens telefon: afleveringen kvitteres med kode">
+            <div class="mini-skaerm">
+              <span class="pill pill-lyng mini-rolle">Mette Lund</span>
+              <div class="boble">
+                <span class="label">Fra Tømrerfirma Holm ApS</span>
+                <span class="title">Kvittér for afleveringen</span>
+                <p class="caption">En mangel rettes uden beregning. Din kvittering starter garantiperioden.</p>
+              </div>
+              <div class="kode"><span class="label">Din kode</span><span class="stamp-lg">771 240</span></div>
+              <span class="btn btn-kunde btn-mini">Kvittér</span>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ol>
+
+    <div class="ud-slut">
+      <span class="icon"><svg aria-hidden="true"><use href="#i-mappe"/></svg></span>
+      <div class="stack" style="gap:var(--space-1)">
+        <span class="title">Begge sider ender i samme sagsmappe</span>
+        <span class="muted">Aftale, tillæg, fotos og kvittering, låst med tid og kode. <a href="#sagsmappen">Se sagsmappen</a></span>
       </div>
     </div>
   </section>

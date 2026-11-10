@@ -26,7 +26,8 @@ Paletten er hentet fra byggepladsen, ikke fra en app-butik.
 
 - **Puds** (`ground-100`, `surface-100`, `surface-200`): varm, lys grund. Kort er hvide. Grå er aldrig neutral grå; den trækker mod varmt.
 - **Tjære** (`ink-900`, `ink-600`, `ink-400`): tekst i tre styrker. Sagsmappens hoved, som foreningen ser, er `ink-900` med lys tekst: det eneste sted, der er mørkt med vilje.
-- **Snor** (`snor-700`, `snor-100`, `on-snor`): kridtsnorens blå. Brandfarven og den eneste farve, der må bruges til primære handlinger, links og aktive faner. Én primær knap pr. skærm.
+- **Snor** (`snor-700`, `snor-100`, `on-snor`): kridtsnorens blå. Brandfarven og håndværkerens farve. Den eneste farve til primære handlinger, links og aktive faner, undtagen på kundens side. Én primær knap pr. skærm.
+- **Lyng** (`lyng-700`, `lyng-100`, `on-lyng`): lyngens lilla. Kundens farve. Når håndværker og kunde vises over for hinanden, er håndværkeren Snor og kunden Lyng, så man altid kan se, hvem der handler. Kundens primære handling (Godkend, Kvittér) er Lyng. Bruges aldrig som pynt eller til tilstande; Markering og Kvit betyder det samme på begge sider.
 - **Markering** (`markering-600`, `markering-100`): sprayorange. Betyder altid "et menneske skal gøre noget": afventer kundens godkendelse, mangel med frist, obligatorisk foto der mangler. Bruges aldrig som pynt, hero eller knap.
 - **Kvit** (`kvit-600`, `kvit-100`): godkendt, kvitteret, dokumenteret, låst. Et grønt flueben er altid koblet til et tidsstempel.
 - **Stop** (`stop-600`, `stop-100`): ikke med i aftalen, afvist. Sparsomt.

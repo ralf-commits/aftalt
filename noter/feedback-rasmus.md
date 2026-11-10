@@ -14,10 +14,10 @@ Givet på Dansk Håndværk-udgaven af prototypen (`main`, efter PR #7). Arbejdet
 
 ## Opgaver
 
-- [ ] Ny sag som trin-for-trin: kontakt, hvor (inde/ude, rum), hvad (spørgsmål der afgør fag), autorisationer og garanti, tjekliste, pris og "ikke med".
+- [x] Ny sag som trin-for-trin: kontakt, hvor (inde/ude, rum), hvad (spørgsmål der afgør fag), autorisationer og garanti, tjekliste, pris og "ikke med".
 - [ ] Research-notat: konkrete krav fra BR18, SBi-anvisning 252 (vådrum), GVK, Byg-Erfa og Dansk Håndværks garantibetingelser. Vådrum først.
-- [ ] Farve til kundens side. Kræver nyt farvepar i designsystemet (begge temaer); Ralf godkender.
-- [ ] Salgsside: udvekslingsflow med to telefoner i zigzag.
+- [x] Farve til kundens side. Lyng (`lyng-700`/`lyng-100`/`on-lyng`) er tilføjet designsystemet efter Ralfs ok.
+- [x] Salgsside: udvekslingsflow med to telefoner i zigzag.
 - [ ] Salgsside: filmstrimmel med de fem skærme vandret.
 - [ ] Salgsside: sektion "Bygget på branchens regler".
 - [ ] Notat om forretningsmodeller: 0,5 % af transaktionen, fast pris pr. sag, licens via foreningen. Hvem betaler, hvordan kendes beløbet, minimum.
