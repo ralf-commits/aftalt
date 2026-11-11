@@ -206,7 +206,14 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
 .roller .prik{width:8px;height:8px;border-radius:var(--radius-pill);background:currentColor}
 .udveksling{display:grid;gap:0}
 .ud{display:grid;gap:var(--space-5);padding-block:var(--space-6)}
-.ud + .ud{border-top:1px dashed var(--line-200)}
+/* Snoren: stiplet kurve, der binder skridtene sammen (Skiftr-greb). */
+.snor-kurve{grid-column:1/-1;display:flex;justify-content:center;color:var(--line-200);margin-block:calc(-1*var(--space-3))}
+.snor-kurve svg{width:min(220px,50vw);height:72px}
+.ud:nth-child(odd) .snor-kurve svg{transform:scaleX(-1)}
+.ud .title{font-size:21px;line-height:27px}
+.title em{font-style:italic}
+.em-snor{color:var(--snor-700)}
+.em-lyng{color:var(--lyng-700)}
 .ud-tekst{display:grid;gap:var(--space-2);align-content:center;max-width:56ch}
 .ud-par{display:grid;gap:var(--space-3);justify-items:center}
 .ud-pil{display:grid;justify-items:center;gap:var(--space-1);color:var(--ink-400)}
@@ -230,7 +237,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
   .ud-pil .stamp{flex-direction:column}
 }
 @media (min-width:1040px){
-  .ud{grid-template-columns:280px 1fr;align-items:center}
+  .ud{grid-template-columns:280px 1fr;align-items:center;padding-block:var(--space-8)}
   .ud:nth-child(even) .ud-tekst{order:2}
   .ud:nth-child(even){grid-template-columns:1fr 280px}
 }
@@ -416,7 +423,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
       <li class="ud">
         <div class="ud-tekst">
           <span class="label">1 · Aftalen</span>
-          <h3 class="title">Tilbuddet sendes, kunden godkender</h3>
+          <h3 class="title">Tilbuddet sendes, <em class="em-lyng">kunden godkender</em></h3>
           <p class="muted">Hvad der er med, og hvad der ikke er med, står sort på hvidt. Mette godkender med koden fra sin SMS. Herefter er aftalen låst.</p>
         </div>
         <div class="ud-par">
@@ -457,9 +464,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
 
       <!-- 2. Tillægget -->
       <li class="ud">
+        <div class="snor-kurve" aria-hidden="true"><svg viewBox="0 0 220 72" fill="none" preserveAspectRatio="xMidYMid meet"><path d="M160 2 C 160 40, 60 32, 60 70" stroke="currentColor" stroke-width="1.5" stroke-dasharray="1 8" stroke-linecap="round"/></svg></div>
         <div class="ud-tekst">
           <span class="label">2 · Tillægget</span>
-          <h3 class="title">Noget uforudset bliver fundet</h3>
+          <h3 class="title"><em class="em-snor">Noget uforudset</em> bliver fundet</h3>
           <p class="muted">Under nedrivningen dukker en rådden bjælke op. Firmaet fotograferer den og sender et tillæg med prisloft. Arbejdet står stille, til Mette har godkendt.</p>
         </div>
         <div class="ud-par">
@@ -496,9 +504,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
 
       <!-- 3. Skjult arbejde -->
       <li class="ud">
+        <div class="snor-kurve" aria-hidden="true"><svg viewBox="0 0 220 72" fill="none" preserveAspectRatio="xMidYMid meet"><path d="M160 2 C 160 40, 60 32, 60 70" stroke="currentColor" stroke-width="1.5" stroke-dasharray="1 8" stroke-linecap="round"/></svg></div>
         <div class="ud-tekst">
           <span class="label">3 · Skjult arbejde</span>
-          <h3 class="title">Fotograferet, før det lukkes inde</h3>
+          <h3 class="title">Fotograferet, <em class="em-snor">før det lukkes inde</em></h3>
           <p class="muted">Membranen fotograferes med tid og position, før fliserne kommer op. Mette skal ikke gøre noget; hun kan se, at det er dokumenteret.</p>
         </div>
         <div class="ud-par">
@@ -534,9 +543,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
 
       <!-- 4. Afleveringen -->
       <li class="ud">
+        <div class="snor-kurve" aria-hidden="true"><svg viewBox="0 0 220 72" fill="none" preserveAspectRatio="xMidYMid meet"><path d="M160 2 C 160 40, 60 32, 60 70" stroke="currentColor" stroke-width="1.5" stroke-dasharray="1 8" stroke-linecap="round"/></svg></div>
         <div class="ud-tekst">
           <span class="label">4 · Afleveringen</span>
-          <h3 class="title">Gennemgået sammen, kvitteret</h3>
+          <h3 class="title">Gennemgået sammen, <em class="em-lyng">kvitteret</em></h3>
           <p class="muted">Tjeklisten gennemgås på stedet. En mangel noteres med frist. Mette kvitterer, og garantiperioden starter.</p>
         </div>
         <div class="ud-par">
