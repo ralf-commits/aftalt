@@ -4,8 +4,8 @@
 - `../dansk-haandvaerk/`: indgang til Dansk Håndværk-udgaven.
 - `./`: præsentationsside med begge udgaver.
 
-Begge indgange bruger `prototype/index.html`. Den eneste særlige URL-parameter er
-`brand=dansk-haandvaerk`; ukendte værdier falder tilbage til Aftalt. Der gemmes
+Begge indgange bruger `prototype/index.html`. Dansk Håndværk er standardudgaven. `brand=aftalt` viser Aftalts egen stil;
+alle andre værdier giver Dansk Håndværk-udgaven. Der gemmes
 hverken brandvalg eller sagsdata på tværs af indlæsninger. Nulstilling bevarer den
 valgte afsender, og en ny indlæsning starter en frisk demonstrationssag.
 

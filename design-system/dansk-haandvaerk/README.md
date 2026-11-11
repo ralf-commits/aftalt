@@ -26,7 +26,7 @@ De tre blå i fluebenet er den tydeligste genkendelse. Brug dem i den rækkeføl
 
 ## Regler for brugen
 
-1. Logoerne tilhører Dansk Håndværk. De bruges kun i den udgave, der vises til Dansk Håndværk som forslag, og ikke i Aftalt-udgaven, på salgssiden eller andre steder.
+1. Logoerne tilhører Dansk Håndværk. Hele showcasen (prototypens standardudgave og salgssiden) vises i Dansk Håndværks stil som forslag til dem. Logoerne bruges dér, men aldrig i Aftalt-udgaven (`?brand=aftalt`), og Aftalt beholder sit eget mærke som afsender af det byggede.
 2. Logoet bruges som det er: ingen omtegning, ingen nye farver, ikke strakt.
 3. Garantimærket må kun vises der, hvor det handler om garantiordningen, for eksempel i sagsmappen eller kundens kvittering. Det må ikke se ud, som om Aftalt selv giver garantien.
 4. Holm ApS er fortsat aftalepart og afsender på arbejdet. Dansk Håndværk er afsender på systemet.

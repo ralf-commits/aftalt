@@ -4,8 +4,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aftalt</title>
 <script>
-// A strict allowlist selects presentation only; case data and actions stay shared.
-if(new URLSearchParams(location.search).get('brand')==='dansk-haandvaerk'){
+// Dansk Håndværk er standardudgaven; ?brand=aftalt viser Aftalts egen stil.
+// Parameteren vælger kun præsentation; sagsdata og handlinger er fælles.
+if(new URLSearchParams(location.search).get('brand')!=='aftalt'){
   document.documentElement.dataset.brand='dansk-haandvaerk';
   document.documentElement.dataset.theme='light';
   document.title='Dansk Håndværk · Digital sagsmappe';
