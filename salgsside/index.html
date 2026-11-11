@@ -9,7 +9,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-/* Salgsside til Dansk Håndværk. Alle værdier kommer fra design-system/tokens.json; navnene er de samme. */
+/* Samme komponentudtryk som prototypen: varme flader, kompakte kort og tydelige stempler.
+   Farver, typografi, afstande, radier og skygger følger design-system/tokens.json.
+   Eksisterende layoutbredder, billedforhold og breakpoints styrer kun responsiviteten. */
 /* Billedpladser er <figure class="billedplads" data-billede="..."> med en prompt i data-prompt. Se salgsside/README.md. */
 :root{
   --ground-100:#efede6; --surface-100:#ffffff; --surface-200:#f7f6f1; --line-100:#dcd9cf; --line-200:#bfbbae;
@@ -58,7 +60,7 @@
 }
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--space-8) + var(--space-6))}
 body{margin:0;background:var(--ground-100);color:var(--ink-900);font-family:var(--sans);font-size:15px;line-height:22px;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
 h1,h2,h3,p,ul,ol,figure{margin:0}
 ul,ol{padding:0;list-style:none}
@@ -71,45 +73,46 @@ a{color:var(--snor-700)}
 .display-md{font-family:var(--display);font-size:24px;line-height:28px;font-weight:700;letter-spacing:-0.01em;text-wrap:balance}
 .display-sm{font-family:var(--display);font-size:20px;line-height:24px;font-weight:600;letter-spacing:-0.005em;text-wrap:balance}
 .title{font-size:17px;line-height:22px;font-weight:600}
-.lede{font-size:17px;line-height:26px;color:var(--ink-600);max-width:56ch}
+.lede{font-size:15px;line-height:22px;color:var(--ink-600);max-width:56ch}
 .muted{color:var(--ink-600)}
 .caption{font-size:13px;line-height:18px;color:var(--ink-400)}
 .label{font-size:11px;line-height:14px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-400)}
-@media (min-width:760px){ .display-xl{font-size:56px;line-height:60px} }
+
 
 /* ---------- stemplet ---------- */
 .stamp{display:inline-flex;align-items:center;gap:var(--space-1);font-family:var(--mono);font-size:12.5px;line-height:16px;font-weight:500;color:var(--ink-400)}
-.stamp svg{width:14px;height:14px;flex:none}
+.stamp svg{width:var(--space-4);height:var(--space-4);flex:none}
 .stamp-lg{font-family:var(--mono);font-size:22px;line-height:28px;font-weight:500;letter-spacing:0.12em}
 
 /* ---------- layout ---------- */
 .wrap{width:100%;max-width:1120px;margin-inline:auto;padding-inline:var(--gutter)}
 .section{display:grid;gap:var(--space-6);padding-block:var(--space-8)}
-@media (min-width:760px){ .section{padding-block:96px} }
-.section-head{display:grid;gap:var(--space-3);max-width:720px}
+
+.section-head{display:grid;gap:var(--space-2);padding-bottom:var(--space-4);border-bottom:1px solid var(--line-100)}
+.section-head .display-md,.section-head .lede{max-width:720px}
 .stack{display:grid;gap:var(--space-3)}
 .stack-lg{display:grid;gap:var(--space-5)}
 .rule{border:0;border-top:1px solid var(--line-100);margin:0}
 
 /* ---------- top ---------- */
-.top{position:sticky;top:0;z-index:5;background:var(--ground-100);border-bottom:1px solid var(--line-100)}
-.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);min-height:64px}
+.top{position:sticky;top:0;z-index:5;background:var(--surface-100);border-bottom:1px solid var(--line-100)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);min-height:calc(var(--space-8) + var(--space-4));padding-block:var(--space-2)}
 .brand{display:inline-flex;align-items:center;gap:var(--space-3);color:var(--ink-900);text-decoration:none}
-.brand .ord{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-0.015em}
-.mark{width:28px;height:28px;flex:none}
-.top nav{display:none;gap:var(--space-5)}
-.top nav a{color:var(--ink-600);text-decoration:none;font-weight:600;font-size:15px}
-.top nav a:hover{color:var(--ink-900)}
+.brand .ord{font-family:var(--display);font-weight:700;font-size:24px;line-height:28px;letter-spacing:-0.015em}
+.mark{width:var(--space-6);height:var(--space-6);flex:none}
+.top nav{display:none;gap:var(--space-1)}
+.top nav a{display:inline-flex;align-items:center;min-height:calc(var(--space-8) - var(--space-1));padding-inline:var(--space-3);border:1px solid transparent;border-radius:var(--radius-pill);color:var(--ink-600);text-decoration:none;font-weight:600;font-size:13px;line-height:18px}
+.top nav a:hover,.top nav a:focus-visible{background:var(--surface-200);border-color:var(--line-100);color:var(--ink-900)}
 @media (min-width:900px){ .top nav{display:flex} }
 
 /* ---------- knapper og chips ---------- */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);min-height:46px;padding-inline:var(--space-5);border-radius:var(--radius-md);font:600 15px/22px var(--sans);text-decoration:none;border:1px solid transparent;cursor:pointer}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);min-height:calc(var(--space-8) - var(--space-1));padding-block:var(--space-2);padding-inline:var(--space-5);border-radius:var(--radius-md);font:600 15px/22px var(--sans);text-decoration:none;border:1px solid transparent;cursor:pointer}
 .btn svg{width:20px;height:20px}
 .btn-primary{background:var(--snor-700);color:var(--on-snor)}
 .btn-secondary{background:var(--surface-100);color:var(--ink-900);border-color:var(--line-200)}
-.btn-sm{min-height:44px;padding-inline:var(--space-4)}
+.btn-sm{min-height:calc(var(--space-8) - var(--space-1));padding-inline:var(--space-4)}
 .pill{display:inline-flex;align-items:center;gap:var(--space-1);padding:var(--space-1) var(--space-3);border-radius:var(--radius-pill);font-size:13px;line-height:18px;font-weight:600;white-space:nowrap}
-.pill svg{width:14px;height:14px}
+.pill svg{width:var(--space-4);height:var(--space-4);flex-shrink:0}
 .pill-kvit{background:var(--kvit-100);color:var(--kvit-600)}
 .pill-markering{background:var(--markering-100);color:var(--markering-600)}
 .pill-snor{background:var(--snor-100);color:var(--snor-700)}
@@ -117,8 +120,8 @@ a{color:var(--snor-700)}
 
 /* ---------- kort ---------- */
 .card{background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-md);padding:var(--space-4);display:grid;gap:var(--space-3);align-content:start}
-@media (min-width:760px){ .card{padding:var(--space-5)} }
-.icon{width:44px;height:44px;border-radius:var(--radius-md);background:var(--snor-100);color:var(--snor-700);display:grid;place-items:center}
+
+.icon{width:var(--space-8);height:var(--space-8);border-radius:var(--radius-md);background:var(--snor-100);color:var(--snor-700);display:grid;place-items:center}
 .icon svg{width:24px;height:24px}
 .grid-2{display:grid;gap:var(--space-5)}
 .grid-3{display:grid;gap:var(--space-5)}
@@ -127,7 +130,7 @@ a{color:var(--snor-700)}
 @media (min-width:1040px){ .grid-4{grid-template-columns:repeat(4,1fr)} }
 
 /* ---------- billedpladser (Codex udfylder) ---------- */
-.billedplads{position:relative;display:grid;place-items:center;overflow:hidden;background:var(--surface-200);border:1px dashed var(--line-200);border-radius:var(--radius-lg);aspect-ratio:4/3;padding:var(--space-4);text-align:center}
+.billedplads{position:relative;display:grid;place-items:center;overflow:hidden;background:var(--surface-200);border:1px dashed var(--line-200);border-radius:var(--radius-md);aspect-ratio:4/3;padding:var(--space-4);text-align:center}
 .billedplads[data-format="bred"]{aspect-ratio:16/9}
 .billedplads[data-format="hoej"]{aspect-ratio:4/5}
 .billedplads .pladstekst{display:grid;gap:var(--space-2);max-width:36ch;justify-items:center;color:var(--ink-400)}
@@ -137,20 +140,22 @@ a{color:var(--snor-700)}
 .billedplads:has(img) .pladstekst{display:none}
 
 /* ---------- hero ---------- */
-.hero{display:grid;gap:var(--space-6);padding-block:var(--space-8)}
-@media (min-width:900px){ .hero{grid-template-columns:1.1fr 1fr;align-items:center;padding-block:96px} }
-.hero-tekst{display:grid;gap:var(--space-5);justify-items:start}
+.hero{display:grid;gap:var(--space-5);padding-block:var(--space-8)}
+@media (min-width:900px){ .hero{grid-template-columns:1.25fr 1fr;align-items:start} }
+.hero-tekst{display:grid;gap:var(--space-5);justify-items:start;align-content:center;align-self:stretch;padding:var(--space-5);background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-md)}
 .hero-handling{display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:center}
-.hero-billede{position:relative}
-.hero-stempel{position:absolute;left:var(--space-4);bottom:var(--space-4);right:var(--space-4);background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);display:grid;gap:var(--space-1);box-shadow:var(--shadow-float)}
+.hero-billede{display:grid;gap:var(--space-3);align-content:start}
+.hero-billede .billedplads{aspect-ratio:4/3}
+.hero-stempel{background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);display:grid;gap:var(--space-2)}
 
 /* ---------- problem ---------- */
-.problem-liste{display:grid;gap:0;border-top:1px solid var(--line-100)}
-.problem-liste li{display:grid;gap:var(--space-2);padding-block:var(--space-5);border-bottom:1px solid var(--line-100)}
-@media (min-width:760px){ .problem-liste li{grid-template-columns:72px 1fr 1.4fr;gap:var(--space-5);align-items:baseline} }
+.problem-liste{display:grid;gap:0;background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-md);overflow:hidden}
+.problem-liste li{display:grid;gap:var(--space-2);padding:var(--space-4);border-bottom:1px solid var(--line-100)}
+.problem-liste li:last-child{border-bottom:0}
+@media (min-width:760px){ .problem-liste li{grid-template-columns:var(--space-8) 1fr 1.4fr;gap:var(--space-5);align-items:baseline} }
 .problem-liste .nr{font-family:var(--mono);font-weight:500;font-size:12.5px;color:var(--ink-400)}
-.citat{background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-lg);padding:var(--space-5);display:grid;gap:var(--space-3)}
-.citat blockquote{margin:0;font-family:var(--display);font-size:24px;line-height:30px;font-weight:600;letter-spacing:-0.01em;text-wrap:balance}
+.citat{background:var(--surface-200);border:1px solid var(--line-100);border-radius:var(--radius-md);padding:var(--space-5);display:grid;gap:var(--space-3)}
+.citat blockquote{margin:0;font-family:var(--display);font-size:24px;line-height:28px;font-weight:700;letter-spacing:-0.01em;text-wrap:balance}
 
 /* ---------- flow ---------- */
 .flow{display:grid;gap:var(--space-4);counter-reset:trin}
@@ -161,9 +166,9 @@ a{color:var(--snor-700)}
 .trin .stack{gap:var(--space-2)}
 
 /* ---------- kundens telefon ---------- */
-.telefon{width:100%;max-width:320px;justify-self:center;background:var(--surface-100);border:1px solid var(--line-200);border-radius:36px;padding:var(--space-3);box-shadow:var(--shadow-float)}
-.telefon-skaerm{border-radius:26px;background:var(--surface-200);padding:var(--space-4);display:grid;gap:var(--space-3);min-height:520px;align-content:start}
-.telefon-top{display:flex;justify-content:space-between}
+.telefon{width:100%;max-width:320px;justify-self:center;background:var(--surface-100);border:var(--space-2) solid var(--mappe-bg);border-radius:var(--radius-lg);padding:0;overflow:hidden;box-shadow:var(--shadow-float)}
+.telefon-skaerm{border-radius:0;background:var(--ground-100);padding:var(--space-4);display:grid;gap:var(--space-3);min-height:520px;align-content:start}
+.telefon-top{display:flex;justify-content:space-between;gap:var(--space-2);padding-bottom:var(--space-3);border-bottom:1px solid var(--line-100)}
 .boble{background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-lg);padding:var(--space-3) var(--space-4);display:grid;gap:var(--space-2)}
 .prisfelt{display:grid;gap:var(--space-2);background:var(--surface-200);border-radius:var(--radius-md);padding:var(--space-3)}
 .prisfelt .linje{display:flex;justify-content:space-between;gap:var(--space-3)}
@@ -171,7 +176,7 @@ a{color:var(--snor-700)}
 .kode{display:grid;gap:var(--space-1);justify-items:center;border:1px solid var(--line-200);border-radius:var(--radius-md);padding:var(--space-3);background:var(--surface-100)}
 
 /* ---------- sagsmappe ---------- */
-.mappe{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--line-100);background:var(--surface-100)}
+.mappe{border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--line-100);background:var(--surface-100)}
 .mappe-hoved{background:var(--mappe-bg);color:var(--mappe-ink);padding:var(--space-5);display:grid;gap:var(--space-3)}
 .mappe-hoved .stamp{color:var(--mappe-stamp)}
 .mappe-hoved .label{color:var(--mappe-stamp)}
@@ -180,7 +185,7 @@ a{color:var(--snor-700)}
 .mappe-raekker .tjek{width:24px;height:24px;border-radius:var(--radius-sm);display:grid;place-items:center;background:var(--kvit-100);color:var(--kvit-600);grid-row:span 2}
 .mappe-raekker .tjek.afventer{background:var(--markering-100);color:var(--markering-600)}
 .mappe-raekker .tjek svg{width:16px;height:16px}
-.mappe-raekker .foto{grid-column:2;display:block;width:112px;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--line-100);margin-top:var(--space-1)}
+.mappe-raekker .foto{grid-column:2;display:block;width:calc(var(--space-8) + var(--space-8) + var(--space-4));aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--line-100);margin-top:var(--space-1)}
 .mappe-raekker .linje1{display:flex;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap;align-items:center}
 
 /* ---------- roller ---------- */
@@ -190,7 +195,7 @@ a{color:var(--snor-700)}
 .rolle li svg{width:20px;height:20px;color:var(--kvit-600);margin-top:1px}
 
 /* ---------- pilot ---------- */
-.pilot{background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-lg);padding:var(--space-5);display:grid;gap:var(--space-5)}
+.pilot{background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-md);padding:var(--space-5);display:grid;gap:var(--space-5)}
 @media (min-width:760px){ .pilot{padding:var(--space-8);grid-template-columns:1.25fr 1fr;align-items:start} }
 .pilot ol{display:grid;gap:var(--space-4);counter-reset:p}
 .pilot ol li{display:grid;grid-template-columns:32px 1fr;gap:var(--space-3);counter-increment:p}
@@ -204,32 +209,30 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
 .btn-kunde{background:var(--lyng-700);color:var(--on-lyng)}
 .roller{display:flex;flex-wrap:wrap;gap:var(--space-2)}
 .roller .prik{width:8px;height:8px;border-radius:var(--radius-pill);background:currentColor}
-.udveksling{display:grid;gap:0}
-.ud{display:grid;gap:var(--space-5);padding-block:var(--space-6)}
-/* Snoren: stiplet kurve, der binder skridtene sammen (Skiftr-greb). */
-.snor-kurve{grid-column:1/-1;display:flex;justify-content:center;color:var(--line-200);margin-block:calc(-1*var(--space-3))}
-.snor-kurve svg{width:min(220px,50vw);height:72px}
-.ud:nth-child(odd) .snor-kurve svg{transform:scaleX(-1)}
-.ud .title{font-size:21px;line-height:27px}
-.title em{font-style:italic}
+.udveksling{display:grid;gap:var(--space-5)}
+.ud{display:grid;gap:var(--space-5);padding:var(--space-5);background:var(--surface-200);border:1px solid var(--line-100);border-radius:var(--radius-md)}
+/* Dekorative forbindelseskurver erstattes af samme rolige kortramme som i appen. */
+.snor-kurve{display:none}
+.ud .title{font-family:var(--display);font-size:20px;line-height:24px;font-weight:600;letter-spacing:-0.005em;text-wrap:balance}
+.title em{font-style:normal}
 .em-snor{color:var(--snor-700)}
 .em-lyng{color:var(--lyng-700)}
 .ud-tekst{display:grid;gap:var(--space-2);align-content:center;max-width:56ch}
 .ud-par{display:grid;gap:var(--space-3);justify-items:center}
 .ud-pil{display:grid;justify-items:center;gap:var(--space-1);color:var(--ink-400)}
 .ud-pil > svg{width:24px;height:24px;transform:rotate(90deg)}
-.mini{width:100%;max-width:300px;background:var(--surface-100);border:1px solid var(--line-200);border-radius:28px;padding:var(--space-2);box-shadow:var(--shadow-float)}
-.mini-skaerm{border-radius:20px;background:var(--surface-200);padding:var(--space-3);display:grid;gap:var(--space-2);align-content:start;min-height:100%}
+.mini{width:100%;max-width:300px;background:var(--surface-100);border:var(--space-1) solid var(--mappe-bg);border-radius:var(--radius-lg);padding:0;overflow:hidden;box-shadow:var(--shadow-float)}
+.mini-skaerm{border-radius:0;background:var(--ground-100);padding:var(--space-3);display:grid;gap:var(--space-3);align-content:start;min-height:100%}
 .mini-rolle{justify-self:start}
-.mini .boble{padding:var(--space-3)}
+.mini .boble{border-radius:var(--radius-md);padding:var(--space-3)}
 .mini .boble-foto{aspect-ratio:16/9}
-.btn-mini{min-height:44px;width:100%}
+.btn-mini{min-height:calc(var(--space-8) - var(--space-1));width:100%}
 .mini-liste{display:grid;gap:var(--space-1)}
 .mini-liste li{display:grid;grid-template-columns:16px 1fr;gap:var(--space-2);align-items:start;font-size:13px;line-height:18px;color:var(--ink-600)}
 .mini-liste svg{width:16px;height:16px;margin-top:1px}
 .mini-liste .ok{color:var(--kvit-600)}
 .mini-liste .ikke{color:var(--stop-600);text-align:center;font-weight:600}
-.ud-slut{display:flex;gap:var(--space-4);align-items:center;background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-lg);padding:var(--space-5)}
+.ud-slut{display:flex;gap:var(--space-4);align-items:center;background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-md);padding:var(--space-5)}
 @media (min-width:760px){
   .ud-par{grid-template-columns:1fr auto 1fr;align-items:stretch}
   .ud-pil{align-content:center;max-width:120px;text-align:center}
@@ -237,27 +240,39 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
   .ud-pil .stamp{flex-direction:column}
 }
 @media (min-width:1040px){
-  .ud{grid-template-columns:280px 1fr;align-items:center;padding-block:var(--space-8)}
-  .ud:nth-child(even) .ud-tekst{order:2}
-  .ud:nth-child(even){grid-template-columns:1fr 280px}
+  .ud{grid-template-columns:var(--space-8) 1fr;align-items:start}
+  .ud-tekst{grid-column:1/-1;max-width:none}
+  .ud-par{grid-column:1/-1;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+  .ud-par .mini{max-width:100%}
 }
 /* Filmstrimmel: de fem skærme vandret */
 .filmstrip{display:flex;gap:var(--space-4);overflow-x:auto;padding:var(--space-1) var(--space-1) var(--space-4);scroll-snap-type:x proximity}
 .skaerm{flex:0 0 236px;scroll-snap-align:start;display:flex;flex-direction:column;background:var(--surface-100);border:1px solid var(--line-200);border-radius:var(--radius-md);overflow:hidden}
-.skaerm .shead{display:flex;align-items:baseline;gap:var(--space-2);padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--line-100)}
-.skaerm .shead b{font-family:var(--mono);font-size:12.5px;color:var(--snor-700)}
-.skaerm .shead span{font-weight:600;font-size:14.5px}
-.skaerm .sbody{display:flex;flex-direction:column;gap:var(--space-2);padding:var(--space-3) var(--space-4) var(--space-4);font-size:12.5px;color:var(--ink-600);flex:1}
-.skaerm .srow{display:flex;align-items:center;gap:var(--space-2);background:var(--surface-200);border-radius:var(--radius-sm);padding:6px 8px;min-width:0}
+.skaerm .shead{display:flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-4);background:var(--snor-100);border-bottom:1px solid var(--line-100)}
+.skaerm .shead b{display:grid;place-items:center;flex-shrink:0;width:var(--space-5);height:var(--space-5);border-radius:var(--radius-pill);border:1px solid var(--snor-700);font-family:var(--mono);font-size:12.5px;line-height:16px;font-weight:500;color:var(--snor-700)}
+.skaerm .shead span{font-weight:600;font-size:15px;line-height:22px;color:var(--snor-700)}
+.skaerm .sbody{display:flex;flex-direction:column;gap:var(--space-2);padding:var(--space-3) var(--space-4) var(--space-4);font-size:13px;line-height:18px;color:var(--ink-600);flex:1}
+.skaerm .srow{display:flex;align-items:center;gap:var(--space-2);background:var(--surface-200);border-radius:var(--radius-sm);padding:var(--space-2);min-width:0}
 .skaerm .srow.kunde{background:var(--lyng-100);color:var(--lyng-700)}
 .skaerm .srow .ok{color:var(--kvit-600);flex-shrink:0}
-.skaerm .sfoot{margin-top:auto;padding:var(--space-2) var(--space-4) var(--space-3);font-family:var(--mono);font-size:11px;color:var(--ink-400);border-top:1px solid var(--line-100)}
+.skaerm .sfoot{margin-top:auto;padding:var(--space-2) var(--space-4) var(--space-3);font-family:var(--mono);font-size:12.5px;line-height:16px;font-weight:500;color:var(--ink-400);border-top:1px solid var(--line-100)}
 /* Bygget på branchens regler */
 .grid-regler{display:grid;gap:var(--space-4);grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
 .regel{background:var(--surface-100);border:1px solid var(--line-100);border-radius:var(--radius-md);padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-2);min-width:0}
-.regel .slags{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-400)}
+.regel .slags{font-family:var(--sans);font-size:11px;line-height:14px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-400)}
 .regel b{font-size:15px}
-.regel p{margin:0;font-size:13.5px;color:var(--ink-600)}
+.regel p{margin:0;font-size:15px;line-height:22px;color:var(--ink-600)}
+
+/* Smalle skærme beholder hele forløbet og læsbare stempler. */
+.hero>*,.grid-2>*,.grid-3>*,.grid-4>*,.ud>*,.ud-par>*,.pilot>*{min-width:0}
+.stamp{overflow-wrap:anywhere;max-width:100%}
+@media(max-width:759px){
+  .hero-tekst,.ud,.pilot{padding:var(--space-4)}
+  .hero-handling{align-items:flex-start;flex-direction:column}
+  .hero-handling .btn{width:100%;white-space:normal}
+  .ud-slut{align-items:flex-start;flex-wrap:wrap;padding:var(--space-4)}
+  .ud-par .mini{max-width:100%}
+}
 </style>
 </head>
 <body>
