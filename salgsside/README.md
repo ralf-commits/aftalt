@@ -2,7 +2,7 @@
 
 `index.html` er en one-pager til salgsmødet med Dansk Håndværk. Én fil, ingen build. Åbn den direkte i browseren. Knapperne "Se prototypen" linker til `../prototype/index.html`.
 
-Sektioner: Hero, Problemet, Det fanger Aftalt (fire ting), En sag (Ved Søen 8 med kundens telefon), Sagsmappen, Det får foreningen (kundens tryghed), Tre parter, Pilot.
+Sektioner: Hero, Problemet, Det fanger Aftalt (fire ting), Ét forløb, to telefoner (håndværkeren i Snor over for kunden i Lyng), Sagsmappen, Det får foreningen (kundens tryghed), Tre parter, Pilot.
 
 Samme regler som i roden (`README.md`) og designsystemet (`design-system/README.md`): kun værdier fra `tokens.json`, stemplet er signaturen, rolig tone, dansk tekst, ingen emojis.
 
@@ -39,7 +39,7 @@ Sådan udfyldes en plads:
 
 Kunde Mette Lund, Ved Søen 8, 3450 Allerød. Tømrerfirma Holm ApS (Thomas Holm). Sag 2026-0142. Aftale 69.576 kr. inkl. moms, godkendt 28. okt kl. 19:35 med kode 482 917. Rådden bjælke fundet 3. nov kl. 08:10; tillæg med prisloft 6.500 kr. inkl. moms godkendt 3. nov kl. 09:42 med kode 306 118. Rør før lukning 4. nov kl. 11:10. Membran før fliser 5. nov kl. 14:30. Aflevering kvitteret 12. nov kl. 15:20 med kode 771 240. Prototypens ur er simuleret, så dens tidspunkter flytter sig, når man klikker.
 
-Prototypen har også en tag-sag, når man vælger fagtypen Tag (kun i prototypen, ikke på salgssiden eller mødesiden): samme kunde og adresse, sag 2026-0157, nyt tegltag for 286.250 kr. inkl. moms. Obligatoriske checkpoints: undertag før lægter og inddækning ved skorsten før tagsten. Tillæg: rådne spærfødder ved tagfod, prisloft 9.800 kr. Aflevering 20. nov; mangel: rygningssten ved østgavlen, frist 27. nov. Fagtypen Andet bruger stadig vådrumssagen. Opsætningen pr. fag står i `FAG` øverst i prototypens script.
+Prototypen har også en tag-sag, når man vælger fagtypen Tag (kun i prototypen, ikke på salgssiden eller mødesiden): samme kunde og adresse, sag 2026-0157, nyt tegltag for 286.250 kr. inkl. moms. Obligatoriske checkpoints: undertag før lægter og inddækning ved skorsten før tagsten. Tillæg: rådne spærfødder ved tagfod, prisloft 9.800 kr. Aflevering 20. nov; mangel: rygningssten ved østgavlen, frist 27. nov. I prototypen vælges fagtypen nu via "Ny sag" i fem trin (kontakt, hvor, hvad, fag og garanti, tjekliste): badeværelse giver vådrumssagen, tag giver tag-sagen; de øvrige rum er endnu ikke bygget. Opsætningen pr. fag står i `FAG` øverst i prototypens script.
 
 Stil for alle billeder: dokumentarisk, naturligt dagslys, varme og dæmpede farver, der passer til puds-grunden (`ground-100`). Danske omgivelser. Ingen tekst eller logoer i billedet, intet poseret smil, ingen stockfoto-stemning. Ingen skærme med læsbart indhold.
 

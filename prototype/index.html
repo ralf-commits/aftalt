@@ -320,17 +320,23 @@ const FAG={
     kMed:['Nedrivning','Membran, fliser, fuger','VVS: afløb og bruser','El: 2 stik, 4 spots'],
     kIkke:['Maling af loft','Nyt toilet (du leverer)','Bortkørsel af affald'],
     cps:[
-      {id:'membran',navn:'Membran før fliser',obl:true,ved:'Håndværker'},
-      {id:'roer',navn:'Rør før lukning',obl:true,ved:'VVS-underleverandør'},
-      {id:'fliser',navn:'Fliser og fald mod afløb',obl:false,needs:['membran','roer']},
-      {id:'vvs',navn:'VVS tilsluttet og tæthedstestet',obl:false,needs:['roer']},
-      {id:'el',navn:'El afprøvet',obl:false}
+      {id:'foer',navn:'Før nedrivning: eksisterende forhold',obl:true,ved:'Håndværker'},
+      {id:'underlag',navn:'Underlag efter nedrivning',obl:true,ved:'Håndværker',needs:['foer']},
+      {id:'vaeg',navn:'Vægopbygning før beklædning',obl:false,needs:['underlag']},
+      {id:'roer',navn:'Rør i væg før lukning',obl:true,ved:'VVS-underleverandør',needs:['underlag']},
+      {id:'taethed',navn:'Tæthedsprøvning med manometer',obl:false,ved:'VVS-underleverandør',needs:['roer']},
+      {id:'afloeb',navn:'Gulvafløb og tilslutning',obl:true,ved:'VVS-underleverandør',needs:['underlag']},
+      {id:'fald',navn:'Fald mod afløb, målt',obl:false,needs:['afloeb']},
+      {id:'manchet',navn:'Rørgennemføringer med manchetter',obl:false,needs:['roer']},
+      {id:'membran',navn:'Membran før fliser',obl:true,ved:'Håndværker',needs:['roer','afloeb']},
+      {id:'fliser',navn:'Fliser og fuger',obl:false,needs:['membran']},
+      {id:'el',navn:'El: zoner og afprøvning',obl:false}
     ],
-    notes:{membran:'Membran i to lag, hjørner og rørgennemføringer forstærket med bånd. Tørretid overholdt.',roer:'Afløb og tilslutninger trykprøvet før gulvet lukkes. Ingen utætheder.',fliser:'Fald mod afløb målt til 15 mm pr. meter. Fuger efter leverandørens anvisning.',vvs:'Bruser og afløb testet med vand i 20 minutter.',el:'Spots og stik afprøvet, HPFI testet.'},
-    laas:'Fliser kan først dokumenteres, når membran og rør er fotograferet. Skønsmanden laver sjældent destruktive indgreb, så fotos før lukning er det eneste bevis for skjult arbejde.',
+    notes:{foer:'Gulv, vægge og afløb fotograferet før nedrivning. Fugtplet ved dørtrin noteret, så den ikke senere tilskrives os.',underlag:'Strøer og dæk sunde, ingen råd. Fugtmåling i træ: 11 %.',vaeg:'Vådrumsplader på stolper, forstærkning bag armatur og toilet.',roer:'Rør-i-rør med koblingsdåser, ingen skjulte samlinger uden melding.',taethed:'Trykprøvet med manometer i billedet. Tæt efter 30 minutter.',afloeb:'Nyt gulvafløb med klemring, tæt tilslutning til eksisterende faldstamme.',fald:'Fald målt med faldmåler: 1,2 % i bruseniche, intet bagfald.',manchet:'Manchetter om alle gennemføringer, tætnet til membranen. Ét foto pr. gennemføring.',membran:'Membran i to lag, hjørner og overgange med bånd, ført over afløbsflangen. Batchnummer i billedet. Tørretid overholdt.',fliser:'Fuger efter leverandørens anvisning, elastisk fuge i hjørner.',el:'Spots og stik placeret efter zonerne, HPFI testet.'},
+    laas:'Membranen kan først dokumenteres, når rør og afløb er fotograferet, og fliserne først efter membranen. Skønsmanden laver sjældent destruktive indgreb, så fotos før lukning er det eneste bevis for skjult arbejde. Tjeklistens 11 checkpoints er trukket fra BR18, SBi 252 og Byg-Erfa; hele grundlaget står i noter/research-vaadrum.md.',
     tillaeg:{titel:'Rådden bjælke under gulv',loft:6500},
     mangel:'Fuge ved bruseniche skal rettes',
-    aflevering:new Date(2026,10,7,14,50), frist:new Date(2026,10,10),
+    aflevering:new Date(2026,10,12,15,20), frist:new Date(2026,10,19),
     klage:{demo:'en klage over fugt ved gulvet',titel:'Reklamation: fugt ved gulv'}
   },
   'Tag':{
@@ -363,7 +369,7 @@ function fresh(){
   return {
     device:'mobile', screen:'sag', showKunde:false,
     clock:new Date(2026,9,28,14,5),
-    sag:{adresse:'Ved Søen 8, 3450 Allerød',kunde:'Mette Lund',mobil:'+45 21 44 56 78',fag:'Vådrum',created:false,nr:'2026-0142'},
+    sag:{adresse:'Ved Søen 8, 3450 Allerød',kunde:'Mette Lund',mobil:'+45 21 44 56 78',fag:'Vådrum',created:false,nr:'2026-0142',trin:1,sted:'inde',rum:'bad',svar:{afloeb:true,el:true,nedriv:true},tjekket:null},
     aftale:{status:'kladde',pris:69576,sentAt:null,okAt:null},
     cps:mkCps('Vådrum'),
     tillaeg:[], draft:null,
@@ -388,35 +394,103 @@ const stepDone={
   byggedag:()=>S.cps.filter(c=>c.obl).every(cpDone), aflevering:()=>S.kvit.status==='kvitteret', sagsmappe:()=>!!S.klage
 };
 
+/* ---------- ny sag: trin for trin ---------- */
+/* Opgaven snævres ind, før prisen sættes: kontakt, hvor, hvad, fag og autorisationer, tjekliste. */
+const RUM={
+  inde:[{id:'bad',navn:'Badeværelse',fag:'Vådrum'},{id:'koekken',navn:'Køkken'},{id:'stue',navn:'Stue eller værelse'}],
+  ude:[{id:'tag',navn:'Tag',fag:'Tag'},{id:'facade',navn:'Facade'},{id:'terrasse',navn:'Terrasse'}]
+};
+const SPM={
+  'Vådrum':[
+    {id:'afloeb',q:'Flyttes eller fornyes afløb og vandrør?',fag:'vvs',ja:true},
+    {id:'el',q:'Skal der laves ny el, stik eller spots?',fag:'el',ja:true},
+    {id:'nedriv',q:'Rives fliser, vægge eller gulv ned?',fag:'tomrer',ja:true}
+  ],
+  'Tag':[
+    {id:'inddaek',q:'Skal der inddækkes ved skorsten eller ovenlys?',fag:'blik',ja:true},
+    {id:'undertag',q:'Udskiftes undertag og lægter?',fag:'tomrer',ja:true},
+    {id:'el',q:'Skal der føres el til ovenlysvinduer?',fag:'el',ja:false}
+  ]
+};
+const FAGINFO={
+  tomrer:{navn:'Tømrer',hvem:'Tømrerfirma Holm ApS',krav:'Medlem af Dansk Håndværk · garantiordning aktiv'},
+  vvs:{navn:'VVS',hvem:'Allerød VVS ApS · underleverandør',krav:'Autoriseret VVS-installatør · Sikkerhedsstyrelsen'},
+  el:{navn:'El',hvem:'Holm El · underleverandør',krav:'Autoriseret elinstallatør · Sikkerhedsstyrelsen'},
+  blik:{navn:'Blikkenslager',hvem:'Nordsjællands Blik ApS · underleverandør',krav:'Medlem af Dansk Håndværk'}
+};
+/* Hvilke regler hvert checkpoint bygger på. Vådrum er afstemt med noter/research-vaadrum.md; tag er endnu ikke researchet. */
+const KILDE={
+  foer:'Byg-Erfa (typiske skader ved renovering)', underlag:'BR18 § 339 · Byg-Erfa', vaeg:'SBi-anvisning 252', roer:'Byg-Erfa (meldesystem) · autoriseret VVS', taethed:'DS 439 · autoriseret VVS', afloeb:'DS 432 · Byg-Erfa · autorisation', fald:'SBi-anvisning 252 (ca. 1 %)', manchet:'BR18 § 339 · Byg-Erfa', membran:'BR18 § 339 · SBi-anvisning 252', fliser:'SBi-anvisning 252', el:'Autoriseret el · DS/HD 60364-7-701',
+  undertag:'Byg-Erfa · producentens anvisning', inddaekning:'Byg-Erfa', tagsten:'Producentens anvisning', ventilation:'BR18', ovenlys:'Producentens anvisning'
+};
+const CPFAG={el:'el'};
+const NS_TRIN=['Kontakt','Hvor','Hvad','Fag og garanti','Tjekliste'];
+const nsSpm=()=>SPM[S.sag.fag]||[];
+const nsFag=()=>['tomrer',...nsSpm().filter(q=>S.sag.svar[q.id]).map(q=>q.fag).filter(f=>f!=='tomrer')].filter((f,i,a)=>a.indexOf(f)===i);
+const nsCps=()=>mkCps(S.sag.fag).filter(c=>!CPFAG[c.id]||nsFag().includes(CPFAG[c.id]));
+const nsRum=()=>[...RUM.inde,...RUM.ude].find(r=>r.id===S.sag.rum);
+
+function nsTrinBody(){
+  const s=S.sag, t=s.created?5:s.trin;
+  if(t===1) return `
+    <div class="field"><label for="f-adr">Adresse</label><input id="f-adr" data-bind="adresse" value="${s.adresse}"></div>
+    <div class="two">
+      <div class="field"><label for="f-kunde">Kunde</label><input id="f-kunde" data-bind="kunde" value="${s.kunde}"></div>
+      <div class="field"><label for="f-mobil">Kundens mobil</label><input id="f-mobil" data-bind="mobil" value="${s.mobil}"></div>
+    </div>
+    <p class="small" style="margin:0">Kunden installerer intet. Alt foregår via SMS-link.</p>`;
+  if(t===2) return `
+    <div class="field"><span class="eyebrow">Inde eller ude</span>
+      <div class="chips">${['inde','ude'].map(v=>`<button type="button" class="chip ${s.sted===v?'on':''}" data-action="nsSted" data-v="${v}">${v==='inde'?'Inde':'Ude'}</button>`).join('')}</div></div>
+    <div class="field"><span class="eyebrow">Hvor i huset</span>
+      <div class="chips">${RUM[s.sted].map(r=>`<button type="button" class="chip ${s.rum===r.id?'on':''}" data-action="nsRum" data-v="${r.id}" ${r.fag?'':'disabled'}>${r.navn}</button>`).join('')}</div>
+      <p class="small" style="margin:0">${RUM[s.sted].some(r=>!r.fag)?'Prototypen har badeværelse og tag. De andre rum kommer, når deres tjeklister er bygget.':''}</p></div>`;
+  if(t===3) return `
+    <span class="eyebrow">Spørgsmålene afgør, hvilke fag der er med</span>
+    ${nsSpm().map(q=>`<div class="card" style="gap:8px"><div style="font-weight:600">${q.q}</div>
+      <div class="chips">${[['ja','Ja'],['nej','Nej']].map(([v,l])=>`<button type="button" class="chip ${(s.svar[q.id]?'ja':'nej')===v?'on':''}" data-action="nsSvar" data-v="${q.id}:${v}">${l}</button>`).join('')}</div></div>`).join('')}
+    <div class="note">${I.list}<span>Fag på sagen: ${nsFag().map(f=>FAGINFO[f].navn).join(', ')}</span></div>`;
+  if(t===4) return `
+    <span class="eyebrow">Hvem udfører hvad</span>
+    ${nsFag().map(f=>{ const g=FAGINFO[f]; return `<div class="card ${s.tjekket?'ok':''}" style="gap:6px">
+      <div class="row between"><div><div class="eyebrow">${g.navn}</div><div style="font-weight:600">${g.hvem}</div></div>${s.tjekket?`<span class="pill ok">${I.check} Gyldig</span>`:`<span class="pill warn">Ikke tjekket</span>`}</div>
+      <div class="small">${g.krav}</div>
+      ${s.tjekket?`<div class="stamp locked">${I.lock}${fmtDate(s.tjekket)} · ${fmtTime(s.tjekket)} · ${/Sikkerhedsstyrelsen/.test(g.krav)?'autorisationsregister':'medlemsregister'}</div>`:''}
+    </div>`; }).join('')}
+    ${s.tjekket?'':`<button type="button" class="btn" style="align-self:flex-start" data-action="nsTjek">${I.check} Tjek autorisationer og garanti</button>`}`;
+  const cps=nsCps();
+  return `
+    <span class="eyebrow">Tjekliste for ${nsRum()?nsRum().navn.toLowerCase():s.fag.toLowerCase()} · ${cps.filter(c=>c.obl).length} obligatoriske fotos</span>
+    <div class="card" style="gap:0;padding-block:6px">${cps.map((c,i)=>`<div class="row between" style="padding:10px 0;${i?'border-top:1px solid var(--line)':''}">
+      <div style="min-width:0"><div style="font-weight:600">${c.navn}</div><div class="stamp">${KILDE[c.id]||''}</div></div>
+      ${c.obl?`<span class="pill warn">${I.camera} Foto før lukning</span>`:`<span class="pill neutral">Checkpoint</span>`}</div>`).join('')}</div>
+    <p class="small" style="margin:0">Tjeklisten bygger på branchens egne regler: Bygningsreglementet (BR18), SBi-anvisning 252 og Byg-Erfa. Pris og hvad der ikke er med kommer i næste trin.</p>`;
+}
+
 function scrSag(){
-  const s=S.sag;
+  const s=S.sag, t=s.created?5:s.trin, r=nsRum();
+  const prog=`<div class="chips" style="gap:6px">${NS_TRIN.map((l,i)=>`<span class="pill ${i+1===t&&!s.created?'acc':i+1<t||s.created?'ok':'neutral'}">${i+1<t||s.created?I.check:''}${i+1}. ${l}</span>`).join('')}</div>`;
+  const resume=`<div class="card"><span class="eyebrow">Sagen indtil videre</span><div class="list">
+      <div class="it"><b>${I.pin}</b><span>${s.adresse}</span></div>
+      <div class="it"><b>${I.home}</b><span>${s.kunde} · ${s.mobil}</span></div>
+      ${t>=2&&r?`<div class="it"><b>${I.list}</b><span>${s.sted==='inde'?'Inde':'Ude'} · ${r.navn} · ${s.fag}</span></div>`:''}
+      ${t>=3?`<div class="it"><b>${I.check}</b><span>${nsFag().map(f=>FAGINFO[f].navn).join(', ')}</span></div>`:''}
+    </div></div>
+    <div class="card"><div class="row"><div class="tick on" style="width:40px;height:40px;border-radius:10px;background:var(--ink);color:var(--ground);font-size:13px">TH</div>
+      <div><div style="font-weight:600">Tømrerfirma Holm ApS</div><div class="muted">Medlem af Dansk Håndværk · Garantiordning</div></div></div></div>`;
+  const back=t>1&&!s.created?`<button type="button" class="btn" data-action="nsTrin" data-v="${t-1}">Tilbage</button>`:'';
+  const next = s.created ? `<button type="button" class="btn primary grow" data-action="go" data-v="aftale">Gå til aftalen</button>`
+    : t===4&&!s.tjekket ? `<button type="button" class="btn primary grow" disabled>Tjek autorisationer først</button>`
+    : t<5 ? `<button type="button" class="btn primary grow" data-action="nsTrin" data-v="${t+1}">Videre</button>`
+    : `<button type="button" class="btn primary grow" data-action="opret">Opret sag</button>`;
   return {
-    title:'Ny sag', sub:'Tager omkring 30 sekunder', pillTxt:null,
-    body:`
+    title:s.created?`Sag ${s.nr}`:'Ny sag', sub:s.created?'Sagen er oprettet · opgaven er låst':`Trin ${t} af 5 · ${NS_TRIN[t-1]}`, pillTxt:null,
+    body:`${prog}
     <div class="cols">
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div class="field"><label for="f-adr">Adresse</label><input id="f-adr" data-bind="adresse" value="${s.adresse}"></div>
-        <div class="two">
-          <div class="field"><label for="f-kunde">Kunde</label><input id="f-kunde" data-bind="kunde" value="${s.kunde}"></div>
-          <div class="field"><label for="f-mobil">Kundens mobil</label><input id="f-mobil" data-bind="mobil" value="${s.mobil}"></div>
-        </div>
-        <div class="field"><span class="eyebrow">Fagtype · bestemmer tjekliste og tilbud</span>
-          <div class="chips">${['Vådrum','Tag','Andet'].map(f=>`<button type="button" class="chip ${s.fag===f?'on':''}" data-action="fag" data-v="${f}" ${s.created&&s.fag!==f?'disabled':''}>${f}</button>`).join('')}</div>${s.created?'<p class="small" style="margin:6px 0 0">Fagtypen er låst, fordi sagen er oprettet. Start forfra for at prøve et andet fag.</p>':''}
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div class="card"><div class="row"><div class="tick on" style="width:40px;height:40px;border-radius:10px;background:var(--ink);color:var(--ground);font-size:13px">TH</div>
-          <div><div style="font-weight:600">Tømrerfirma Holm ApS</div><div class="muted">Medlem af Dansk Håndværk · Garantiordning</div></div></div></div>
-        <div class="card"><span class="eyebrow">Det får du med sagen</span>
-          <div class="list">
-            <div class="it"><b style="color:var(--good)">✓</b><span>Tjekliste med obligatoriske fotos for ${s.fag.toLowerCase()}</span></div>
-            <div class="it"><b style="color:var(--good)">✓</b><span>Aftale og tillæg godkendt af kunden via SMS-kode</span></div>
-            <div class="it"><b style="color:var(--good)">✓</b><span>Sagsmappe med låste tidsstempler, gemt i 10 år</span></div>
-          </div>
-          <p class="small" style="margin:0">Kunden installerer intet. Alt foregår via SMS-link.</p></div>
-      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">${nsTrinBody()}</div>
+      <div style="display:flex;flex-direction:column;gap:14px">${resume}</div>
     </div>`,
-    actions:`<button type="button" class="btn primary grow" data-action="opret">Opret sag</button>`
+    actions:back+next
   };
 }
 
@@ -646,7 +720,12 @@ const A={
   reset(){ S=fresh(); toast('Prototypen er nulstillet'); },
   go(v){ if(v!=='sag' && !S.sag.created){ toast('Opret sagen først'); S.screen='sag'; return; } enter(v); },
   fag(v){ if(S.sag.created){ toast('Fagtypen er låst. Start forfra for at skifte.'); return; } const f=FAG[v]||FAG['Vådrum']; S.sag.fag=v; S.sag.nr=f.nr; S.aftale.pris=f.pris; S.cps=mkCps(FAG[v]?v:'Vådrum'); },
-  opret(){ S.sag.created=true; log('sag','Sag oprettet','Adresse, kunde og fagtype registreret af Tømrerfirma Holm'); tick(2); enter('aftale'); toast('Sagen er oprettet. Tilbuddet er hentet fra Dinero.'); },
+  nsTrin(v){ S.sag.trin=Number(v); },
+  nsSted(v){ S.sag.sted=v; A.nsRum(RUM[v].find(r=>r.fag).id); },
+  nsRum(v){ const r=[...RUM.inde,...RUM.ude].find(x=>x.id===v); if(!r||!r.fag) return; S.sag.rum=v; A.fag(r.fag); S.sag.svar=Object.fromEntries(nsSpm().map(q=>[q.id,q.ja])); S.sag.tjekket=null; },
+  nsSvar(v){ const [id,a]=v.split(':'); S.sag.svar[id]=a==='ja'; S.sag.tjekket=null; },
+  nsTjek(){ tick(1); S.sag.tjekket=new Date(S.clock); log('sag','Autorisationer og garanti tjekket',nsFag().map(f=>FAGINFO[f].navn).join(', ')+' · register opslået'); toast('Autorisationer og garanti er tjekket'); },
+  opret(){ S.sag.created=true; S.cps=nsCps(); log('sag','Sag oprettet',nsRum().navn+' · '+nsFag().map(f=>FAGINFO[f].navn).join(', ')+' · tjekliste med '+S.cps.filter(c=>c.obl).length+' obligatoriske fotos'); tick(2); enter('aftale'); toast('Sagen er oprettet. Tilbuddet er hentet fra Dinero.'); },
   sendAftale(){ tick(5); S.aftale.status='sendt'; S.aftale.sentAt=new Date(S.clock); log('send','Aftale sendt til kunde','SMS-link til '+S.sag.mobil+' · '+kr(S.aftale.pris)+' DKK · med og ikke med'); if(S.device==='mobile'){ S.showKunde=true; } toast('SMS sendt til '+S.sag.kunde); },
   kunde(){ S.showKunde=true; }, kundeBack(){ S.showKunde=false; },
   okAftale(){ tick(323); S.aftale.status='godkendt'; S.aftale.okAt=new Date(S.clock); log('godk','Aftale godkendt af kunde','SMS-kode · '+kr(S.aftale.pris)+' DKK · med og ikke med låst'); S.showKunde=false; toast('Aftalen er godkendt og låst'); },
