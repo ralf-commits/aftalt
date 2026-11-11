@@ -358,6 +358,29 @@ const FAG={
     mangel:'Rygningssten ved østgavlen skal fastgøres',
     aflevering:new Date(2026,10,20,14,30), frist:new Date(2026,10,27),
     klage:{demo:'en klage over vand ved skorstenen',titel:'Reklamation: vand ved skorsten'}
+  },
+  'Køkken':{
+    nr:'2026-0163', pris:158750, fil:'Tilbud_VedSoen8_koekken.pdf',
+    med:['Nedrivning af eksisterende køkken','Montering af nye elementer og bordplade','VVS: vand og afløb til vask og opvaskemaskine (underleverandør)','El: komfurgruppe, emhætte og 4 stik (underleverandør)'],
+    ikke:['Hårde hvidevarer (kunden leverer selv)','Maling af vægge og loft','Nyt gulv under køkkenet'],
+    kMed:['Nedrivning','Nye elementer og bordplade','VVS: vask og opvaskemaskine','El: komfur, emhætte, 4 stik'],
+    kIkke:['Hvidevarer (du leverer)','Maling','Nyt gulv'],
+    cps:[
+      {id:'kfoer',navn:'Før nedrivning: eksisterende køkken',obl:true,ved:'Håndværker'},
+      {id:'kvand',navn:'Vand og afløb før lukning',obl:true,ved:'VVS-underleverandør',needs:['kfoer']},
+      {id:'kel',navn:'El til komfur og emhætte før lukning',obl:true,ved:'El-underleverandør',needs:['kfoer']},
+      {id:'kaftraek',navn:'Emhættens aftræk til det fri',obl:false,ved:'Håndværker'},
+      {id:'kluk',navn:'Vægge lukket og spartlet',obl:false,needs:['kvand']},
+      {id:'kelementer',navn:'Elementer monteret i lod og vater',obl:false,needs:['kluk']},
+      {id:'kbord',navn:'Bordplade: udskæringer forseglet',obl:false,needs:['kelementer']},
+      {id:'ktilslut',navn:'Vask og maskiner tilsluttet, tæthedstjek',obl:false,needs:['kbord']}
+    ],
+    notes:{kfoer:'Eksisterende køkken, gulv og synlige installationer fotograferet før nedrivning.',kvand:'Nye tilslutninger til vask og opvaskemaskine med stophaner, fotograferet før pladen lukkes.',kel:'Komfurgruppe og emhættens føring fotograferet før lukning. HPFI testet.',kaftraek:'Aftræk ført til det fri. Recirkulation opfylder ikke BR18, så kanalføringen er fotograferet før loftet lukkes.',kluk:'Vægge lukket, samlinger spartlet og klar til elementer.',kelementer:'Elementer i lod og vater, fastgjort i væg efter underlagets type.',kbord:'Udskæringer til vask og kogeplade forseglet mod fugt efter producentens anvisning.',ktilslut:'Vask, opvaskemaskine og afløb testet med vand, ingen dryp ved koblinger.'},
+    laas:'Vand og el kan kun dokumenteres, før væggene lukkes. Bagefter er koblinger og kabler skjult bag elementerne, så fotos før lukning er det eneste bevis for skjult arbejde.',
+    tillaeg:{titel:'Rådden gulvplade under vask',loft:4800},
+    mangel:'Skabslåger skal justeres',
+    aflevering:new Date(2026,10,18,14,10), frist:new Date(2026,10,25),
+    klage:{demo:'en klage over en utæt kobling under vasken',titel:'Reklamation: utæt kobling under vask'}
   }
 };
 const F=()=>FAG[S.sag.fag]||FAG['Vådrum'];
@@ -397,7 +420,7 @@ const stepDone={
 /* ---------- ny sag: trin for trin ---------- */
 /* Opgaven snævres ind, før prisen sættes: kontakt, hvor, hvad, fag og autorisationer, tjekliste. */
 const RUM={
-  inde:[{id:'bad',navn:'Badeværelse',fag:'Vådrum'},{id:'koekken',navn:'Køkken'},{id:'stue',navn:'Stue eller værelse'}],
+  inde:[{id:'bad',navn:'Badeværelse',fag:'Vådrum'},{id:'koekken',navn:'Køkken',fag:'Køkken'},{id:'stue',navn:'Stue eller værelse'}],
   ude:[{id:'tag',navn:'Tag',fag:'Tag'},{id:'facade',navn:'Facade'},{id:'terrasse',navn:'Terrasse'}]
 };
 const SPM={
@@ -405,6 +428,11 @@ const SPM={
     {id:'afloeb',q:'Flyttes eller fornyes afløb og vandrør?',fag:'vvs',ja:true},
     {id:'el',q:'Skal der laves ny el, stik eller spots?',fag:'el',ja:true},
     {id:'nedriv',q:'Rives fliser, vægge eller gulv ned?',fag:'tomrer',ja:true}
+  ],
+  'Køkken':[
+    {id:'kvvs',q:'Flyttes vand eller afløb?',fag:'vvs',ja:true},
+    {id:'knyel',q:'Ny el til komfur, emhætte eller stik?',fag:'el',ja:true},
+    {id:'knedriv',q:'Rives det gamle køkken ned?',fag:'tomrer',ja:true}
   ],
   'Tag':[
     {id:'inddaek',q:'Skal der inddækkes ved skorsten eller ovenlys?',fag:'blik',ja:true},
@@ -421,9 +449,10 @@ const FAGINFO={
 /* Hvilke regler hvert checkpoint bygger på. Vådrum er afstemt med noter/research-vaadrum.md; tag er endnu ikke researchet. */
 const KILDE={
   foer:'Byg-Erfa (typiske skader ved renovering)', underlag:'BR18 § 339 · Byg-Erfa', vaeg:'SBi-anvisning 252', roer:'Byg-Erfa (meldesystem) · autoriseret VVS', taethed:'DS 439 · autoriseret VVS', afloeb:'DS 432 · Byg-Erfa · autorisation', fald:'SBi-anvisning 252 (ca. 1 %)', manchet:'BR18 § 339 · Byg-Erfa', membran:'BR18 § 339 · SBi-anvisning 252', fliser:'SBi-anvisning 252', el:'Autoriseret el · DS/HD 60364-7-701',
+  kfoer:'Byg-Erfa (typiske skader ved renovering)', kvand:'DS 439 · autoriseret VVS', kel:'Autoriseret el · Sikkerhedsstyrelsen', kaftraek:'BR18 § 443 (emhætte med afkast til det fri)', kluk:'Producentens anvisning', kelementer:'Producentens monteringsvejledning', kbord:'Producentens anvisning (fugt ved udskæringer)', ktilslut:'Autoriseret VVS · tæthedsprøvning',
   undertag:'Byg-Erfa · producentens anvisning', inddaekning:'Byg-Erfa', tagsten:'Producentens anvisning', ventilation:'BR18', ovenlys:'Producentens anvisning'
 };
-const CPFAG={el:'el'};
+const CPFAG={el:'el',kel:'el'};
 const NS_TRIN=['Kontakt','Hvor','Hvad','Fag og garanti','Tjekliste'];
 const nsSpm=()=>SPM[S.sag.fag]||[];
 const nsFag=()=>['tomrer',...nsSpm().filter(q=>S.sag.svar[q.id]).map(q=>q.fag).filter(f=>f!=='tomrer')].filter((f,i,a)=>a.indexOf(f)===i);
@@ -444,7 +473,7 @@ function nsTrinBody(){
       <div class="chips">${['inde','ude'].map(v=>`<button type="button" class="chip ${s.sted===v?'on':''}" data-action="nsSted" data-v="${v}">${v==='inde'?'Inde':'Ude'}</button>`).join('')}</div></div>
     <div class="field"><span class="eyebrow">Hvor i huset</span>
       <div class="chips">${RUM[s.sted].map(r=>`<button type="button" class="chip ${s.rum===r.id?'on':''}" data-action="nsRum" data-v="${r.id}" ${r.fag?'':'disabled'}>${r.navn}</button>`).join('')}</div>
-      <p class="small" style="margin:0">${RUM[s.sted].some(r=>!r.fag)?'Prototypen har badeværelse og tag. De andre rum kommer, når deres tjeklister er bygget.':''}</p></div>`;
+      <p class="small" style="margin:0">${RUM[s.sted].some(r=>!r.fag)?'Prototypen har badeværelse, køkken og tag. De andre rum kommer, når deres tjeklister er bygget.':''}</p></div>`;
   if(t===3) return `
     <span class="eyebrow">Spørgsmålene afgør, hvilke fag der er med</span>
     ${nsSpm().map(q=>`<div class="card" style="gap:8px"><div style="font-weight:600">${q.q}</div>
