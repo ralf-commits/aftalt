@@ -1,4 +1,4 @@
-# Salgsside
+# Konceptsiden (tidligere salgsside)
 
 `index.html` er en one-pager til salgsmødet med Dansk Håndværk. Én fil, ingen build. Åbn den direkte i browseren. Knapperne "Se prototypen" linker til `../prototype/index.html`.
 
@@ -19,7 +19,7 @@ Siden har fem billedpladser. Hver er et element som dette:
 Sådan udfyldes en plads:
 
 1. Generér billedet ud fra `data-prompt`. Format: `data-format="hoej"` er 4:5, `"bred"` er 16:9, ingen værdi er 4:3.
-2. Gem det som `salgsside/billeder/<data-billede>.jpg` (f.eks. `billeder/hero.jpg`). Maks. ca. 400 KB pr. billede.
+2. Gem det som `koncept/billeder/<data-billede>.jpg` (f.eks. `billeder/hero.jpg`). Maks. ca. 400 KB pr. billede.
 3. Indsæt `<img src="billeder/hero.jpg" alt="...">` som første barn i `<figure>`. Pladsteksten skjules automatisk, og rammen bliver fast.
 4. Skriv en kort, saglig `alt`-tekst på dansk.
 
@@ -35,7 +35,7 @@ Sådan udfyldes en plads:
 
 `billeder/bjaelke.jpg`, `roer.jpg`, `membran.jpg` og `aflevering.jpg` er de fire AI-illustrationer fra mødesiden (`moede/`). De bruges i kundens telefon (tillægget) og som miniaturer i sagsmappen, og midlertidigt i `hero` og `boligejer`, indtil der er billeder til de motiver. Erstattes et midlertidigt billede, så gem det nye som `<data-billede>.jpg` og ret `src`.
 
-### Sagens fakta (samme på salgsside, mødeside og prototype)
+### Sagens fakta (samme på konceptside, mødeside og prototype)
 
 Kunde Mette Lund, Ved Søen 8, 3450 Allerød. Tømrerfirma Holm ApS (Thomas Holm). Sag 2026-0142. Aftale 69.576 kr. inkl. moms, godkendt 28. okt kl. 19:35 med kode 482 917. Rådden bjælke fundet 3. nov kl. 08:10; tillæg med prisloft 6.500 kr. inkl. moms godkendt 3. nov kl. 09:42 med kode 306 118. Rør før lukning 4. nov kl. 11:10. Membran før fliser 5. nov kl. 14:30. Aflevering kvitteret 12. nov kl. 15:20 med kode 771 240. Prototypens ur er simuleret, så dens tidspunkter flytter sig, når man klikker.
 

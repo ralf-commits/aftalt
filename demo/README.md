@@ -25,7 +25,7 @@ officiel designmanual; se mappens README for kilder og anvendelsesregler.
 
 Logoet er indlejret uændret og vises på hvide flader med korrekt billedforhold.
 Garantimærket vises kun i medlemsudgavens garantiafsnit i sagsmappen. Ingen af
-logoerne vises i Aftalt-udgaven, på salgssiden eller på vælger-siden.
+logoerne vises i Aftalt-udgaven, på konceptsiden eller på vælger-siden.
 Lexend Latin er indlejret med licens og kildefiler i brandmappens `fonts/`.
 Primærfarven er blue-01 (#005489), sidegrunden blue-03-40 (#F4F6F9), den mørke
 sagsmappeflade navy (#013B60), og brødtekstfarven ink (#1D1D1B). De eksisterende

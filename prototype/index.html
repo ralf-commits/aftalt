@@ -253,7 +253,7 @@ a.ghost{text-decoration:none;display:inline-flex;align-items:center}
       <button type="button" id="devDesktop" data-action="device" data-v="desktop">Desktop</button>
     </div>
     <button type="button" class="ghost" data-action="reset">Nulstil</button>
-    <a class="ghost back" href="../salgsside/index.html">Til salgssiden</a>
+    <a class="ghost back" href="../koncept/">Konceptet</a><a class="ghost" href="../demo/">Vælg udgave</a>
   </header>
   <main class="stage" id="stage">
     <div class="scaler" id="scaler">
@@ -285,8 +285,6 @@ const BRAND=isMemberBrand ? {
 if(isMemberBrand){
   document.querySelector('.topbar .brand').innerHTML=BRAND.wordmark+'<small>prototype</small>';
   document.querySelector('.phone .lbl').textContent='Dansk Håndværk · kundens telefon';
-  const back=document.querySelector('.back');
-  back.href='../demo/'; back.textContent='Vælg prototype';
 }
 
 /* ---------- icons ---------- */
