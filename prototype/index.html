@@ -369,12 +369,13 @@ const FAG={
       {id:'kfoer',navn:'Før nedrivning: eksisterende køkken',obl:true,ved:'Håndværker'},
       {id:'kvand',navn:'Vand og afløb før lukning',obl:true,ved:'VVS-underleverandør',needs:['kfoer']},
       {id:'kel',navn:'El til komfur og emhætte før lukning',obl:true,ved:'El-underleverandør',needs:['kfoer']},
+      {id:'kaftraek',navn:'Emhættens aftræk til det fri',obl:false,ved:'Håndværker'},
       {id:'kluk',navn:'Vægge lukket og spartlet',obl:false,needs:['kvand']},
       {id:'kelementer',navn:'Elementer monteret i lod og vater',obl:false,needs:['kluk']},
       {id:'kbord',navn:'Bordplade: udskæringer forseglet',obl:false,needs:['kelementer']},
       {id:'ktilslut',navn:'Vask og maskiner tilsluttet, tæthedstjek',obl:false,needs:['kbord']}
     ],
-    notes:{kfoer:'Eksisterende køkken, gulv og synlige installationer fotograferet før nedrivning.',kvand:'Nye tilslutninger til vask og opvaskemaskine med stophaner, fotograferet før pladen lukkes.',kel:'Komfurgruppe og emhættens føring fotograferet før lukning. HPFI testet.',kluk:'Vægge lukket, samlinger spartlet og klar til elementer.',kelementer:'Elementer i lod og vater, fastgjort i væg efter underlagets type.',kbord:'Udskæringer til vask og kogeplade forseglet mod fugt efter producentens anvisning.',ktilslut:'Vask, opvaskemaskine og afløb testet med vand, ingen dryp ved koblinger.'},
+    notes:{kfoer:'Eksisterende køkken, gulv og synlige installationer fotograferet før nedrivning.',kvand:'Nye tilslutninger til vask og opvaskemaskine med stophaner, fotograferet før pladen lukkes.',kel:'Komfurgruppe og emhættens føring fotograferet før lukning. HPFI testet.',kaftraek:'Aftræk ført til det fri. Recirkulation opfylder ikke BR18, så kanalføringen er fotograferet før loftet lukkes.',kluk:'Vægge lukket, samlinger spartlet og klar til elementer.',kelementer:'Elementer i lod og vater, fastgjort i væg efter underlagets type.',kbord:'Udskæringer til vask og kogeplade forseglet mod fugt efter producentens anvisning.',ktilslut:'Vask, opvaskemaskine og afløb testet med vand, ingen dryp ved koblinger.'},
     laas:'Vand og el kan kun dokumenteres, før væggene lukkes. Bagefter er koblinger og kabler skjult bag elementerne, så fotos før lukning er det eneste bevis for skjult arbejde.',
     tillaeg:{titel:'Rådden gulvplade under vask',loft:4800},
     mangel:'Skabslåger skal justeres',
@@ -448,7 +449,7 @@ const FAGINFO={
 /* Hvilke regler hvert checkpoint bygger på. Vådrum er afstemt med noter/research-vaadrum.md; tag er endnu ikke researchet. */
 const KILDE={
   foer:'Byg-Erfa (typiske skader ved renovering)', underlag:'BR18 § 339 · Byg-Erfa', vaeg:'SBi-anvisning 252', roer:'Byg-Erfa (meldesystem) · autoriseret VVS', taethed:'DS 439 · autoriseret VVS', afloeb:'DS 432 · Byg-Erfa · autorisation', fald:'SBi-anvisning 252 (ca. 1 %)', manchet:'BR18 § 339 · Byg-Erfa', membran:'BR18 § 339 · SBi-anvisning 252', fliser:'SBi-anvisning 252', el:'Autoriseret el · DS/HD 60364-7-701',
-  kfoer:'Byg-Erfa (typiske skader ved renovering)', kvand:'DS 439 · autoriseret VVS', kel:'Autoriseret el · Sikkerhedsstyrelsen', kluk:'Producentens anvisning', kelementer:'Producentens monteringsvejledning', kbord:'Producentens anvisning (fugt ved udskæringer)', ktilslut:'Autoriseret VVS · tæthedsprøvning',
+  kfoer:'Byg-Erfa (typiske skader ved renovering)', kvand:'DS 439 · autoriseret VVS', kel:'Autoriseret el · Sikkerhedsstyrelsen', kaftraek:'BR18 § 443 (emhætte med afkast til det fri)', kluk:'Producentens anvisning', kelementer:'Producentens monteringsvejledning', kbord:'Producentens anvisning (fugt ved udskæringer)', ktilslut:'Autoriseret VVS · tæthedsprøvning',
   undertag:'Byg-Erfa · producentens anvisning', inddaekning:'Byg-Erfa', tagsten:'Producentens anvisning', ventilation:'BR18', ovenlys:'Producentens anvisning'
 };
 const CPFAG={el:'el',kel:'el'};
